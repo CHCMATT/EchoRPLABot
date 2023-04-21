@@ -18,7 +18,6 @@ var fileParts = __filename.split(/[\\/]/);
 var fileName = fileParts[fileParts.length - 1];
 
 cron.schedule('0 21 * * SAT', function () { commissionCmds.weeklyReport(client); }); // runs at 21:00 every Saturday
-cron.schedule('38 11 * * FRI', function () { commissionCmds.weeklyReport(client); }); // runs at 21:00 every Saturday
 
 client.once('ready', async () => {
 	console.log(`[${fileName}] The client is starting up!`);
