@@ -149,7 +149,7 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				var costPrice = (price * 0.90);
+				var costPrice = (price * 0.85);
 				var laProfit = price - costPrice;
 				var commission25Percent = (laProfit * 0.25);
 				var commission30Percent = (laProfit * 0.30);
@@ -249,7 +249,7 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				var costPrice = (price * 0.90);
+				var costPrice = (price * 0.80);
 				var laProfit = price - costPrice;
 				var commission25Percent = (laProfit * 0.25);
 				var commission30Percent = (laProfit * 0.30);
