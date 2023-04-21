@@ -7,6 +7,13 @@ module.exports.startUp = async (client) => {
 	var channel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID);
 	var oldEmbed = await dbCmds.readMsgId("embedMsg");
 
+	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
+	countCarsSold = countCarsSold.toString();
+
+	if (countCarsSold.includes('Value not found')) {
+		await dbCmds.resetSummValue("countCarsSold");
+	}
+
 	try {
 		await channel.messages.fetch(oldEmbed);
 		editEmbed.editEmbed(client);
