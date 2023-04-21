@@ -23,7 +23,7 @@ module.exports.weeklyReport = async (client) => {
 			var currentCommission = peopleArray[i].commission30Percent;
 		}
 
-		commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}**: ${formatter.format(currentCommission)}\n`);
+		commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
 
 		await dbCmds.resetCommission(peopleArray[i].discordId);
 	}

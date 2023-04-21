@@ -34,7 +34,7 @@ module.exports.initPersStats = async (discordId, discordNickname, embedColor, em
 };
 
 module.exports.readPersStats = async (discordId) => {
-	var result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, commission25Percent: 1, commission30Percent: 1, weeklyCarsSold: 1, _id: 0 });
+	var result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, commission25Percent: 1, commission30Percent: 1, weeklyCarsSold: 1, bankAccount: 1, _id: 0 });
 	return result;
 };
 
@@ -48,6 +48,10 @@ module.exports.addOnePersStat = async (discordId, statName) => {
 
 module.exports.subtractOnePersStat = async (discordId, statName) => {
 	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { $inc: { [statName]: -1 } });
+};
+
+module.exports.setBankAccount = async (discordId, bankNum) => {
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { bankAccount: bankNum }, { upsert: true });
 };
 
 
@@ -77,7 +81,7 @@ module.exports.readCommission = async (discordId) => {
 };
 
 module.exports.weeklyCommissionRep = async () => {
-	var result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, weeklyCarsSold: 1, _id: 0 });
+	var result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, weeklyCarsSold: 1, bankAccount: 1, _id: 0 });
 	return result;
 };
 
