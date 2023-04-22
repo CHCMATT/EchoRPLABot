@@ -16,7 +16,6 @@ var personnelInfoSchema = new Schema({
 	carsSold: reqNum,
 	commission25Percent: reqNum,
 	commission30Percent: reqNum,
-	weeklyCarsSold: reqNum,
 	embedColor: reqString,
 	embedMsgId: reqString,
 	bankAccount: reqString,

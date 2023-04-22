@@ -13,7 +13,8 @@ var reqNum = {
 var summaryInfoSchema = new Schema({
 	summaryName: reqString,
 	value: reqNum,
-	msgId: String
+	msgId: String,
+	repDate: String
 });
 
 module.exports = models['summaryInfo'] || model('summaryInfo', summaryInfoSchema);

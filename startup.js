@@ -10,8 +10,15 @@ module.exports.startUp = async (client) => {
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	countCarsSold = countCarsSold.toString();
 
+	let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+	countWeeklyCarsSold = countWeeklyCarsSold.toString();
+
 	if (countCarsSold.includes('Value not found')) {
 		await dbCmds.resetSummValue("countCarsSold");
+	}
+
+	if (countWeeklyCarsSold.includes('Value not found')) {
+		await dbCmds.resetSummValue("countWeeklyCarsSold");
 	}
 
 	try {

@@ -7,7 +7,7 @@ module.exports.readSummValue = async (summaryName) => {
 		return result.value;
 	}
 	else {
-		return `Value not found for ${summaryName}.`;
+		return `Value not found for ${summaryName}`;
 	}
 };
 
@@ -34,7 +34,7 @@ module.exports.initPersStats = async (discordId, discordNickname, embedColor, em
 };
 
 module.exports.readPersStats = async (discordId) => {
-	var result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, commission25Percent: 1, commission30Percent: 1, weeklyCarsSold: 1, bankAccount: 1, _id: 0 });
+	var result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, _id: 0 });
 	return result;
 };
 
@@ -72,16 +72,16 @@ module.exports.addCommission = async (discordId, commission25Percent, commission
 };
 
 module.exports.resetCommission = async (discordId) => {
-	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { commission25Percent: 0, commission30Percent: 0, weeklyCarsSold: 0 });
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { commission25Percent: 0, commission30Percent: 0 });
 };
 
 module.exports.readCommission = async (discordId) => {
-	var result = await personnelInfo.findOne({ discordId: discordId }, { commission25Percent: 1, commission30Percent: 1, weeklyCarsSold: 1, _id: 0 });
+	var result = await personnelInfo.findOne({ discordId: discordId }, { commission25Percent: 1, commission30Percent: 1, _id: 0 });
 	return result;
 };
 
 module.exports.weeklyCommissionRep = async () => {
-	var result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, weeklyCarsSold: 1, bankAccount: 1, _id: 0 });
+	var result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, _id: 0 });
 	return result;
 };
 
@@ -97,6 +97,21 @@ module.exports.readMsgId = async (summaryName) => {
 		return result.msgId;
 	}
 	else {
-		return `Value not found for ${summaryName}.`;
+		return `Value not found for ${summaryName}`;
+	}
+};
+
+// for setting string of latest commission report date
+module.exports.setRepDate = async (summaryName, newValue) => {
+	await summaryInfo.findOneAndUpdate({ summaryName: summaryName }, { repDate: newValue }, { upsert: true });
+};
+
+module.exports.readRepDate = async (summaryName) => {
+	var result = await summaryInfo.findOne({ summaryName }, { repDate: 1, _id: 0 });
+	if (result !== null) {
+		return result.repDate;
+	}
+	else {
+		return `Value not found for ${summaryName}`;
 	}
 };

@@ -1,5 +1,7 @@
-var { EmbedBuilder } = require('discord.js');
 var dbCmds = require('./dbCmds.js');
+var editEmbed = require('./editEmbed.js');
+var { EmbedBuilder } = require('discord.js');
+const { db } = require('./schemas/summaryInfo.js');
 
 var formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
@@ -9,18 +11,21 @@ var formatter = new Intl.NumberFormat('en-US', {
 
 module.exports.weeklyReport = async (client) => {
 	var now = Math.floor(new Date().getTime() / 1000.0);
-	var nowMinus7 = now - 604800;
 	var today = `<t:${now}:d>`;
-	var lastweek = `<t:${nowMinus7}:d>`;
 
 	var peopleArray = await dbCmds.weeklyCommissionRep();
 	var commissionDescList = '';
+	var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 	for (i = 0; i < peopleArray.length; i++) {
-		if (peopleArray[i].weeklyCarsSold < 100) {
+		if (weeklyCarsSold < 100) {
 			var currentCommission = peopleArray[i].commission25Percent;
+			var commissionPercent = "25%";
+
 		} else {
 			var currentCommission = peopleArray[i].commission30Percent;
+			var commissionPercent = "30%";
+
 		}
 
 		commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
@@ -28,12 +33,17 @@ module.exports.weeklyReport = async (client) => {
 		await dbCmds.resetCommission(peopleArray[i].discordId);
 	}
 
+	await dbCmds.resetSummValue("countWeeklyCarsSold");
+	await editEmbed.editEmbed(client);
+
 	if (commissionDescList == '') {
 		commissionDescList = "There is no commission to pay this week."
 	}
 
+	var lastRep = await dbCmds.readRepDate("lastCommissionReportDate");
+
 	var embed = new EmbedBuilder()
-		.setTitle(`Weekly commission report for ${lastweek} through ${today}:`)
+		.setTitle(`Weekly Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
 		.setDescription(commissionDescList)
 		.setColor('EDC531');
 
@@ -41,8 +51,11 @@ module.exports.weeklyReport = async (client) => {
 
 	// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 	var now = Math.floor(new Date().getTime() / 1000.0);
-	var repDate = `<t:${now}:d>`
-	var reason = `Automatic Commission Report Triggered on ${repDate}`
+	var repDate = `<t:${now}:d>`;
+
+	await dbCmds.setRepDate("lastCommissionReportDate", repDate);
+
+	var reason = `Automatic Commission Report Triggered on ${repDate}`;
 	var notificationEmbed = new EmbedBuilder()
 		.setTitle('Commission Modified Automatically:')
 		.setDescription(`All salesperson's commissions have been reset to \`$0\`.\n\n**Reason:** ${reason}.`)
