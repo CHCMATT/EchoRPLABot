@@ -9,12 +9,13 @@ var formatter = new Intl.NumberFormat('en-US', {
 	maximumFractionDigits: 0
 });
 
-module.exports.weeklyReport = async (client) => {
+module.exports.commissionReport = async (client) => {
 	var now = Math.floor(new Date().getTime() / 1000.0);
 	var today = `<t:${now}:d>`;
 
 	var peopleArray = await dbCmds.weeklyCommissionRep();
 	var commissionDescList = '';
+
 	var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 	for (i = 0; i < peopleArray.length; i++) {
@@ -34,7 +35,6 @@ module.exports.weeklyReport = async (client) => {
 	} else {
 		var commissionPercent = "30%";
 	}
-
 
 	await dbCmds.resetSummValue("countWeeklyCarsSold");
 	await editEmbed.editEmbed(client);
