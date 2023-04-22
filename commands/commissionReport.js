@@ -6,7 +6,7 @@ module.exports = {
 	description: 'Manually runs the commission report for the Management team',
 	async execute(interaction) {
 		if (interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-			commissionCmds.weeklyReport(interaction.client);
+			commissionCmds.commissionReport(interaction.client);
 			await interaction.reply({ content: `Successfully ran the weekly report.`, ephemeral: true });
 		}
 		else {
