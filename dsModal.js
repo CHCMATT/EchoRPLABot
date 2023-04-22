@@ -9,16 +9,6 @@ var formatter = new Intl.NumberFormat('en-US', {
 	maximumFractionDigits: 0
 });
 
-function isValidUrl(string) {
-	let url;
-	try {
-		url = new URL(string);
-	} catch (_) {
-		return false;
-	}
-	return url.protocol === "http:" || url.protocol === "https:";
-}
-
 module.exports.modalSubmit = async (interaction) => {
 	try {
 		var modalID = interaction.customId;
