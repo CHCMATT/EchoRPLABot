@@ -20,18 +20,21 @@ module.exports.weeklyReport = async (client) => {
 	for (i = 0; i < peopleArray.length; i++) {
 		if (weeklyCarsSold < 100) {
 			var currentCommission = peopleArray[i].commission25Percent;
-			var commissionPercent = "25%";
-
 		} else {
 			var currentCommission = peopleArray[i].commission30Percent;
-			var commissionPercent = "30%";
-
 		}
 
 		commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
 
 		await dbCmds.resetCommission(peopleArray[i].discordId);
 	}
+
+	if (weeklyCarsSold < 100) {
+		var commissionPercent = "25%";
+	} else {
+		var commissionPercent = "30%";
+	}
+
 
 	await dbCmds.resetSummValue("countWeeklyCarsSold");
 	await editEmbed.editEmbed(client);
@@ -41,6 +44,11 @@ module.exports.weeklyReport = async (client) => {
 	}
 
 	var lastRep = await dbCmds.readRepDate("lastCommissionReportDate");
+
+	if (lastRep.includes("Value not found")) {
+		var nowMinus7 = now - 604800;
+		var lastRep = `<t:${nowMinus7}:d>`
+	}
 
 	var embed = new EmbedBuilder()
 		.setTitle(`Weekly Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
