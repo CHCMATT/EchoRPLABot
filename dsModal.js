@@ -322,6 +322,95 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
 				break;
+			case 'addEmployeeSaleModal':
+				var salesmanName;
+				if (interaction.member.nickname) {
+					salesmanName = interaction.member.nickname;
+				} else {
+					salesmanName = interaction.member.user.username;
+				}
+
+				var now = Math.floor(new Date().getTime() / 1000.0);
+				var saleDate = `<t:${now}:d>`;
+
+				var soldTo = interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart();
+				var vehicleName = interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart();
+				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart();
+				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
+				var formattedPrice = formatter.format(price);
+				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
+
+				if (isNaN(price)) { // validate quantity of money
+					await interaction.reply({
+						content: `:exclamation: \`${interaction.fields.getTextInputValue('priceInput')}\` is not a valid number, please be sure to only enter numbers.`,
+						ephemeral: true
+					});
+					return;
+				}
+
+				var costPrice = (price * 0.80);
+				var laProfit = price - costPrice;
+
+				var formattedCostPrice = formatter.format(costPrice);
+				var formattedLaProfit = formatter.format(laProfit);
+
+				if (notes) {
+					var carSoldEmbed = [new EmbedBuilder()
+						.setTitle('A new car has been sold to an employee!')
+						.addFields(
+							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${saleDate}` },
+							{ name: `Car Sold To:`, value: `${soldTo}` },
+							{ name: `Vehicle Name:`, value: `${vehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+							{ name: `Notes:`, value: `${notes}` }
+						)
+						.setColor('0096C7')];
+				} else {
+					var carSoldEmbed = [new EmbedBuilder()
+						.setTitle('A new car has been sold to an employee!')
+						.addFields(
+							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${saleDate}` },
+							{ name: `Car Sold To:`, value: `${soldTo}` },
+							{ name: `Vehicle Name:`, value: `${vehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+						)
+						.setColor('0096C7')];
+				}
+
+				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
+				if (personnelStats == null || personnelStats.charName == null) {
+					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
+				}
+
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: carSoldEmbed });
+
+				await dbCmds.addOneSumm("countCarsSold");
+				await dbCmds.addOneSumm("countWeeklyCarsSold");
+				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
+				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
+				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+
+				if (weeklyCarsSold < 100) {
+					var overallCommission = commissionArray.commission25Percent;
+					var commissionPercent = "25%";
+				} else {
+					var overallCommission = commissionArray.commission30Percent;
+					var commissionPercent = "30%";
+				}
+
+				var formattedOverallCommission = formatter.format(overallCommission);
+
+				await editEmbed.editEmbed(interaction.client);
+				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
+
+				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
+
+				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
+				break;
 			default:
 				await interaction.reply({
 					content: `I'm not familiar with this modal type. Please tag @CHCMATT to fix this issue.`,

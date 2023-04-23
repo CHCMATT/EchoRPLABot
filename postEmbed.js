@@ -43,6 +43,11 @@ function addBtnRows() {
 			.setCustomId('addTunerCarSale')
 			.setLabel('Add a Tuner Car Sale')
 			.setStyle(ButtonStyle.Success),
+
+		new ButtonBuilder()
+			.setCustomId('addEmployeeSale')
+			.setLabel('Add an Employee Sale')
+			.setStyle(ButtonStyle.Primary),
 	);
 
 	var rows = [row1];
