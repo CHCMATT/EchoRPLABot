@@ -1,7 +1,6 @@
 var dbCmds = require('./dbCmds.js');
 var editEmbed = require('./editEmbed.js');
 var { EmbedBuilder } = require('discord.js');
-const { db } = require('./schemas/summaryInfo.js');
 
 var formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',

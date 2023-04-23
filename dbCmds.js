@@ -101,6 +101,7 @@ module.exports.readMsgId = async (summaryName) => {
 	}
 };
 
+
 // for setting string of latest commission report date
 module.exports.setRepDate = async (summaryName, newValue) => {
 	await summaryInfo.findOneAndUpdate({ summaryName: summaryName }, { repDate: newValue }, { upsert: true });

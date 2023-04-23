@@ -1,6 +1,6 @@
 require('discord.js');
-var { EmbedBuilder } = require('discord.js');
 var dbCmds = require('./dbCmds.js');
+var { EmbedBuilder } = require('discord.js');
 
 module.exports.initPersonnel = async (client, userId) => {
 	var guild = await client.guilds.fetch(process.env.DISCORD_SERVER_ID);
