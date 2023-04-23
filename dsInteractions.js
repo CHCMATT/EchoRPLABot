@@ -1,5 +1,6 @@
-var dsBtn = require('./dsBtn');
-var dsModal = require('./dsModal');
+var dsBtn = require('./dsBtn.js');
+var dsModal = require('./dsModal.js');
+var dsStringSelectMenu = require('./dsStringSelectMenu.js');
 
 module.exports = (client) => {
 	client.on('interactionCreate', async interaction => {
@@ -13,7 +14,12 @@ module.exports = (client) => {
 			else if (interaction.isModalSubmit()) {
 				await dsModal.modalSubmit(interaction);
 			}
+			else if (interaction.isStringSelectMenu()) {
+				await dsStringSelectMenu.stringSelectMenuSubmit(interaction);
+			}
 			else {
+				await interaction.reply({ content: `I'm not familiar with this interaction. Please tag @CHCMATT to fix this issue.`, ephemeral: true });
+				console.log(`Error: Unrecognized interaction '${interaction.customId}' with type '${interaction.constructor.name}'`);
 				return;
 			}
 		}
