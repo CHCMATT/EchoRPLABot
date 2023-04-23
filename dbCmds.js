@@ -80,7 +80,7 @@ module.exports.readCommission = async (discordId) => {
 	return result;
 };
 
-module.exports.weeklyCommissionRep = async () => {
+module.exports.commissionRep = async () => {
 	var result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, _id: 0 });
 	return result;
 };
