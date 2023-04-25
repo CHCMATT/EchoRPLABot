@@ -218,7 +218,7 @@ module.exports.modalSubmit = async (interaction) => {
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
+				var reason = `Sports Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
 
 				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
@@ -326,7 +326,7 @@ module.exports.modalSubmit = async (interaction) => {
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
+				var reason = `Tuner Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
 
 				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
