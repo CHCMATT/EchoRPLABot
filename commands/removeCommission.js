@@ -72,7 +72,7 @@ module.exports = {
 
 						.setColor('#FFA630');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
-					await interaction.reply({ content: `Successfully removed \`${formatted25Percent}\` from <@${user.id}>'s 25% commission and \`${formatted30Percent}\` from <@${user.id}>'s 30% commission for a new total of (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
+					await interaction.reply({ content: `Successfully removed \`${formatted25Percent}\` from <@${user.id}>'s 25% commission and \`${formatted30Percent}\` from their 30% commission for a new total of (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
 				} else {
 					await interaction.reply({ content: `:exclamation: <@${user.id}> doesn't have any commission to modify, yet.`, ephemeral: true });
 				}
