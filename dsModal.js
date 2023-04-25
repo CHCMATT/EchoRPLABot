@@ -9,6 +9,14 @@ var formatter = new Intl.NumberFormat('en-US', {
 	maximumFractionDigits: 0
 });
 
+function toTitleCase(str) {
+	str = str.toLowerCase().split(' ');
+	for (var i = 0; i < str.length; i++) {
+		str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+	}
+	return str.join(' ');
+}
+
 module.exports.modalSubmit = async (interaction) => {
 	try {
 		var modalID = interaction.customId;
@@ -24,9 +32,9 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart();
-				var vehicleName = interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart();
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart();
+				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
+				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
+				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
 				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
 				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
@@ -47,7 +55,19 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (notes) {
+				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
+					var carSoldEmbed = [new EmbedBuilder()
+						.setTitle('A new car has been sold!')
+						.addFields(
+							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${saleDate}` },
+							{ name: `Car Sold To:`, value: `${soldTo}` },
+							{ name: `Vehicle Name:`, value: `${vehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+						)
+						.setColor('0096C7')];
+				} else {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold!')
 						.addFields(
@@ -59,19 +79,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
 							{ name: `Notes:`, value: `${notes}` }
 						)
-						.setColor('03045E')];
-				} else {
-					var carSoldEmbed = [new EmbedBuilder()
-						.setTitle('A new car has been sold!')
-						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-						)
-						.setColor('03045E')];
+						.setColor('0096C7')];
 				}
 
 				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -132,9 +140,9 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart();
-				var vehicleName = interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart();
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart();
+				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
+				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
+				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
 				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
 				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
@@ -155,7 +163,19 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (notes) {
+				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
+					var carSoldEmbed = [new EmbedBuilder()
+						.setTitle('A new sports car has been sold!')
+						.addFields(
+							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${saleDate}` },
+							{ name: `Car Sold To:`, value: `${soldTo}` },
+							{ name: `Vehicle Name:`, value: `${vehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+						)
+						.setColor('0096C7')];
+				} else {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
 						.addFields(
@@ -167,19 +187,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
 							{ name: `Notes:`, value: `${notes}` }
 						)
-						.setColor('023E8A')];
-				} else {
-					var carSoldEmbed = [new EmbedBuilder()
-						.setTitle('A new sports car has been sold!')
-						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-						)
-						.setColor('023E8A')];
+						.setColor('0096C7')];
 				}
 
 				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -240,9 +248,9 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart();
-				var vehicleName = interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart();
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart();
+				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
+				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
+				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
 				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
 				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
@@ -263,7 +271,19 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (notes) {
+				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
+					var carSoldEmbed = [new EmbedBuilder()
+						.setTitle('A new tuner car has been sold!')
+						.addFields(
+							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${saleDate}` },
+							{ name: `Car Sold To:`, value: `${soldTo}` },
+							{ name: `Vehicle Name:`, value: `${vehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+						)
+						.setColor('0096C7')];
+				} else {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new tuner car has been sold!')
 						.addFields(
@@ -275,19 +295,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
 							{ name: `Notes:`, value: `${notes}` }
 						)
-						.setColor('0077B6')];
-				} else {
-					var carSoldEmbed = [new EmbedBuilder()
-						.setTitle('A new tuner car has been sold!')
-						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-						)
-						.setColor('0077B6')];
+						.setColor('0096C7')];
 				}
 
 				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -348,9 +356,9 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart();
-				var vehicleName = interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart();
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart();
+				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
+				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
+				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
 				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
 				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
@@ -369,7 +377,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (notes) {
+				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold to an employee!')
 						.addFields(
@@ -379,7 +387,6 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Name:`, value: `${vehicleName}` },
 							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-							{ name: `Notes:`, value: `${notes}` }
 						)
 						.setColor('0096C7')];
 				} else {
@@ -392,6 +399,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Name:`, value: `${vehicleName}` },
 							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+							{ name: `Notes:`, value: `${notes}` }
 						)
 						.setColor('0096C7')];
 				}
