@@ -52,7 +52,7 @@ module.exports = {
 					await dbCmds.removeCommission(user.id, commission25Percent, commission30Percent)
 
 					var personnelData = await dbCmds.readPersStats(user.id)
-					var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
+					var commissionArray = await dbCmds.readCommission(user.id);
 					var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 					if (weeklyCarsSold < 100) {
@@ -68,7 +68,7 @@ module.exports = {
 					// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 					var notificationEmbed = new EmbedBuilder()
 						.setTitle('Commission Modified Manually:')
-						.setDescription(`<@${interaction.user.id}> removed from <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25Percent}\`\n• **30%:** \`${formatted30Percent}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** \`${reason}\`.`)
+						.setDescription(`<@${interaction.user.id}> removed from <@${user.id}>'s commission:\n• **25%:** \`${formatted25Percent}\`\n• **30%:** \`${formatted30Percent}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** \`${reason}\`.`)
 
 						.setColor('#FFA630');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
