@@ -196,9 +196,12 @@ module.exports.modalSubmit = async (interaction) => {
 				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
 				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
+				var thisSale25PercCommission = commission25Percent;
+				var thisSale30PercCommission = commission30Percent;
+
 				if (weeklyCarsSold < 100) {
 					var overallCommission = commissionArray.commission25Percent;
-					var thisSaleCommission = commission25Percent;
+					var thisSaleCommission = commission25Percent
 					var commissionPercent = "25%";
 				} else {
 					var overallCommission = commissionArray.commission30Percent;
@@ -206,6 +209,8 @@ module.exports.modalSubmit = async (interaction) => {
 					var commissionPercent = "30%";
 				}
 
+				var formatted25PercCommission = formatter.format(thisSale25PercCommission);
+				var formatted30PercCommission = formatter.format(thisSale30PercCommission);
 				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
 				var formattedOverallCommission = formatter.format(overallCommission);
 
@@ -213,12 +218,12 @@ module.exports.modalSubmit = async (interaction) => {
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Sports Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
+				var reason = `Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
 
 				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added \`${formattedThisSaleCommission}\` to <@${interaction.user.id}>'s current commission for a new total of \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added  to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
 					.setColor('#1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
@@ -299,9 +304,12 @@ module.exports.modalSubmit = async (interaction) => {
 				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
 				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
+				var thisSale25PercCommission = commission25Percent;
+				var thisSale30PercCommission = commission30Percent;
+
 				if (weeklyCarsSold < 100) {
 					var overallCommission = commissionArray.commission25Percent;
-					var thisSaleCommission = commission25Percent;
+					var thisSaleCommission = commission25Percent
 					var commissionPercent = "25%";
 				} else {
 					var overallCommission = commissionArray.commission30Percent;
@@ -309,6 +317,8 @@ module.exports.modalSubmit = async (interaction) => {
 					var commissionPercent = "30%";
 				}
 
+				var formatted25PercCommission = formatter.format(thisSale25PercCommission);
+				var formatted30PercCommission = formatter.format(thisSale30PercCommission);
 				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
 				var formattedOverallCommission = formatter.format(overallCommission);
 
@@ -316,12 +326,12 @@ module.exports.modalSubmit = async (interaction) => {
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Tuner Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
+				var reason = `Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
 
 				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added \`${formattedThisSaleCommission}\` to <@${interaction.user.id}>'s current commission for a new total of \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added  to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
 					.setColor('#1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
