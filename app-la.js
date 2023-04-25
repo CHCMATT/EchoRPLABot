@@ -1,6 +1,6 @@
 var fs = require('fs');
 require("dotenv/config");
-const cron = require('node-cron');
+var cron = require('node-cron');
 var mongoose = require("mongoose");
 var startup = require('./startup.js');
 var interact = require('./dsInteractions.js');
