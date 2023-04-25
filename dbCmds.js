@@ -71,6 +71,10 @@ module.exports.addCommission = async (discordId, commission25Percent, commission
 	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { $inc: { commission25Percent: commission25Percent, commission30Percent: commission30Percent } }, { upsert: true });
 };
 
+module.exports.removeCommission = async (discordId, commission25Percent, commission30Percent) => {
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { $inc: { commission25Percent: -commission25Percent, commission30Percent: -commission30Percent } }, { upsert: true });
+};
+
 module.exports.resetCommission = async (discordId) => {
 	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { commission25Percent: 0, commission30Percent: 0 });
 };
