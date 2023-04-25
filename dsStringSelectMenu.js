@@ -5,7 +5,7 @@ module.exports.stringSelectMenuSubmit = async (interaction) => {
 		var selectStringMenuID = interaction.customId;
 		switch (selectStringMenuID) {
 			case 'starter':
-				const select2 = new StringSelectMenuBuilder()
+				var select2 = new StringSelectMenuBuilder()
 					.setCustomId('starter2')
 					.setPlaceholder('Make a 2nd selection!')
 					.addOptions(
@@ -14,7 +14,7 @@ module.exports.stringSelectMenuSubmit = async (interaction) => {
 							.setDescription('Description 1')
 							.setValue('Value 1'),
 					);
-				const row2 = new ActionRowBuilder()
+				var row2 = new ActionRowBuilder()
 					.addComponents(select2);
 
 				await interaction.reply({
