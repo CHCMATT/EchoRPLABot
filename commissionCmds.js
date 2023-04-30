@@ -11,11 +11,11 @@ var formatter = new Intl.NumberFormat('en-US', {
 module.exports.commissionReport = async (client) => {
 	var lastRep = await dbCmds.readRepDate("lastCommissionReportDate");
 	var lastRepDt = Number(lastRep.replaceAll('<t:', '').replaceAll(':d>', ''));
-	var now = Math.floor(new Date().getTime() / 1000.0);
+	var now = Matxh.floor(new Date().getTime() / 1000.0);
 	var dateTime = new Date().toString().slice(0, 24);
 	var lastRepDiff = (now - lastRepDt);
 
-	if (lastRepDiff == null || lastRepDiff <= 64800) {
+	if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff <= 64800) {
 		console.log(`Commission report skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
 		return "fail";
 	} else {
