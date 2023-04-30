@@ -15,6 +15,7 @@ module.exports.commissionReport = async (client) => {
 	var lastRepDiff = (now - lastRepDt);
 
 	if (lastRepDiff == null || lastRepDiff <= 64800) {
+		console.log(`Commission report skipped (lastRepDiff: ${lastRepDiff})`)
 		return "fail";
 	} else {
 		var now = Math.floor(new Date().getTime() / 1000.0);
