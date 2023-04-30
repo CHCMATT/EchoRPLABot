@@ -14,7 +14,9 @@ module.exports.commissionReport = async (client) => {
 	var now = Math.floor(new Date().getTime() / 1000.0);
 	var lastRepDiff = (now - lastRepDt);
 
-	if (lastRepDiff >= 64800) {
+	if (lastRepDiff == null || lastRepDiff <= 64800) {
+		return "fail";
+	} else {
 		var now = Math.floor(new Date().getTime() / 1000.0);
 		var today = `<t:${now}:d>`;
 
@@ -75,7 +77,5 @@ module.exports.commissionReport = async (client) => {
 			.setColor('#1EC276');
 		await client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 		return "success";
-	} else {
-		return "fail";
 	}
 };
