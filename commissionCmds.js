@@ -11,7 +11,7 @@ var formatter = new Intl.NumberFormat('en-US', {
 module.exports.commissionReport = async (client) => {
 	var lastRep = await dbCmds.readRepDate("lastCommissionReportDate");
 	var lastRepDt = Number(lastRep.replaceAll('<t:', '').replaceAll(':d>', ''));
-	var now = Matxh.floor(new Date().getTime() / 1000.0);
+	var now = Math.floor(new Date().getTime() / 1000.0);
 	var dateTime = new Date().toString().slice(0, 24);
 	var lastRepDiff = (now - lastRepDt);
 
