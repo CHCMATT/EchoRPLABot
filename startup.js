@@ -13,16 +13,18 @@ module.exports.startUp = async (client) => {
 	let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 	countWeeklyCarsSold = countWeeklyCarsSold.toString();
 
-	let lastCommissionReportDate = await dbCmds.readSummValue("lastCommissionReportDate");
+	let lastCommissionReportDate = await dbCmds.readRepDate("lastCommissionReportDate");
 	lastCommissionReportDate = lastCommissionReportDate.toString();
 
 
 	if (countCarsSold.includes('Value not found')) {
 		await dbCmds.resetSummValue("countCarsSold");
 	}
+
 	if (countWeeklyCarsSold.includes('Value not found')) {
 		await dbCmds.resetSummValue("countWeeklyCarsSold");
 	}
+
 	if (lastCommissionReportDate.includes('Value not found')) {
 		await dbCmds.resetSummValue("lastCommissionReportDate");
 	}
