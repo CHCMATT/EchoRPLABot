@@ -52,8 +52,6 @@ module.exports.commissionReport = async (client) => {
 			commissionDescList = "There is no commission to pay this week."
 		}
 
-		var lastRep = await dbCmds.readRepDate("lastCommissionReportDate");
-
 		if (lastRep.includes("Value not found")) {
 			var nowMinus7 = now - 604800;
 			var lastRep = `<t:${nowMinus7}:d>`
@@ -67,12 +65,9 @@ module.exports.commissionReport = async (client) => {
 		await client.channels.cache.get(process.env.COMMISSION_REPORT_CHANNEL_ID).send({ embeds: [embed] });
 
 		// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-		var now = Math.floor(new Date().getTime() / 1000.0);
-		var repDate = `<t:${now}:d>`;
+		await dbCmds.setRepDate("lastCommissionReportDate", today);
 
-		await dbCmds.setRepDate("lastCommissionReportDate", repDate);
-
-		var reason = `Automatic Commission Report Triggered on ${repDate}`;
+		var reason = `Commission Report triggered on ${today}`
 		var notificationEmbed = new EmbedBuilder()
 			.setTitle('Commission Modified Automatically:')
 			.setDescription(`All salesperson's commissions have been reset to \`$0\`.\n\n**Reason:** ${reason}.`)
