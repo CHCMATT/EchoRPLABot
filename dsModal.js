@@ -17,6 +17,11 @@ function toTitleCase(str) {
 	return str.join(' ');
 }
 
+function strCleanup(str) {
+	var cleaned = str.replaceAll('`', '-').replaceAll('\\', '-').trimEnd().trimStart();
+	return cleaned;
+};
+
 module.exports.modalSubmit = async (interaction) => {
 	try {
 		var modalID = interaction.customId;
@@ -32,12 +37,12 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
-				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
-				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
-				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
+				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
@@ -55,7 +60,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
+				if (!notes || notes.toLowerCase() === "n/a") {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold!')
 						.addFields(
@@ -66,7 +71,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
 						)
-						.setColor('0096C7')];
+						.setColor('023E8A')];
 				} else {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold!')
@@ -79,7 +84,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
 							{ name: `Notes:`, value: `${notes}` }
 						)
-						.setColor('0096C7')];
+						.setColor('023E8A')];
 				}
 
 				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -140,12 +145,12 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
-				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
-				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
-				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
+				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
@@ -163,7 +168,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
+				if (!notes || notes.toLowerCase() === "n/a") {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
 						.addFields(
@@ -174,7 +179,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
 						)
-						.setColor('0096C7')];
+						.setColor('0077B6')];
 				} else {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
@@ -187,7 +192,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
 							{ name: `Notes:`, value: `${notes}` }
 						)
-						.setColor('0096C7')];
+						.setColor('0077B6')];
 				}
 
 				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -248,12 +253,12 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
-				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
-				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
-				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
+				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
@@ -271,7 +276,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
+				if (!notes || notes.toLowerCase() === "n/a") {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new tuner car has been sold!')
 						.addFields(
@@ -356,12 +361,12 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(interaction.fields.getTextInputValue('soldToInput').trimEnd().trimStart());
-				var vehicleName = toTitleCase(interaction.fields.getTextInputValue('vehicleNameInput').trimEnd().trimStart());
-				var vehiclePlate = interaction.fields.getTextInputValue('vehiclePlateInput').trimEnd().trimStart().toUpperCase();
-				var price = Math.abs(Number(interaction.fields.getTextInputValue('priceInput').trimEnd().trimStart().replaceAll(',', '').replaceAll('$', '')));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
 				var formattedPrice = formatter.format(price);
-				var notes = interaction.fields.getTextInputValue('notesInput').trimEnd().trimStart();
+				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
@@ -377,7 +382,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCostPrice = formatter.format(costPrice);
 				var formattedLaProfit = formatter.format(laProfit);
 
-				if (!notes || notes.toLowerCase().trimEnd().trimStart() === "n/a") {
+				if (!notes || notes.toLowerCase() === "n/a") {
 					var carSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold to an employee!')
 						.addFields(
