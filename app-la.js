@@ -23,9 +23,7 @@ cron.schedule('0 15 * * FRI', function () { commissionCmds.commissionReport(clie
 client.once('ready', async () => {
 	console.log(`[${fileName}] The client is starting up!`);
 	mongoose.set("strictQuery", false);
-	mongoose.connect(process.env.MONGO_URI, {
-		keepAlive: true
-	});
+	mongoose.connect(process.env.MONGO_URI);
 	console.log(`[${fileName}] Connected to Mongo!`);
 
 	// Google Sheets Authorization Stuff
@@ -41,7 +39,6 @@ client.once('ready', async () => {
 	client.sheetId = process.env.SPREADSHEET_ID;
 	client.googleSheets = googleSheets.spreadsheets;
 	console.log(`[${fileName}] Connected to Google Sheets!`);
-
 
 	var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // Find all the files in the command folder that end with .js
 	var cmdList = []; // Create an empty array for pushing each command file to
