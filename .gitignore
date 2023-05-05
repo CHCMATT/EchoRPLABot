@@ -1,4 +1,5 @@
 .env
 package.json
 package-lock.json
+sheets-creds.json
 /node_modules

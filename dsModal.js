@@ -41,8 +41,13 @@ module.exports.modalSubmit = async (interaction) => {
 				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
 				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
 				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var formattedPrice = formatter.format(price);
 				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+
+				await interaction.client.googleSheets.values.append({
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Regular`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+				});
+
+				var formattedPrice = formatter.format(price);
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
@@ -149,8 +154,13 @@ module.exports.modalSubmit = async (interaction) => {
 				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
 				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
 				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var formattedPrice = formatter.format(price);
 				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+
+				await interaction.client.googleSheets.values.append({
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Sports`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+				});
+
+				var formattedPrice = formatter.format(price);
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
@@ -257,8 +267,13 @@ module.exports.modalSubmit = async (interaction) => {
 				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
 				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
 				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var formattedPrice = formatter.format(price);
 				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+
+				await interaction.client.googleSheets.values.append({
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Tuner`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+				});
+
+				var formattedPrice = formatter.format(price);
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
@@ -365,8 +380,13 @@ module.exports.modalSubmit = async (interaction) => {
 				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
 				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
 				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var formattedPrice = formatter.format(price);
 				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+
+				await interaction.client.googleSheets.values.append({
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Employee`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+				});
+
+				var formattedPrice = formatter.format(price);
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
