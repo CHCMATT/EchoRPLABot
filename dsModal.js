@@ -133,7 +133,7 @@ module.exports.modalSubmit = async (interaction) => {
 				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added  to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
 					.setColor('#1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
@@ -246,7 +246,7 @@ module.exports.modalSubmit = async (interaction) => {
 				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added  to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
 					.setColor('#1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
@@ -359,7 +359,7 @@ module.exports.modalSubmit = async (interaction) => {
 				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added  to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formatted25PercCommission}\`\n• **30%:** \`${formatted30PercCommission}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** ${reason}.`)
 					.setColor('#1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
