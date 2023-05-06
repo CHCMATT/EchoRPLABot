@@ -21,7 +21,7 @@ module.exports = {
 	async execute(interaction) {
 		if (interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
 			var user = interaction.options.getUser('user');
-			var bankNum = interaction.options.getString('accountnumber').replaceAll(' ', '');
+			var bankNum = interaction.options.getString('accountnumber');
 			await dbCmds.setBankAccount(user.id, bankNum)
 			await interaction.reply({ content: `Successfully set the bank account number for <@${user.id}> to \`${bankNum}\`.`, ephemeral: true });
 		}

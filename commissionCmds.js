@@ -8,7 +8,7 @@ var formatter = new Intl.NumberFormat('en-US', {
 	maximumFractionDigits: 0
 });
 
-module.exports.commissionReport = async (client, type, who) => {
+module.exports.commissionReport = async (client) => {
 	var lastRep = await dbCmds.readRepDate("lastCommissionReportDate");
 	var lastRepDt = Number(lastRep.replaceAll('<t:', '').replaceAll(':d>', ''));
 	var now = Math.floor(new Date().getTime() / 1000.0);
@@ -16,7 +16,7 @@ module.exports.commissionReport = async (client, type, who) => {
 	var lastRepDiff = (now - lastRepDt);
 
 	if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff <= 64800) {
-		console.log(`${type} Commission report triggered by ${who} skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
+		console.log(`Commission report skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
 		return "fail";
 	} else {
 		var now = Math.floor(new Date().getTime() / 1000.0);
@@ -46,7 +46,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		}
 
 		await dbCmds.resetSummValue("countWeeklyCarsSold");
-		await editEmbed.editMainEmbed(client);
+		await editEmbed.editEmbed(client);
 
 		if (commissionDescList == '') {
 			commissionDescList = "There is no commission to pay this week."
@@ -58,7 +58,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		}
 
 		var embed = new EmbedBuilder()
-			.setTitle(`${type} Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
+			.setTitle(`Weekly Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
 			.setDescription(commissionDescList)
 			.setColor('EDC531');
 
@@ -67,7 +67,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 		await dbCmds.setRepDate("lastCommissionReportDate", today);
 
-		var reason = `${type} Commission Report triggered by ${who} on ${today}`
+		var reason = `Commission Report triggered on ${today}`
 		var notificationEmbed = new EmbedBuilder()
 			.setTitle('Commission Modified Automatically:')
 			.setDescription(`All salesperson's commissions have been reset to \`$0\`.\n\n**Reason:** ${reason}.`)

@@ -19,7 +19,6 @@ var personnelInfoSchema = new Schema({
 	embedColor: reqString,
 	embedMsgId: reqString,
 	bankAccount: reqString,
-	weeklyCarsSold: reqNum,
 });
 
 module.exports = models['personnelInfo'] || model('personnelInfo', personnelInfoSchema);
