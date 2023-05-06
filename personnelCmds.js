@@ -18,8 +18,10 @@ module.exports.sendOrUpdateEmbed = async (client, userId) => {
 		var charName = personnelData.charName;
 		var embedColor = personnelData.embedColor;
 		var carsSold = personnelData.carsSold;
+		var weeklyCarsSold = personnelData.weeklyCarsSold;
 
-		var embedDesc = `• **Cars Sold:** ${carsSold}`;
+		var embedDesc = `• **Cars Sold:** ${carsSold}
+		• **Weekly Cars Sold:** ${weeklyCarsSold}`;
 
 		var personnelEmbed = new EmbedBuilder()
 			.setTitle(`Luxury Autos statistics for ${charName}:`)
@@ -35,8 +37,10 @@ module.exports.sendOrUpdateEmbed = async (client, userId) => {
 		var charName = personnelData.charName;
 		var embedColor = personnelData.embedColor;
 		var carsSold = personnelData.carsSold;
+		var weeklyCarsSold = personnelData.weeklyCarsSold;
 
-		var embedDesc = `• **Cars Sold:** ${carsSold}`;
+		var embedDesc = `• **Cars Sold:** ${carsSold}
+		• **Weekly Cars Sold:** ${weeklyCarsSold}`;
 
 		var personnelEmbed = new EmbedBuilder()
 			.setTitle(`Luxury Autos statistics for ${charName}:`)

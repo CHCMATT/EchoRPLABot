@@ -124,7 +124,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
 				var formattedOverallCommission = formatter.format(overallCommission);
 
-				await editEmbed.editEmbed(interaction.client);
+				await editEmbed.editMainEmbed(interaction.client);
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
@@ -237,7 +237,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
 				var formattedOverallCommission = formatter.format(overallCommission);
 
-				await editEmbed.editEmbed(interaction.client);
+				await editEmbed.editMainEmbed(interaction.client);
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
@@ -350,7 +350,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
 				var formattedOverallCommission = formatter.format(overallCommission);
 
-				await editEmbed.editEmbed(interaction.client);
+				await editEmbed.editMainEmbed(interaction.client);
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
@@ -452,7 +452,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				var formattedOverallCommission = formatter.format(overallCommission);
 
-				await editEmbed.editEmbed(interaction.client);
+				await editEmbed.editMainEmbed(interaction.client);
 				await personnelCmds.sendOrUpdateEmbed(interaction.client, interaction.member.user.id);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");

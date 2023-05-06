@@ -46,7 +46,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		}
 
 		await dbCmds.resetSummValue("countWeeklyCarsSold");
-		await editEmbed.editEmbed(client);
+		await editEmbed.editMainEmbed(client);
 
 		if (commissionDescList == '') {
 			commissionDescList = "There is no commission to pay this week."

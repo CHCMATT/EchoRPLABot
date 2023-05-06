@@ -74,4 +74,9 @@ client.once('ready', async () => {
 	console.log(`[${fileName}] Client is ready.`);
 
 	await startup.startUp(client);
+
+	var now = Math.floor(new Date().getTime() / 1000.0);
+	var time = `<t:${now}:t>`;
+
+	await client.channels.cache.get(process.env.LOG_CHANNEL_ID).send(`:bangbang: The ${process.env.BOT_NAME} bot started up at ${time}.`)
 });

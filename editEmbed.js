@@ -1,7 +1,7 @@
 var dbCmds = require('./dbCmds.js');
 var { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 
-module.exports.editEmbed = async (client) => {
+module.exports.editMainEmbed = async (client) => {
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
