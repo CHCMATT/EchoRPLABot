@@ -53,3 +53,32 @@ function addBtnRows() {
 	var rows = [row1];
 	return rows;
 };
+
+module.exports.postStatsEmbed = async (client) => {
+
+	var employeeStats = await dbCmds.currStats();
+
+	var embeds = [];
+
+	for (var i = 0; i < employeeStats.length; i++) {
+		var charName = employeeStats[i].charName;
+		var embedColor = employeeStats[i].embedColor;
+		var carsSold = employeeStats[i].carsSold;
+		var weeklyCarsSold = employeeStats[i].weeklyCarsSold;
+		var commission25Percent = employeeStats[i].commission25Percent;
+		var commission30Percent = employeeStats[i].commission30Percent;
+		var formattedComm25Percent = formatter.format(commission25Percent);
+		var formattedComm30Percent = formatter.format(commission30Percent);
+
+		var currEmbed = new EmbedBuilder().setTitle(`Luxury Autos statistics for ${charName}:`).setColor(embedColor).setDescription(`• **Cars Sold:** ${carsSold}
+		• **Weekly Cars Sold:** ${weeklyCarsSold}
+		• **Current Commission (25%):** ${formattedComm25Percent}
+		• **Current Commission (30%):** ${formattedComm30Percent}`);
+
+		embeds = embeds.concat(currEmbed);
+	}
+
+	client.statsMsg = await client.channels.cache.get(process.env.PERSONNEL_STATS_CHANNEL_ID).send({ embeds: embeds });
+
+	await dbCmds.setMsgId("statsMsg", client.statsMsg.id);
+};

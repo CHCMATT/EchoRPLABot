@@ -44,8 +44,8 @@ module.exports = {
 				var commission30Percent = Math.abs(interaction.options.getInteger('commissionthirty'));
 				var reason = interaction.options.getString('reason');
 
-				var formatted25Percent = formatter.format(commission25Percent);
-				var formatted30Percent = formatter.format(commission30Percent);
+				var formatted25PercentComm = formatter.format(commission25Percent);
+				var formatted30PercentComm = formatter.format(commission30Percent);
 
 				var personnelData = await dbCmds.readPersStats(user.id)
 				if (personnelData.commission25Percent != null && personnelData.commission25Percent > 0) {
@@ -56,23 +56,25 @@ module.exports = {
 					var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 					if (weeklyCarsSold < 100) {
-						var overallCommission = commissionArray.commission25Percent;
 						var commissionPercent = "25%";
 					} else {
-						var overallCommission = commissionArray.commission30Percent;
 						var commissionPercent = "30%";
 					}
 
-					var formattedOverallCommission = formatter.format(overallCommission);
+					var overallCommission25Percent = commissionArray.commission25Percent;
+					var overallCommission30Percent = commissionArray.commission30Percent;
+
+					var formattedOverallCommission25 = formatter.format(overallCommission25Percent);
+					var formattedOverallCommission30 = formatter.format(overallCommission30Percent);
 
 					// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 					var notificationEmbed = new EmbedBuilder()
 						.setTitle('Commission Modified Manually:')
-						.setDescription(`<@${interaction.user.id}> removed from <@${user.id}>'s commission:\n• **25%:** \`${formatted25Percent}\`\n• **30%:** \`${formatted30Percent}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** \`${reason}\`.`)
+						.setDescription(`<@${interaction.user.id}> removed from <@${user.id}>'s commission:\n• **25%:** \`${formatted25PercentComm}\`\n• **30%:** \`${formatted30PercentComm}\`\n\nTheir new total is:\n• **25%:** \`${formattedOverallCommission25}\`\n• **30%:** \`${formattedOverallCommission30}.\n\n**Reason:** \`${reason}\`.`)
 
 						.setColor('#FFA630');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
-					await interaction.reply({ content: `Successfully removed \`${formatted25Percent}\` from <@${user.id}>'s 25% commission and \`${formatted30Percent}\` from their 30% commission for a new total of (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
+					await interaction.reply({ content: `Successfully removed \`${formatted25PercentComm}\` from <@${user.id}>'s 25% commission and \`${formatted30PercentComm}\` from their 30% commission for a new total of (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
 				} else {
 					await interaction.reply({ content: `:exclamation: <@${user.id}> doesn't have any commission to modify, yet.`, ephemeral: true });
 				}
