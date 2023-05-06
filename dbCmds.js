@@ -125,3 +125,12 @@ module.exports.currStats = async () => {
 	var result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, embedColor: 1, carsSold: 1, weeklyCarsSold: 1, commission25Percent: 1, commission30Percent: 1, _id: 0 });
 	return result;
 };
+
+module.exports.weeklyStatsRep = async () => {
+	var result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, carsSold: 1, weeklyCarsSold: 1, _id: 0 });
+	return result;
+};
+
+module.exports.resetWeeklyStats = async (discordId) => {
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { weeklyCarsSold: 0 }, { upsert: true });
+};

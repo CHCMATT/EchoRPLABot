@@ -136,7 +136,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
 					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
-					.setColor('#1EC276');
+					.setColor('1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
 				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedCurrentCommission}\`.`, ephemeral: true });
@@ -251,7 +251,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
 					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
-					.setColor('#1EC276');
+					.setColor('1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
 				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedCurrentCommission}\`.`, ephemeral: true });
@@ -366,7 +366,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
 					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
-					.setColor('#1EC276');
+					.setColor('1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
 				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedCurrentCommission}\`.`, ephemeral: true });

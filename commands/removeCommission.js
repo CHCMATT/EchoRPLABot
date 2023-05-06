@@ -37,7 +37,7 @@ module.exports = {
 		},
 	],
 	async execute(interaction) {
-		if (interaction.member._roles.includes(process.env.REALTOR_ROLE_ID) || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+		if (interaction.member._roles.includes(process.env.SALESMAN_ROLE_ID) || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
 			var user = interaction.options.getUser('user');
 			if (interaction.user.id == user.id || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
 				var commission25Percent = Math.abs(interaction.options.getInteger('commissiontwentyfive'));
@@ -72,7 +72,7 @@ module.exports = {
 						.setTitle('Commission Modified Manually:')
 						.setDescription(`<@${interaction.user.id}> removed from <@${user.id}>'s commission:\n• **25%:** \`${formatted25PercentComm}\`\n• **30%:** \`${formatted30PercentComm}\`\n\nTheir new total is:\n• **25%:** \`${formattedOverallCommission25}\`\n• **30%:** \`${formattedOverallCommission30}.\n\n**Reason:** \`${reason}\`.`)
 
-						.setColor('#FFA630');
+						.setColor('FFA630');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 					await interaction.reply({ content: `Successfully removed \`${formatted25PercentComm}\` from <@${user.id}>'s 25% commission and \`${formatted30PercentComm}\` from their 30% commission for a new total of (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
 				} else {

@@ -13,7 +13,7 @@ module.exports = {
 		},
 	],
 	async execute(interaction) {
-		if (interaction.member._roles.includes(process.env.REALTOR_ROLE_ID) || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+		if (interaction.member._roles.includes(process.env.SALESMAN_ROLE_ID) || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
 			var user = interaction.user;
 			var plateInput = interaction.options.getString('licenseplate').toUpperCase();
 

@@ -13,12 +13,12 @@ module.exports.postMainEmbed = async (client) => {
 	var carsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold:')
 		.setDescription(countCarsSold)
-		.setColor('#00B4D8');
+		.setColor('00B4D8');
 
 	var weeklyCarsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold This Week:')
 		.setDescription(countWeeklyCarsSold)
-		.setColor('#48CAE4');
+		.setColor('48CAE4');
 
 	var btnRows = addBtnRows();
 
