@@ -4,11 +4,8 @@ var postEmbed = require('./postEmbed.js');
 var editEmbed = require('./editEmbed.js');
 
 module.exports.startUp = async (client) => {
-	var mainChannel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID);
-	var statsChannel = await client.channels.fetch(process.env.PERSONNEL_STATS_CHANNEL_ID);
-	var mainEmbed = await dbCmds.readMsgId("embedMsg");
-	var statsEmbed = await dbCmds.readMsgId("statsMsg");
-
+	var channel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID);
+	var oldEmbed = await dbCmds.readMsgId("embedMsg");
 
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	countCarsSold = countCarsSold.toString();
@@ -33,15 +30,7 @@ module.exports.startUp = async (client) => {
 	}
 
 	try {
-		await statsChannel.messages.fetch(statsEmbed);
-		editEmbed.editStatsEmbed(client);
-	}
-	catch (error) {
-		postEmbed.postStatsEmbed(client);
-	}
-
-	try {
-		await mainChannel.messages.fetch(mainEmbed);
+		await channel.messages.fetch(oldEmbed);
 		editEmbed.editMainEmbed(client);
 		return "edited";
 	}

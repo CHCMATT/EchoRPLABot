@@ -1,12 +1,6 @@
 var { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 var dbCmds = require('./dbCmds.js');
 
-var formatter = new Intl.NumberFormat('en-US', {
-	style: 'currency',
-	currency: 'USD',
-	maximumFractionDigits: 0
-});
-
 module.exports.postMainEmbed = async (client) => {
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
@@ -19,12 +13,12 @@ module.exports.postMainEmbed = async (client) => {
 	var carsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold:')
 		.setDescription(countCarsSold)
-		.setColor('00B4D8');
+		.setColor('#00B4D8');
 
 	var weeklyCarsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold This Week:')
 		.setDescription(countWeeklyCarsSold)
-		.setColor('48CAE4');
+		.setColor('#48CAE4');
 
 	var btnRows = addBtnRows();
 
@@ -58,33 +52,4 @@ function addBtnRows() {
 
 	var rows = [row1];
 	return rows;
-};
-
-module.exports.postStatsEmbed = async (client) => {
-
-	var employeeStats = await dbCmds.currStats();
-
-	var embeds = [];
-
-	for (var i = 0; i < employeeStats.length; i++) {
-		var charName = employeeStats[i].charName;
-		var embedColor = employeeStats[i].embedColor;
-		var carsSold = employeeStats[i].carsSold;
-		var weeklyCarsSold = employeeStats[i].weeklyCarsSold;
-		var commission25Percent = employeeStats[i].commission25Percent;
-		var commission30Percent = employeeStats[i].commission30Percent;
-		var formattedComm25Percent = formatter.format(commission25Percent);
-		var formattedComm30Percent = formatter.format(commission30Percent);
-
-		var currEmbed = new EmbedBuilder().setTitle(`Luxury Autos statistics for ${charName}:`).setColor(embedColor).setDescription(`• **Cars Sold:** ${carsSold}
-		• **Weekly Cars Sold:** ${weeklyCarsSold}
-		• **Current Commission (25%):** ${formattedComm25Percent}
-		• **Current Commission (30%):** ${formattedComm30Percent}`);
-
-		embeds = embeds.concat(currEmbed);
-	}
-
-	client.statsMsg = await client.channels.cache.get(process.env.PERSONNEL_STATS_CHANNEL_ID).send({ embeds: embeds });
-
-	await dbCmds.setMsgId("statsMsg", client.statsMsg.id);
 };

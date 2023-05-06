@@ -60,7 +60,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		var embed = new EmbedBuilder()
 			.setTitle(`${type} Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
 			.setDescription(commissionDescList)
-			.setColor('90E0EF');
+			.setColor('EDC531');
 
 		await client.channels.cache.get(process.env.COMMISSION_REPORT_CHANNEL_ID).send({ embeds: [embed] });
 
@@ -71,7 +71,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		var notificationEmbed = new EmbedBuilder()
 			.setTitle('Commission Modified Automatically:')
 			.setDescription(`All salesperson's commissions have been reset to \`$0\`.\n\n**Reason:** ${reason}.`)
-			.setColor('1EC276');
+			.setColor('#1EC276');
 		await client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 		return "success";
 	}

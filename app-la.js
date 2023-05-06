@@ -6,7 +6,6 @@ var startup = require('./startup.js');
 var { google } = require('googleapis');
 var interact = require('./dsInteractions.js');
 var commissionCmds = require('./commissionCmds.js');
-var statsReport = require('./statsReport.js');
 var { Client, Collection, GatewayIntentBits } = require('discord.js');
 
 var client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers], partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
@@ -19,13 +18,7 @@ client.login(process.env.TOKEN);
 var fileParts = __filename.split(/[\\/]/);
 var fileName = fileParts[fileParts.length - 1];
 
-cron.schedule('0 15 * * SAT', function () {
-	commissionCmds.commissionReport(client, `Automatic`, `\`System\``);
-}); // runs at 15:00 every Friday
-cron.schedule('1 15 * * SAT', function () {
-	statsReport.statsReport(client, `Automatic`, `\`System\``);
-}); // runs at 15:01 every Friday
-
+cron.schedule('00 15 * * FRI', function () { commissionCmds.commissionReport(client, `Automatic`, `\`System\``); }); // runs at 15:00 every Friday
 
 client.once('ready', async () => {
 	console.log(`[${fileName}] The client is starting up!`);
