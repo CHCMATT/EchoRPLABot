@@ -23,9 +23,7 @@ cron.schedule('0 15 * * FRI', function () { commissionCmds.commissionReport(clie
 client.once('ready', async () => {
 	console.log(`[${fileName}] The client is starting up!`);
 	mongoose.set("strictQuery", false);
-	mongoose.connect(process.env.MONGO_URI, {
-		keepAlive: true
-	});
+	mongoose.connect(process.env.MONGO_URI);
 	console.log(`[${fileName}] Connected to Mongo!`);
 
 	// Google Sheets Authorization Stuff
