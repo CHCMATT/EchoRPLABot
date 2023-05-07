@@ -22,11 +22,21 @@ module.exports = (client) => {
 				console.log(`Error: Unrecognized interaction '${interaction.customId}' with type '${interaction.constructor.name}'`);
 				return;
 			}
-		}
-		catch (error) {
+		} catch (error) {
+			var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+			var fileParts = __filename.split(/[\\/]/);
+			var fileName = fileParts[fileParts.length - 1];
+
+			var errorEmbed = [new EmbedBuilder()
+				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
+				.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
+				.setColor('B80600')
+				.setFooter({ text: `${errTime}` })];
+
+			await interaction.client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+
+			console.log(`Error occured at ${errTime} at file ${fileName}!`);
 			console.error(error);
-			console.log(interaction);
-			await interaction.reply({ content: 'There was an error executing this command! Please tag @CHCMATT to fix this issue.', ephemeral: true });
 		}
 	});
 };

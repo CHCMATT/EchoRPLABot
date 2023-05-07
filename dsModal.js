@@ -1,3 +1,4 @@
+var moment = require('moment');
 var dbCmds = require('./dbCmds.js');
 var editEmbed = require('./editEmbed.js');
 var { EmbedBuilder } = require('discord.js');
@@ -132,7 +133,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				var reason = `Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
 
-				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
 					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
@@ -247,7 +248,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				var reason = `Sports Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
 
-				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
 					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
@@ -362,7 +363,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				var reason = `Tuner Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
 
-				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
 					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
@@ -374,6 +375,7 @@ module.exports.modalSubmit = async (interaction) => {
 			case 'addEmployeeSaleModal':
 				var salesmanName;
 				if (interaction.member.nickname) {
+					xzx;;; lp
 					salesmanName = interaction.member.nickname;
 				} else {
 					salesmanName = interaction.member.user.username;
@@ -562,7 +564,7 @@ module.exports.modalSubmit = async (interaction) => {
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				var reason = `Car Rented to \`${rentedTo}\` costing \`${formattedPrice}\` on ${rentalDate}`
 
-				// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 				var notificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
 					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
@@ -579,9 +581,19 @@ module.exports.modalSubmit = async (interaction) => {
 				console.log(`Error: Unrecognized modal ID: ${interaction.customId}`);
 		}
 	} catch (error) {
-		console.log(`Error in modal popup!`);
+		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		var fileParts = __filename.split(/[\\/]/);
+		var fileName = fileParts[fileParts.length - 1];
+
+		var errorEmbed = [new EmbedBuilder()
+			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
+			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
+			.setColor('B80600')
+			.setFooter({ text: `${errTime}` })];
+
+		await interaction.client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+
+		console.log(`Error occured at ${errTime} at file ${fileName}!`);
 		console.error(error);
 	}
 };
-
-

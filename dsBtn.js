@@ -233,9 +233,20 @@ module.exports.btnPressed = async (interaction) => {
 				await interaction.reply({ content: `I'm not familiar with this button press. Please tag @CHCMATT to fix this issue.`, ephemeral: true });
 				console.log(`Error: Unrecognized button press: ${interaction.customId}`);
 		}
-	}
-	catch (error) {
-		console.log(`Error in button press!`);
+	} catch (error) {
+		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		var fileParts = __filename.split(/[\\/]/);
+		var fileName = fileParts[fileParts.length - 1];
+
+		var errorEmbed = [new EmbedBuilder()
+			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
+			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
+			.setColor('B80600')
+			.setFooter({ text: `${errTime}` })];
+
+		await interaction.client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+
+		console.log(`Error occured at ${errTime} at file ${fileName}!`);
 		console.error(error);
 	}
 };
