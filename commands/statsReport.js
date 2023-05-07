@@ -1,14 +1,14 @@
 var { PermissionsBitField } = require('discord.js');
-var commissionCmds = require('../commissionCmds.js');
+var statsReport = require('../statsReport.js');
 
 module.exports = {
-	name: 'commissionreport',
-	description: 'Manually runs the commission report for the Management team',
+	name: 'statsreport',
+	description: 'Manually runs the statistics report for the Management team',
 	async execute(interaction) {
 		if (interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-			var result = await commissionCmds.commissionReport(interaction.client, `Manual`, `<@${interaction.user.id}>`);
+			var result = await statsReport.statsReport(interaction.client, `Manual`, `<@${interaction.user.id}>`);
 			if (result === "success") {
-				await interaction.reply({ content: `Successfully ran the commission report.`, ephemeral: true });
+				await interaction.reply({ content: `Successfully ran the statistics report.`, ephemeral: true });
 			} else {
 				await interaction.reply({ content: `:exclamation: The commission report has been run recently, please wait 24 hours between reports.`, ephemeral: true });
 			}

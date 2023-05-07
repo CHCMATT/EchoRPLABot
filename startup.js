@@ -4,8 +4,11 @@ var postEmbed = require('./postEmbed.js');
 var editEmbed = require('./editEmbed.js');
 
 module.exports.startUp = async (client) => {
-	var channel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID);
-	var oldEmbed = await dbCmds.readMsgId("embedMsg");
+	var mainChannel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID);
+	var statsChannel = await client.channels.fetch(process.env.PERSONNEL_STATS_CHANNEL_ID);
+	var mainEmbed = await dbCmds.readMsgId("embedMsg");
+	var statsEmbed = await dbCmds.readMsgId("statsMsg");
+
 
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	countCarsSold = countCarsSold.toString();
@@ -13,8 +16,8 @@ module.exports.startUp = async (client) => {
 	let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 	countWeeklyCarsSold = countWeeklyCarsSold.toString();
 
-	let lastCommissionReportDate = await dbCmds.readRepDate("lastCommissionReportDate");
-	lastCommissionReportDate = lastCommissionReportDate.toString();
+	let lastCommissionRepDate = await dbCmds.readRepDate("lastCommissionRepDate");
+	lastCommissionRepDate = lastCommissionRepDate.toString();
 
 
 	if (countCarsSold.includes('Value not found')) {
@@ -25,20 +28,25 @@ module.exports.startUp = async (client) => {
 		await dbCmds.resetSummValue("countWeeklyCarsSold");
 	}
 
-	if (lastCommissionReportDate.includes('Value not found')) {
-		await dbCmds.resetSummValue("lastCommissionReportDate");
+	if (lastCommissionRepDate.includes('Value not found')) {
+		await dbCmds.resetSummValue("lastCommissionRepDate");
 	}
 
 	try {
-		await channel.messages.fetch(oldEmbed);
-		editEmbed.editEmbed(client);
+		await statsChannel.messages.fetch(statsEmbed);
+		editEmbed.editStatsEmbed(client);
 	}
 	catch (error) {
-		postEmbed.postEmbed(client);
+		postEmbed.postStatsEmbed(client);
 	}
 
-	var now = Math.floor(new Date().getTime() / 1000.0);
-	var time = `<t:${now}:t>`;
-
-	await client.channels.cache.get(process.env.LOG_CHANNEL_ID).send(`:bangbang: The ${process.env.BOT_NAME} bot started up at ${time}.`)
+	try {
+		await mainChannel.messages.fetch(mainEmbed);
+		editEmbed.editMainEmbed(client);
+		return "edited";
+	}
+	catch (error) {
+		postEmbed.postMainEmbed(client);
+		return "posted";
+	}
 };

@@ -1,7 +1,13 @@
 var dbCmds = require('./dbCmds.js');
 var { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 
-module.exports.editEmbed = async (client) => {
+var formatter = new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+	maximumFractionDigits: 0
+});
+
+module.exports.editMainEmbed = async (client) => {
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
@@ -13,12 +19,12 @@ module.exports.editEmbed = async (client) => {
 	var carsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold:')
 		.setDescription(countCarsSold)
-		.setColor('#00B4D8');
+		.setColor('00B4D8');
 
 	var weeklyCarsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold This Week:')
 		.setDescription(countWeeklyCarsSold)
-		.setColor('#48CAE4');
+		.setColor('48CAE4');
 
 	var currEmbed = await dbCmds.readMsgId("embedMsg");
 
@@ -55,4 +61,37 @@ function addBtnRows() {
 
 	var rows = [row1];
 	return rows;
+};
+
+module.exports.editStatsEmbed = async (client) => {
+	var employeeStats = await dbCmds.currStats();
+	var currentDescList = '';
+
+	var now = Math.floor(new Date().getTime() / 1000.0);
+	var today = `<t:${now}:d>`;
+
+	for (i = 0; i < employeeStats.length; i++) {
+		if (employeeStats[i].weeklyCarsSold > 0) {
+			currentDescList = currentDescList.concat(`__${employeeStats[i].charName}__:
+	• **Cars Sold Overall:** ${employeeStats[i].carsSold}
+	• **Cars Sold This Week:** ${employeeStats[i].weeklyCarsSold}
+	• **Current Commission (25%):** ${formatter.format(employeeStats[i].commission25Percent)}
+	• **Current Commission (30%):** ${formatter.format(employeeStats[i].commission30Percent)}\n\n`);
+		}
+	}
+
+	if (currentDescList == '') {
+		currentDescList = "There is no salesperson data to display yet."
+	}
+
+	var embed = new EmbedBuilder()
+		.setTitle(`Salesman Data as of ${today}:`)
+		.setDescription(currentDescList)
+		.setColor('ADE8F4');
+
+	var statsEmbed = await dbCmds.readMsgId("statsMsg");
+	var channel = await client.channels.fetch(process.env.PERSONNEL_STATS_CHANNEL_ID)
+	var statsMsg = await channel.messages.fetch(statsEmbed);
+
+	statsMsg.edit({ embeds: [embed] });
 };

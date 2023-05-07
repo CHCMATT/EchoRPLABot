@@ -6,6 +6,7 @@ var startup = require('./startup.js');
 var { google } = require('googleapis');
 var interact = require('./dsInteractions.js');
 var commissionCmds = require('./commissionCmds.js');
+var statsReport = require('./statsReport.js');
 var { Client, Collection, GatewayIntentBits } = require('discord.js');
 
 var client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers], partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
@@ -18,7 +19,13 @@ client.login(process.env.TOKEN);
 var fileParts = __filename.split(/[\\/]/);
 var fileName = fileParts[fileParts.length - 1];
 
-cron.schedule('0 15 * * FRI', function () { commissionCmds.commissionReport(client); }); // runs at 15:00 every Friday
+cron.schedule('0 15 * * SAT', function () {
+	commissionCmds.commissionReport(client, `Automatic`, `\`System\``);
+}); // runs at 15:00 every Friday
+cron.schedule('1 15 * * SAT', function () {
+	statsReport.statsReport(client, `Automatic`, `\`System\``);
+}); // runs at 15:01 every Friday
+
 
 client.once('ready', async () => {
 	console.log(`[${fileName}] The client is starting up!`);
@@ -39,7 +46,6 @@ client.once('ready', async () => {
 	client.sheetId = process.env.SPREADSHEET_ID;
 	client.googleSheets = googleSheets.spreadsheets;
 	console.log(`[${fileName}] Connected to Google Sheets!`);
-
 
 	var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // Find all the files in the command folder that end with .js
 	var cmdList = []; // Create an empty array for pushing each command file to
@@ -75,4 +81,9 @@ client.once('ready', async () => {
 	console.log(`[${fileName}] Client is ready.`);
 
 	await startup.startUp(client);
+
+	var now = Math.floor(new Date().getTime() / 1000.0);
+	var time = `<t:${now}:t>`;
+
+	await client.channels.cache.get(process.env.LOG_CHANNEL_ID).send(`:bangbang: The ${process.env.BOT_NAME} bot started up at ${time}.`)
 });

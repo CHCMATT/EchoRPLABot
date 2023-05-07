@@ -1,4 +1,5 @@
 var dbCmds = require('../dbCmds.js');
+var editEmbed = require('../editEmbed.js');
 var { PermissionsBitField, EmbedBuilder } = require('discord.js');
 
 var formatter = new Intl.NumberFormat('en-US', {
@@ -64,6 +65,8 @@ module.exports = {
 					}
 
 					var formattedOverallCommission = formatter.format(overallCommission);
+
+					await editEmbed.editStatsEmbed(interaction.client);
 
 					// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 					var notificationEmbed = new EmbedBuilder()

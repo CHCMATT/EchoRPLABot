@@ -11,10 +11,16 @@ module.exports.statsReport = async (client) => {
 	var statsDescList = '';
 
 	for (i = 0; i < statsArray.length; i++) {
-		statsDescList = statsDescList.concat(`__${statsArray[i].charName}__:
+		if (statsArray[i].weeklyCarsSold > 0) {
+			statsDescList = statsDescList.concat(`__${statsArray[i].charName}__:
 • **Cars Sold Overall:** ${statsArray[i].carsSold}
 • **Cars Sold This Week:** ${statsArray[i].weeklyCarsSold}\n\n`);
-		await dbCmds.resetWeeklyStats(statsArray[i].discordId);
+			await dbCmds.resetWeeklyStats(statsArray[i].discordId);
+		}
+	}
+
+	if (statsDescList == '') {
+		statsDescList = "There were no sales this week."
 	}
 
 	await editEmbed.editMainEmbed(client);
@@ -33,5 +39,5 @@ module.exports.statsReport = async (client) => {
 
 	// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 	await dbCmds.setRepDate("lastStatsRepDate", today);
-
+	return "success";
 };

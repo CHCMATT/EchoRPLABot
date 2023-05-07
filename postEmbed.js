@@ -1,7 +1,13 @@
 var { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 var dbCmds = require('./dbCmds.js');
 
-module.exports.postEmbed = async (client) => {
+var formatter = new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+	maximumFractionDigits: 0
+});
+
+module.exports.postMainEmbed = async (client) => {
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
@@ -13,12 +19,12 @@ module.exports.postEmbed = async (client) => {
 	var carsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold:')
 		.setDescription(countCarsSold)
-		.setColor('#00B4D8');
+		.setColor('00B4D8');
 
 	var weeklyCarsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold This Week:')
 		.setDescription(countWeeklyCarsSold)
-		.setColor('#48CAE4');
+		.setColor('48CAE4');
 
 	var btnRows = addBtnRows();
 
@@ -52,4 +58,31 @@ function addBtnRows() {
 
 	var rows = [row1];
 	return rows;
+};
+
+module.exports.postStatsEmbed = async (client) => {
+	var employeeStats = await dbCmds.currStats();
+	var currentDescList = '';
+
+	var now = Math.floor(new Date().getTime() / 1000.0);
+	var today = `<t:${now}:d>`;
+
+	for (i = 0; i < employeeStats.length; i++) {
+		if (employeeStats[i].weeklyCarsSold > 0) {
+			currentDescList = currentDescList.concat(`__${employeeStats[i].charName}__:
+	• **Cars Sold Overall:** ${employeeStats[i].carsSold}
+	• **Cars Sold This Week:** ${employeeStats[i].weeklyCarsSold}
+	• **Current Commission (25%):** ${formatter.format(employeeStats[i].commission25Percent)}
+	• **Current Commission (30%):** ${formatter.format(employeeStats[i].commission30Percent)}\n\n`);
+		}
+	}
+
+	var embed = new EmbedBuilder()
+		.setTitle(`Salesman Data as of ${today}:`)
+		.setDescription(currentDescList)
+		.setColor('ADE8F4');
+
+	client.statsMsg = await client.channels.cache.get(process.env.PERSONNEL_STATS_CHANNEL_ID).send({ embeds: [embed] });
+
+	await dbCmds.setMsgId("statsMsg", client.statsMsg.id);
 };

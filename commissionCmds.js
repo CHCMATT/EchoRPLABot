@@ -8,15 +8,15 @@ var formatter = new Intl.NumberFormat('en-US', {
 	maximumFractionDigits: 0
 });
 
-module.exports.commissionReport = async (client) => {
-	var lastRep = await dbCmds.readRepDate("lastCommissionReportDate");
+module.exports.commissionReport = async (client, type, who) => {
+	var lastRep = await dbCmds.readRepDate("lastCommissionRepDate");
 	var lastRepDt = Number(lastRep.replaceAll('<t:', '').replaceAll(':d>', ''));
 	var now = Math.floor(new Date().getTime() / 1000.0);
 	var dateTime = new Date().toString().slice(0, 24);
 	var lastRepDiff = (now - lastRepDt);
 
 	if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff <= 64800) {
-		console.log(`Commission report skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
+		console.log(`${type} Commission report triggered by ${who} skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
 		return "fail";
 	} else {
 		var now = Math.floor(new Date().getTime() / 1000.0);
@@ -46,7 +46,8 @@ module.exports.commissionReport = async (client) => {
 		}
 
 		await dbCmds.resetSummValue("countWeeklyCarsSold");
-		await editEmbed.editEmbed(client);
+		await editEmbed.editMainEmbed(client);
+		await editEmbed.editStatsEmbed(client);
 
 		if (commissionDescList == '') {
 			commissionDescList = "There is no commission to pay this week."
@@ -58,20 +59,20 @@ module.exports.commissionReport = async (client) => {
 		}
 
 		var embed = new EmbedBuilder()
-			.setTitle(`Weekly Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
+			.setTitle(`${type} Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
 			.setDescription(commissionDescList)
-			.setColor('EDC531');
+			.setColor('90E0EF');
 
 		await client.channels.cache.get(process.env.COMMISSION_REPORT_CHANNEL_ID).send({ embeds: [embed] });
 
 		// color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-		await dbCmds.setRepDate("lastCommissionReportDate", today);
+		await dbCmds.setRepDate("lastCommissionRepDate", today);
 
-		var reason = `Commission Report triggered on ${today}`
+		var reason = `${type} Commission Report triggered by ${who} on ${today}`
 		var notificationEmbed = new EmbedBuilder()
 			.setTitle('Commission Modified Automatically:')
 			.setDescription(`All salesperson's commissions have been reset to \`$0\`.\n\n**Reason:** ${reason}.`)
-			.setColor('#1EC276');
+			.setColor('1EC276');
 		await client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 		return "success";
 	}
