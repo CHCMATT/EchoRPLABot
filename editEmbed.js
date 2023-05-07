@@ -46,7 +46,7 @@ module.exports.editMainEmbed = async (client) => {
 			.setColor('B80600')
 			.setFooter({ text: `${errTime}` })];
 
-		await interaction.client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+		await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
 
 		console.log(`Error occured at ${errTime} at file ${fileName}!`);
 		console.error(error);
@@ -128,7 +128,7 @@ module.exports.editStatsEmbed = async (client) => {
 			.setColor('B80600')
 			.setFooter({ text: `${errTime}` })];
 
-		await interaction.client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+		await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
 
 		console.log(`Error occured at ${errTime} at file ${fileName}!`);
 		console.error(error);

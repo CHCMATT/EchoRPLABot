@@ -88,7 +88,7 @@ module.exports.commissionReport = async (client, type, who) => {
 			.setColor('B80600')
 			.setFooter({ text: `${errTime}` })];
 
-		await interaction.client.channels.cache.get(process.env.LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+		await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
 
 		console.log(`Error occured at ${errTime} at file ${fileName}!`);
 		console.error(error);
