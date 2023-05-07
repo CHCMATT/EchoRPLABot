@@ -83,7 +83,7 @@ module.exports = {
 				await interaction.reply({ content: `:x: You must have the \`Administrator\` permission to use this function.`, ephemeral: true });
 			}
 		} else {
-			await interaction.reply({ content: `:x: You must have the \`Salesman\` role or the \`Administrator\` permission to use this function.`, ephemeral: true });
+			await interaction.reply({ content: `:x: You must have the \`Sales\` role or the \`Administrator\` permission to use this function.`, ephemeral: true });
 		}
 	},
 };

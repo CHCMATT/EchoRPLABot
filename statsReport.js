@@ -32,7 +32,7 @@ module.exports.statsReport = async (client) => {
 	}
 
 	var embed = new EmbedBuilder()
-		.setTitle(`Weekly Salesman Stats Report for ${lastRep} through ${today}:`)
+		.setTitle(`Salesperson Stats Report for ${lastRep} through ${today}:`)
 		.setDescription(statsDescList)
 		.setColor('ADE8F4');
 	await client.channels.cache.get(process.env.CEO_GENERAL_CHANNEL_ID).send({ embeds: [embed] });
