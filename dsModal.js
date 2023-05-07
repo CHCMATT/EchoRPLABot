@@ -536,9 +536,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await dbCmds.addCommission(interaction.member.user.id, commission25Percent, commission30Percent);
 				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
-
 				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
-
 
 				if (weeklyCarsSold < 100) {
 					var commissionPercent = "25%";
@@ -560,7 +558,6 @@ module.exports.modalSubmit = async (interaction) => {
 				var formattedCurrentCommission = formatter.format(currentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editStatsEmbed(interaction.client);
 
 				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				var reason = `Car Rented to \`${rentedTo}\` costing \`${formattedPrice}\` on ${rentalDate}`
