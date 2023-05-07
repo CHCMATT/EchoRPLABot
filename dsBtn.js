@@ -184,6 +184,51 @@ module.exports.btnPressed = async (interaction) => {
 
 				await interaction.showModal(addEmployeeSaleModal);
 				break;
+			case 'addCarRental':
+				var addCarRentalModal = new ModalBuilder()
+					.setCustomId('addCarRentalModal')
+					.setTitle('Log a car that you rented');
+				var rentedToInput = new TextInputBuilder()
+					.setCustomId('rentedToInput')
+					.setLabel("Who did you rent the car to?")
+					.setStyle(TextInputStyle.Short)
+					.setPlaceholder('Stacy Cox')
+					.setRequired(true);
+				var vehicleNameInput = new TextInputBuilder()
+					.setCustomId('vehicleNameInput')
+					.setLabel("What is the vehicle name?")
+					.setStyle(TextInputStyle.Short)
+					.setPlaceholder('Caracara 4x4')
+					.setRequired(true);
+				var vehiclePlateInput = new TextInputBuilder()
+					.setCustomId('vehiclePlateInput')
+					.setLabel("What was the car's license plate?")
+					.setStyle(TextInputStyle.Short)
+					.setPlaceholder('54CB17D6')
+					.setRequired(true);
+				var priceInput = new TextInputBuilder()
+					.setCustomId('priceInput')
+					.setLabel("What was the rental price?")
+					.setStyle(TextInputStyle.Short)
+					.setPlaceholder('1000')
+					.setRequired(true);
+				var notesInput = new TextInputBuilder()
+					.setCustomId('notesInput')
+					.setLabel("Any notes to include about this rental?")
+					.setStyle(TextInputStyle.Short)
+					.setPlaceholder('First time rental')
+					.setRequired(false);
+
+				var rentedToInputRow = new ActionRowBuilder().addComponents(rentedToInput);
+				var vehicleNameInputRow = new ActionRowBuilder().addComponents(vehicleNameInput);
+				var vehiclePlateInputRow = new ActionRowBuilder().addComponents(vehiclePlateInput);
+				var priceInputRow = new ActionRowBuilder().addComponents(priceInput);
+				var notesInputRow = new ActionRowBuilder().addComponents(notesInput);
+
+				addCarRentalModal.addComponents(rentedToInputRow, vehicleNameInputRow, vehiclePlateInputRow, priceInputRow, notesInputRow);
+
+				await interaction.showModal(addCarRentalModal);
+				break;
 			default:
 				await interaction.reply({ content: `I'm not familiar with this button press. Please tag @CHCMATT to fix this issue.`, ephemeral: true });
 				console.log(`Error: Unrecognized button press: ${interaction.customId}`);

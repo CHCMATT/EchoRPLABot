@@ -19,12 +19,12 @@ module.exports.editMainEmbed = async (client) => {
 	var carsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold:')
 		.setDescription(countCarsSold)
-		.setColor('00B4D8');
+		.setColor('023E8A');
 
 	var weeklyCarsSoldEmbed = new EmbedBuilder()
 		.setTitle('Amount of Cars Sold This Week:')
 		.setDescription(countWeeklyCarsSold)
-		.setColor('48CAE4');
+		.setColor('0077B6');
 
 	var currEmbed = await dbCmds.readMsgId("embedMsg");
 
@@ -57,6 +57,11 @@ function addBtnRows() {
 			.setCustomId('addEmployeeSale')
 			.setLabel('Add an Employee Sale')
 			.setStyle(ButtonStyle.Primary),
+
+		new ButtonBuilder()
+			.setCustomId('addCarRental')
+			.setLabel('Add a Car Rental')
+			.setStyle(ButtonStyle.Secondary),
 	);
 
 	var rows = [row1];
