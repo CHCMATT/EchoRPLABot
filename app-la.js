@@ -19,10 +19,10 @@ client.login(process.env.TOKEN);
 var fileParts = __filename.split(/[\\/]/);
 var fileName = fileParts[fileParts.length - 1];
 
-cron.schedule('0 15 * * SAT', function () {
+cron.schedule('0 15 * * FRI', function () {
 	commissionCmds.commissionReport(client, `Automatic`, `\`System\``);
 }); // runs at 15:00 every Friday
-cron.schedule('1 15 * * SAT', function () {
+cron.schedule('1 15 * * FRI', function () {
 	statsReport.statsReport(client, `Automatic`, `\`System\``);
 }); // runs at 15:01 every Friday
 
