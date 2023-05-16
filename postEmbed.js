@@ -1,5 +1,6 @@
-var { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
+var moment = require('moment');
 var dbCmds = require('./dbCmds.js');
+var { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 
 var formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',

@@ -1,6 +1,8 @@
+let moment = require('moment');
 var dsBtn = require('./dsBtn.js');
 var dsModal = require('./dsModal.js');
 var dsStringSelectMenu = require('./dsStringSelectMenu.js');
+var { EmbedBuilder } = require('discord.js');
 
 module.exports = (client) => {
 	client.on('interactionCreate', async interaction => {

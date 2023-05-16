@@ -1,4 +1,5 @@
-var { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+let moment = require('moment');
+var { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js');
 
 module.exports.btnPressed = async (interaction) => {
 	try {
