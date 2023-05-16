@@ -33,7 +33,6 @@ client.once('ready', async () => {
 	mongoose.connect(process.env.MONGO_URI);
 	console.log(`[${fileName}] Connected to Mongo!`);
 
-	// Google Sheets Authorization Stuff
 	var auth = new google.auth.GoogleAuth({
 		keyFile: "./sheets-creds.json",
 		scopes: "https://www.googleapis.com/auth/spreadsheets"
