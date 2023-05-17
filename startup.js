@@ -13,16 +13,12 @@ module.exports.startUp = async (client) => {
 		var mainEmbed = await dbCmds.readMsgId("embedMsg");
 		var statsEmbed = await dbCmds.readMsgId("statsMsg");
 
-
 		let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 		countCarsSold = countCarsSold.toString();
-
 		let countWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 		countWeeklyCarsSold = countWeeklyCarsSold.toString();
-
 		let lastCommissionRepDate = await dbCmds.readRepDate("lastCommissionRepDate");
 		lastCommissionRepDate = lastCommissionRepDate.toString();
-
 
 		if (countCarsSold.includes('Value not found')) {
 			await dbCmds.resetSummValue("countCarsSold");
