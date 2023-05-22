@@ -103,7 +103,7 @@ module.exports.postStatsEmbed = async (client) => {
 		}
 
 		var embed = new EmbedBuilder()
-			.setTitle(`Salesperson Data as of ${today}:`)
+			.setTitle(`Salesperson Statistics as of ${today}:`)
 			.setDescription(currentDescList)
 			.setColor('ADE8F4');
 
