@@ -1,23 +1,34 @@
 let moment = require('moment');
-var dbCmds = require('./dbCmds.js');
-var editEmbed = require('./editEmbed.js');
-var { EmbedBuilder } = require('discord.js');
+let dbCmds = require('./dbCmds.js');
+let editEmbed = require('./editEmbed.js');
+let { EmbedBuilder } = require('discord.js');
 
 module.exports.statsReport = async (client) => {
 	try {
-		var lastRep = await dbCmds.readRepDate("lastStatsRepDate");
-		var now = Math.floor(new Date().getTime() / 1000.0);
-		var today = `<t:${now}:d>`;
+		let lastRep = await dbCmds.readRepDate("lastStatsRepDate");
+		let now = Math.floor(new Date().getTime() / 1000.0);
+		let today = `<t:${now}:d>`;
 
-		var statsArray = await dbCmds.weeklyStatsRep();
-		var statsDescList = '';
+		let statsArray = await dbCmds.weeklyStatsRep();
+		console.log(`---- before ----`);
+		console.log(statsArray);
+		statsArray.sort((a, b) => {
+			let fa = a.charName.toLowerCase(),
+				fb = b.charName.toLowerCase();
+			if (fa < fb) { return -1; }
+			if (fa > fb) { return 1; }
+			return 0;
+		});
+		console.log(`---- after ----`);
+		console.log(statsArray);
+		let statsDescList = '';
 
 		for (i = 0; i < statsArray.length; i++) {
 			if (statsArray[i].weeklyCarsSold > 0) {
 				statsDescList = statsDescList.concat(`__${statsArray[i].charName}__:
 • **Cars Sold Overall:** ${statsArray[i].carsSold}
 • **Cars Sold This Week:** ${statsArray[i].weeklyCarsSold}\n\n`);
-				await dbCmds.resetWeeklyStats(statsArray[i].discordId);
+				//await dbCmds.resetWeeklyStats(statsArray[i].discordId);
 			}
 		}
 
@@ -29,11 +40,11 @@ module.exports.statsReport = async (client) => {
 		await editEmbed.editStatsEmbed(client);
 
 		if (lastRep == null || lastRep.includes("Value not found")) {
-			var nowMinus7 = now - 604800;
-			var lastRep = `<t:${nowMinus7}:d>`
+			let nowMinus7 = now - 604800;
+			let lastRep = `<t:${nowMinus7}:d>`
 		}
 
-		var embed = new EmbedBuilder()
+		let embed = new EmbedBuilder()
 			.setTitle(`Salesperson Stats Report for ${lastRep} through ${today}:`)
 			.setDescription(statsDescList)
 			.setColor('ADE8F4');
@@ -43,11 +54,11 @@ module.exports.statsReport = async (client) => {
 		await dbCmds.setRepDate("lastStatsRepDate", today);
 		return "success";
 	} catch (error) {
-		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-		var fileParts = __filename.split(/[\\/]/);
-		var fileName = fileParts[fileParts.length - 1];
+		let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		let fileParts = __filename.split(/[\\/]/);
+		let fileName = fileParts[fileParts.length - 1];
 
-		var errorEmbed = [new EmbedBuilder()
+		let errorEmbed = [new EmbedBuilder()
 			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 			.setColor('B80600')
