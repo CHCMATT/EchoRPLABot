@@ -34,9 +34,9 @@ module.exports.commissionReport = async (client, type, who) => {
 
 			for (i = 0; i < peopleArray.length; i++) {
 				if (weeklyCarsSold < 100) {
-					let currentCommission = peopleArray[i].commission25Percent;
+					currentCommission = peopleArray[i].commission25Percent;
 				} else {
-					let currentCommission = peopleArray[i].commission30Percent;
+					currentCommission = peopleArray[i].commission30Percent;
 				}
 
 				commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
@@ -45,9 +45,9 @@ module.exports.commissionReport = async (client, type, who) => {
 			}
 
 			if (weeklyCarsSold < 100) {
-				let commissionPercent = "25%";
+				commissionPercent = "25%";
 			} else {
-				let commissionPercent = "30%";
+				commissionPercent = "30%";
 			}
 
 			//await dbCmds.resetSummValue("countWeeklyCarsSold");
@@ -60,7 +60,7 @@ module.exports.commissionReport = async (client, type, who) => {
 
 			if (lastRep.includes("Value not found")) {
 				let nowMinus7 = now - 604800;
-				let lastRep = `<t:${nowMinus7}:d>`
+				lastRep = `<t:${nowMinus7}:d>`
 			}
 
 			let embed = new EmbedBuilder()
@@ -92,7 +92,7 @@ module.exports.commissionReport = async (client, type, who) => {
 			.setColor('B80600')
 			.setFooter({ text: `${errTime}` })];
 
-		await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+		await client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
 
 		console.log(`Error occured at ${errTime} at file ${fileName}!`);
 		console.error(error);
