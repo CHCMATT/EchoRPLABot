@@ -17,7 +17,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		let dateTime = new Date().toString().slice(0, 24);
 		let lastRepDiff = (now - lastRepDt);
 
-		if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff <= 64800) {
+		if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff >= 64800) {
 			console.log(`${type} Commission report triggered by ${who} skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
 			return "fail";
 		} else {
@@ -26,7 +26,7 @@ module.exports.commissionReport = async (client, type, who) => {
 
 			let peopleArray = await dbCmds.commissionRep();
 			peopleArray.sort((a, b) => {
-				return a.commission25Percent - b.commission25Percent;
+				return b.commission25Percent - a.commission25Percent;
 			});
 			let commissionDescList = '';
 
@@ -41,7 +41,7 @@ module.exports.commissionReport = async (client, type, who) => {
 
 				commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
 
-				//await dbCmds.resetCommission(peopleArray[i].discordId);
+				await dbCmds.resetCommission(peopleArray[i].discordId);
 			}
 
 			if (weeklyCarsSold < 100) {
@@ -50,7 +50,7 @@ module.exports.commissionReport = async (client, type, who) => {
 				commissionPercent = "30%";
 			}
 
-			//await dbCmds.resetSummValue("countWeeklyCarsSold");
+			await dbCmds.resetSummValue("countWeeklyCarsSold");
 			await editEmbed.editMainEmbed(client);
 			await editEmbed.editStatsEmbed(client);
 
