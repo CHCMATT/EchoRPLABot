@@ -17,7 +17,7 @@ module.exports.commissionReport = async (client, type, who) => {
 		let dateTime = new Date().toString().slice(0, 24);
 		let lastRepDiff = (now - lastRepDt);
 
-		if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff >= 64800) {
+		if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff <= 64800) {
 			console.log(`${type} Commission report triggered by ${who} skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
 			return "fail";
 		} else {
