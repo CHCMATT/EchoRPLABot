@@ -1,6 +1,6 @@
 let moment = require('moment');
-let { PermissionsBitField } = require('discord.js');
 let commissionCmds = require('../commissionCmds.js');
+let { PermissionsBitField, EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'commissionreport',
