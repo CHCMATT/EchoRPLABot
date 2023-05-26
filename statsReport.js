@@ -10,8 +10,6 @@ module.exports.statsReport = async (client) => {
 		let today = `<t:${now}:d>`;
 
 		let statsArray = await dbCmds.weeklyStatsRep();
-		console.log(`---- before ----`);
-		console.log(statsArray);
 		statsArray.sort((a, b) => {
 			let fa = a.charName.toLowerCase(),
 				fb = b.charName.toLowerCase();
@@ -19,8 +17,6 @@ module.exports.statsReport = async (client) => {
 			if (fa > fb) { return 1; }
 			return 0;
 		});
-		console.log(`---- after ----`);
-		console.log(statsArray);
 		let statsDescList = '';
 
 		for (i = 0; i < statsArray.length; i++) {
