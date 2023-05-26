@@ -24,7 +24,7 @@ module.exports.statsReport = async (client) => {
 				statsDescList = statsDescList.concat(`__${statsArray[i].charName}__:
 • **Cars Sold Overall:** ${statsArray[i].carsSold}
 • **Cars Sold This Week:** ${statsArray[i].weeklyCarsSold}\n\n`);
-				//await dbCmds.resetWeeklyStats(statsArray[i].discordId);
+				await dbCmds.resetWeeklyStats(statsArray[i].discordId);
 			}
 		}
 
