@@ -1,232 +1,232 @@
 let moment = require('moment');
-var { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js');
+let { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js');
 
 module.exports.btnPressed = async (interaction) => {
 	try {
-		var buttonID = interaction.customId;
+		let buttonID = interaction.customId;
 		switch (buttonID) {
 			case 'addRegularCarSale':
-				var addRegularCarSaleModal = new ModalBuilder()
+				let addRegularCarSaleModal = new ModalBuilder()
 					.setCustomId('addRegularCarSaleModal')
 					.setTitle('Log a regular car that you sold');
-				var soldToInput = new TextInputBuilder()
-					.setCustomId('soldToInput')
+				let regSoldToInput = new TextInputBuilder()
+					.setCustomId('regSoldToInput')
 					.setLabel("Who did you sell the car to?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Ashlynn Waves')
 					.setRequired(true);
-				var vehicleNameInput = new TextInputBuilder()
-					.setCustomId('vehicleNameInput')
+				let regVehicleNameInput = new TextInputBuilder()
+					.setCustomId('regVehicleNameInput')
 					.setLabel("What is the vehicle name?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Sentinel Convertible')
 					.setRequired(true);
-				var vehiclePlateInput = new TextInputBuilder()
-					.setCustomId('vehiclePlateInput')
+				let regVehiclePlateInput = new TextInputBuilder()
+					.setCustomId('regVehiclePlateInput')
 					.setLabel("What was the car's license plate?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('040C0491')
 					.setRequired(true);
-				var priceInput = new TextInputBuilder()
-					.setCustomId('priceInput')
+				let regPriceInput = new TextInputBuilder()
+					.setCustomId('regPriceInput')
 					.setLabel("What was the final sale price?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('30000')
 					.setRequired(true);
-				var notesInput = new TextInputBuilder()
-					.setCustomId('notesInput')
+				let regNotesInput = new TextInputBuilder()
+					.setCustomId('regNotesInput')
 					.setLabel("Any notes to include about this sale?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('First purchase discount')
 					.setRequired(false);
 
-				var soldToInputRow = new ActionRowBuilder().addComponents(soldToInput);
-				var vehicleNameInputRow = new ActionRowBuilder().addComponents(vehicleNameInput);
-				var vehiclePlateInputRow = new ActionRowBuilder().addComponents(vehiclePlateInput);
-				var priceInputRow = new ActionRowBuilder().addComponents(priceInput);
-				var notesInputRow = new ActionRowBuilder().addComponents(notesInput);
+				let regSoldToInputRow = new ActionRowBuilder().addComponents(regSoldToInput);
+				let regVehicleNameInputRow = new ActionRowBuilder().addComponents(regVehicleNameInput);
+				let regVehiclePlateInputRow = new ActionRowBuilder().addComponents(regVehiclePlateInput);
+				let regPriceInputRow = new ActionRowBuilder().addComponents(regPriceInput);
+				let regNotesInputRow = new ActionRowBuilder().addComponents(regNotesInput);
 
-				addRegularCarSaleModal.addComponents(soldToInputRow, vehicleNameInputRow, vehiclePlateInputRow, priceInputRow, notesInputRow);
+				addRegularCarSaleModal.addComponents(regSoldToInputRow, regVehicleNameInputRow, regVehiclePlateInputRow, regPriceInputRow, regNotesInputRow);
 
 				await interaction.showModal(addRegularCarSaleModal);
 				break;
 			case 'addSportsCarSale':
-				var addSportsCarSaleModal = new ModalBuilder()
+				let addSportsCarSaleModal = new ModalBuilder()
 					.setCustomId('addSportsCarSaleModal')
 					.setTitle('Log a sports car that you sold');
-				var soldToInput = new TextInputBuilder()
-					.setCustomId('soldToInput')
+				let sportsSoldToInput = new TextInputBuilder()
+					.setCustomId('sportsSoldToInput')
 					.setLabel("Who did you sell the car to?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Hennessey Stax')
 					.setRequired(true);
-				var vehicleNameInput = new TextInputBuilder()
-					.setCustomId('vehicleNameInput')
+				let sportsVehicleNameInput = new TextInputBuilder()
+					.setCustomId('sportsVehicleNameInput')
 					.setLabel("What is the vehicle name?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Komoda')
 					.setRequired(true);
-				var vehiclePlateInput = new TextInputBuilder()
-					.setCustomId('vehiclePlateInput')
+				let sportsVehiclePlateInput = new TextInputBuilder()
+					.setCustomId('sportsVehiclePlateInput')
 					.setLabel("What was the car's license plate?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('J09IN4E7')
 					.setRequired(true);
-				var priceInput = new TextInputBuilder()
-					.setCustomId('priceInput')
+				let sportsPriceInput = new TextInputBuilder()
+					.setCustomId('sportsPriceInput')
 					.setLabel("What was the final sale price?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('105000')
 					.setRequired(true);
-				var notesInput = new TextInputBuilder()
-					.setCustomId('notesInput')
+				let sportsNotesInput = new TextInputBuilder()
+					.setCustomId('sportsNotesInput')
 					.setLabel("Any notes to include about this sale?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Multiple purchase discount')
 					.setRequired(false);
 
-				var soldToInputRow = new ActionRowBuilder().addComponents(soldToInput);
-				var vehicleNameInputRow = new ActionRowBuilder().addComponents(vehicleNameInput);
-				var vehiclePlateInputRow = new ActionRowBuilder().addComponents(vehiclePlateInput);
-				var priceInputRow = new ActionRowBuilder().addComponents(priceInput);
-				var notesInputRow = new ActionRowBuilder().addComponents(notesInput);
+				let sportsSoldToInputRow = new ActionRowBuilder().addComponents(sportsSoldToInput);
+				let sportsVehicleNameInputRow = new ActionRowBuilder().addComponents(sportsVehicleNameInput);
+				let sportsVehiclePlateInputRow = new ActionRowBuilder().addComponents(sportsVehiclePlateInput);
+				let sportsPriceInputRow = new ActionRowBuilder().addComponents(sportsPriceInput);
+				let sportsNotesInputRow = new ActionRowBuilder().addComponents(sportsNotesInput);
 
-				addSportsCarSaleModal.addComponents(soldToInputRow, vehicleNameInputRow, vehiclePlateInputRow, priceInputRow, notesInputRow);
+				addSportsCarSaleModal.addComponents(sportsSoldToInputRow, sportsVehicleNameInputRow, sportsVehiclePlateInputRow, sportsPriceInputRow, sportsNotesInputRow);
 
 				await interaction.showModal(addSportsCarSaleModal);
 				break;
 			case 'addTunerCarSale':
-				var addTunerCarSaleModal = new ModalBuilder()
+				let addTunerCarSaleModal = new ModalBuilder()
 					.setCustomId('addTunerCarSaleModal')
 					.setTitle('Log a tuner car that you sold');
-				var soldToInput = new TextInputBuilder()
-					.setCustomId('soldToInput')
+				let tunerSoldToInput = new TextInputBuilder()
+					.setCustomId('tunerSoldToInput')
 					.setLabel("Who did you sell the car to?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Aria Kinsley')
 					.setRequired(true);
-				var vehicleNameInput = new TextInputBuilder()
-					.setCustomId('vehicleNameInput')
+				let tunerVehicleNameInput = new TextInputBuilder()
+					.setCustomId('tunerVehicleNameInput')
 					.setLabel("What is the vehicle name?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Dominator ASP')
 					.setRequired(true);
-				var vehiclePlateInput = new TextInputBuilder()
-					.setCustomId('vehiclePlateInput')
+				let tunerVehiclePlateInput = new TextInputBuilder()
+					.setCustomId('tunerVehiclePlateInput')
 					.setLabel("What was the car's license plate?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('G4T1N409')
 					.setRequired(true);
-				var priceInput = new TextInputBuilder()
-					.setCustomId('priceInput')
+				let tunerPriceInput = new TextInputBuilder()
+					.setCustomId('tunerPriceInput')
 					.setLabel("What was the final sale price?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('145000')
 					.setRequired(true);
-				var notesInput = new TextInputBuilder()
-					.setCustomId('notesInput')
+				let tunerNotesInput = new TextInputBuilder()
+					.setCustomId('tunerNotesInput')
 					.setLabel("Any notes to include about this sale?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('5k discount')
 					.setRequired(false);
 
-				var soldToInputRow = new ActionRowBuilder().addComponents(soldToInput);
-				var vehicleNameInputRow = new ActionRowBuilder().addComponents(vehicleNameInput);
-				var vehiclePlateInputRow = new ActionRowBuilder().addComponents(vehiclePlateInput);
-				var priceInputRow = new ActionRowBuilder().addComponents(priceInput);
-				var notesInputRow = new ActionRowBuilder().addComponents(notesInput);
+				let tunerSoldToInputRow = new ActionRowBuilder().addComponents(tunerSoldToInput);
+				let tunerVehicleNameInputRow = new ActionRowBuilder().addComponents(tunerVehicleNameInput);
+				let tunerVehiclePlateInputRow = new ActionRowBuilder().addComponents(tunerVehiclePlateInput);
+				let tunerPriceInputRow = new ActionRowBuilder().addComponents(tunerPriceInput);
+				let tunerNotesInputRow = new ActionRowBuilder().addComponents(tunerNotesInput);
 
-				addTunerCarSaleModal.addComponents(soldToInputRow, vehicleNameInputRow, vehiclePlateInputRow, priceInputRow, notesInputRow);
+				addTunerCarSaleModal.addComponents(tunerSoldToInputRow, tunerVehicleNameInputRow, tunerVehiclePlateInputRow, tunerPriceInputRow, tunerNotesInputRow);
 
 				await interaction.showModal(addTunerCarSaleModal);
 				break;
 			case 'addEmployeeSale':
-				var addEmployeeSaleModal = new ModalBuilder()
+				let addEmployeeSaleModal = new ModalBuilder()
 					.setCustomId('addEmployeeSaleModal')
 					.setTitle('Log a car that you sold to a fellow employee');
-				var soldToInput = new TextInputBuilder()
-					.setCustomId('soldToInput')
+				let employeeSoldToInput = new TextInputBuilder()
+					.setCustomId('employeeSoldToInput')
 					.setLabel("Who did you sell the car to?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Trevon Ricch')
 					.setRequired(true);
-				var vehicleNameInput = new TextInputBuilder()
-					.setCustomId('vehicleNameInput')
+				let employeeVehicleNameInput = new TextInputBuilder()
+					.setCustomId('employeeVehicleNameInput')
 					.setLabel("What is the vehicle name?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('190z')
 					.setRequired(true);
-				var vehiclePlateInput = new TextInputBuilder()
-					.setCustomId('vehiclePlateInput')
+				let employeeVehiclePlateInput = new TextInputBuilder()
+					.setCustomId('employeeVehiclePlateInput')
 					.setLabel("What was the car's license plate?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('G904Z23M')
 					.setRequired(true);
-				var priceInput = new TextInputBuilder()
-					.setCustomId('priceInput')
+				let employeePriceInput = new TextInputBuilder()
+					.setCustomId('employeePriceInput')
 					.setLabel("What was the final sale price?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('75000')
 					.setRequired(true);
-				var notesInput = new TextInputBuilder()
-					.setCustomId('notesInput')
+				let employeeNotesInput = new TextInputBuilder()
+					.setCustomId('employeeNotesInput')
 					.setLabel("Any notes to include about this sale?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Self purchase')
 					.setRequired(false);
 
-				var soldToInputRow = new ActionRowBuilder().addComponents(soldToInput);
-				var vehicleNameInputRow = new ActionRowBuilder().addComponents(vehicleNameInput);
-				var vehiclePlateInputRow = new ActionRowBuilder().addComponents(vehiclePlateInput);
-				var priceInputRow = new ActionRowBuilder().addComponents(priceInput);
-				var notesInputRow = new ActionRowBuilder().addComponents(notesInput);
+				let employeeSoldToInputRow = new ActionRowBuilder().addComponents(employeeSoldToInput);
+				let employeeVehicleNameInputRow = new ActionRowBuilder().addComponents(employeeVehicleNameInput);
+				let employeeVehiclePlateInputRow = new ActionRowBuilder().addComponents(employeeVehiclePlateInput);
+				let employeePriceInputRow = new ActionRowBuilder().addComponents(employeePriceInput);
+				let employeeNotesInputRow = new ActionRowBuilder().addComponents(employeeNotesInput);
 
-				addEmployeeSaleModal.addComponents(soldToInputRow, vehicleNameInputRow, vehiclePlateInputRow, priceInputRow, notesInputRow);
+				addEmployeeSaleModal.addComponents(employeeSoldToInputRow, employeeVehicleNameInputRow, employeeVehiclePlateInputRow, employeePriceInputRow, employeeNotesInputRow);
 
 				await interaction.showModal(addEmployeeSaleModal);
 				break;
 			case 'addCarRental':
-				var addCarRentalModal = new ModalBuilder()
+				let addCarRentalModal = new ModalBuilder()
 					.setCustomId('addCarRentalModal')
 					.setTitle('Log a car that you rented');
-				var rentedToInput = new TextInputBuilder()
-					.setCustomId('rentedToInput')
+				let rentalRentedToInput = new TextInputBuilder()
+					.setCustomId('rentalRentedToInput')
 					.setLabel("Who did you rent the car to?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Stacy Cox')
 					.setRequired(true);
-				var vehicleNameInput = new TextInputBuilder()
-					.setCustomId('vehicleNameInput')
+				let rentalVehicleNameInput = new TextInputBuilder()
+					.setCustomId('rentalVehicleNameInput')
 					.setLabel("What is the vehicle name?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Caracara 4x4')
 					.setRequired(true);
-				var vehiclePlateInput = new TextInputBuilder()
-					.setCustomId('vehiclePlateInput')
+				let rentalVehiclePlateInput = new TextInputBuilder()
+					.setCustomId('rentalVehiclePlateInput')
 					.setLabel("What was the car's license plate?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('54CB17D6')
 					.setRequired(true);
-				var priceInput = new TextInputBuilder()
-					.setCustomId('priceInput')
+				let rentalPriceInput = new TextInputBuilder()
+					.setCustomId('rentalPriceInput')
 					.setLabel("What was the rental price?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('1000')
 					.setRequired(true);
-				var notesInput = new TextInputBuilder()
-					.setCustomId('notesInput')
+				let rentalNotesInput = new TextInputBuilder()
+					.setCustomId('rentalNotesInput')
 					.setLabel("Any notes to include about this rental?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('First time rental')
 					.setRequired(false);
 
-				var rentedToInputRow = new ActionRowBuilder().addComponents(rentedToInput);
-				var vehicleNameInputRow = new ActionRowBuilder().addComponents(vehicleNameInput);
-				var vehiclePlateInputRow = new ActionRowBuilder().addComponents(vehiclePlateInput);
-				var priceInputRow = new ActionRowBuilder().addComponents(priceInput);
-				var notesInputRow = new ActionRowBuilder().addComponents(notesInput);
+				let rentalRentedToInputRow = new ActionRowBuilder().addComponents(rentalRentedToInput);
+				let rentalVehicleNameInputRow = new ActionRowBuilder().addComponents(rentalVehicleNameInput);
+				let rentalVehiclePlateInputRow = new ActionRowBuilder().addComponents(rentalVehiclePlateInput);
+				let rentalPriceInputRow = new ActionRowBuilder().addComponents(rentalPriceInput);
+				let rentalNotesInputRow = new ActionRowBuilder().addComponents(rentalNotesInput);
 
-				addCarRentalModal.addComponents(rentedToInputRow, vehicleNameInputRow, vehiclePlateInputRow, priceInputRow, notesInputRow);
+				addCarRentalModal.addComponents(rentalRentedToInputRow, rentalVehicleNameInputRow, rentalVehiclePlateInputRow, rentalPriceInputRow, rentalNotesInputRow);
 
 				await interaction.showModal(addCarRentalModal);
 				break;
@@ -235,11 +235,11 @@ module.exports.btnPressed = async (interaction) => {
 				console.log(`Error: Unrecognized button press: ${interaction.customId}`);
 		}
 	} catch (error) {
-		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-		var fileParts = __filename.split(/[\\/]/);
-		var fileName = fileParts[fileParts.length - 1];
+		let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		let fileParts = __filename.split(/[\\/]/);
+		let fileName = fileParts[fileParts.length - 1];
 
-		var errorEmbed = [new EmbedBuilder()
+		let errorEmbed = [new EmbedBuilder()
 			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 			.setColor('B80600')

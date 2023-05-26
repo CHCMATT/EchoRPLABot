@@ -38,11 +38,11 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('regSoldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('regVehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('regVehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('regPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				var notes = strCleanup(interaction.fields.getTextInputValue('regNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Regular`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
@@ -52,7 +52,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
-						content: `:exclamation: \`${interaction.fields.getTextInputValue('priceInput')}\` is not a valid number, please be sure to only enter numbers.`,
+						content: `:exclamation: \`${interaction.fields.getTextInputValue('regPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
 					return;
@@ -153,11 +153,11 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('sportsSoldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('sportsVehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('sportsVehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('sportsPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				var notes = strCleanup(interaction.fields.getTextInputValue('sportsNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Sports`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
@@ -167,7 +167,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
-						content: `:exclamation: \`${interaction.fields.getTextInputValue('priceInput')}\` is not a valid number, please be sure to only enter numbers.`,
+						content: `:exclamation: \`${interaction.fields.getTextInputValue('sportsPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
 					return;
@@ -268,11 +268,11 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('tunerSoldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('tunerVehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('tunerVehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('tunerPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				var notes = strCleanup(interaction.fields.getTextInputValue('tunerNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Tuner`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
@@ -282,7 +282,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
-						content: `:exclamation: \`${interaction.fields.getTextInputValue('priceInput')}\` is not a valid number, please be sure to only enter numbers.`,
+						content: `:exclamation: \`${interaction.fields.getTextInputValue('tunerPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
 					return;
@@ -383,11 +383,11 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var saleDate = `<t:${now}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('soldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('employeeSoldToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('employeeVehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('employeeVehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('employeePriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				var notes = strCleanup(interaction.fields.getTextInputValue('employeeNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Employee`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
@@ -397,7 +397,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
-						content: `:exclamation: \`${interaction.fields.getTextInputValue('priceInput')}\` is not a valid number, please be sure to only enter numbers.`,
+						content: `:exclamation: \`${interaction.fields.getTextInputValue('employeePriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
 					return;
@@ -478,11 +478,11 @@ module.exports.modalSubmit = async (interaction) => {
 				var now = Math.floor(new Date().getTime() / 1000.0);
 				var rentalDate = `<t:${now}:d>`;
 
-				var rentedTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('rentedToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('vehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('vehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('priceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('notesInput'));
+				var rentedTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('rentalRentedToInput')));
+				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('rentalVehicleNameInput')));
+				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('rentalVehiclePlateInput')).toUpperCase();
+				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('rentalPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				var notes = strCleanup(interaction.fields.getTextInputValue('rentalNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Rental`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, rentedTo, vehicleName, vehiclePlate, price, notes]] }
@@ -492,7 +492,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				if (isNaN(price)) { // validate quantity of money
 					await interaction.reply({
-						content: `:exclamation: \`${interaction.fields.getTextInputValue('priceInput')}\` is not a valid number, please be sure to only enter numbers.`,
+						content: `:exclamation: \`${interaction.fields.getTextInputValue('rentalPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
 					return;
