@@ -54,16 +54,16 @@ module.exports = {
 					if (personnelData.commission25Percent != null && personnelData.commission25Percent > 0) {
 						await dbCmds.removeCommission(user.id, commission25Percent, commission30Percent)
 
-						let personnelData = await dbCmds.readPersStats(user.id)
+						personnelData = await dbCmds.readPersStats(user.id)
 						let commissionArray = await dbCmds.readCommission(user.id);
 						let weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 						if (weeklyCarsSold < 100) {
-							let overallCommission = commissionArray.commission25Percent;
-							let commissionPercent = "25%";
+							overallCommission = commissionArray.commission25Percent;
+							commissionPercent = "25%";
 						} else {
-							let overallCommission = commissionArray.commission30Percent;
-							let commissionPercent = "30%";
+							overallCommission = commissionArray.commission30Percent;
+							commissionPercent = "30%";
 						}
 
 						let formattedOverallCommission = formatter.format(overallCommission);
