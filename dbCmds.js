@@ -29,8 +29,8 @@ module.exports.resetSummValue = async (summaryName) => {
 
 
 // for finding and adding to the personnel's statistics
-module.exports.initPersStats = async (discordId, discordNickname, embedColor, embedMsgId) => {
-	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { discordId: discordId, charName: discordNickname, embedColor: embedColor, embedMsgId: embedMsgId, carsSold: 0, weeklyCarsSold: 0, commission25Percent: 0, commission30Percent: 0 }, { upsert: true });
+module.exports.initPersStats = async (discordId, discordNickname) => {
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { discordId: discordId, charName: discordNickname, carsSold: 0, weeklyCarsSold: 0, commission25Percent: 0, commission30Percent: 0 }, { upsert: true });
 };
 
 module.exports.readPersStats = async (discordId) => {
