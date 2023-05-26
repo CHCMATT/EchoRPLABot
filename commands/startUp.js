@@ -1,5 +1,5 @@
-var startup = require('../startup.js');
-var { PermissionsBitField } = require('discord.js');
+let startup = require('../startup.js');
+let { PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	name: 'startup',
@@ -14,11 +14,11 @@ module.exports = {
 				await interaction.reply({ content: `:x: You must have the \`Administrator\` permission to use this function.`, ephemeral: true });
 			}
 		} catch (error) {
-			var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-			var fileParts = __filename.split(/[\\/]/);
-			var fileName = fileParts[fileParts.length - 1];
+			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+			let fileParts = __filename.split(/[\\/]/);
+			let fileName = fileParts[fileParts.length - 1];
 
-			var errorEmbed = [new EmbedBuilder()
+			let errorEmbed = [new EmbedBuilder()
 				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 				.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 				.setColor('B80600')

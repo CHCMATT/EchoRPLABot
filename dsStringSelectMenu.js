@@ -1,12 +1,12 @@
 let moment = require('moment');
-var { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, EmbedBuilder } = require('discord.js');
+let { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports.stringSelectMenuSubmit = async (interaction) => {
 	try {
-		var selectStringMenuID = interaction.customId;
+		let selectStringMenuID = interaction.customId;
 		switch (selectStringMenuID) {
 			case 'starter':
-				var select2 = new StringSelectMenuBuilder()
+				let select2 = new StringSelectMenuBuilder()
 					.setCustomId('starter2')
 					.setPlaceholder('Make a 2nd selection!')
 					.addOptions(
@@ -15,7 +15,7 @@ module.exports.stringSelectMenuSubmit = async (interaction) => {
 							.setDescription('Description 1')
 							.setValue('Value 1'),
 					);
-				var row2 = new ActionRowBuilder()
+				let row2 = new ActionRowBuilder()
 					.addComponents(select2);
 
 				await interaction.reply({
@@ -32,11 +32,11 @@ module.exports.stringSelectMenuSubmit = async (interaction) => {
 				console.log(`Error: Unrecognized modal ID: ${interaction.customId}`);
 		}
 	} catch (error) {
-		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-		var fileParts = __filename.split(/[\\/]/);
-		var fileName = fileParts[fileParts.length - 1];
+		let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		let fileParts = __filename.split(/[\\/]/);
+		let fileName = fileParts[fileParts.length - 1];
 
-		var errorEmbed = [new EmbedBuilder()
+		let errorEmbed = [new EmbedBuilder()
 			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 			.setColor('B80600')

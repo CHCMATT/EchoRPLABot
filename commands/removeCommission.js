@@ -1,8 +1,8 @@
-var dbCmds = require('../dbCmds.js');
-var editEmbed = require('../editEmbed.js');
-var { PermissionsBitField, EmbedBuilder } = require('discord.js');
+let dbCmds = require('../dbCmds.js');
+let editEmbed = require('../editEmbed.js');
+let { PermissionsBitField, EmbedBuilder } = require('discord.js');
 
-var formatter = new Intl.NumberFormat('en-US', {
+let formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
 	currency: 'USD',
 	maximumFractionDigits: 0
@@ -40,37 +40,37 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			if (interaction.member._roles.includes(process.env.REALTOR_ROLE_ID) || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-				var user = interaction.options.getUser('user');
+				let user = interaction.options.getUser('user');
 				if (interaction.user.id == user.id || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-					var commission25Percent = Math.abs(interaction.options.getInteger('commissiontwentyfive'));
-					var commission30Percent = Math.abs(interaction.options.getInteger('commissionthirty'));
-					var reason = interaction.options.getString('reason');
+					let commission25Percent = Math.abs(interaction.options.getInteger('commissiontwentyfive'));
+					let commission30Percent = Math.abs(interaction.options.getInteger('commissionthirty'));
+					let reason = interaction.options.getString('reason');
 
-					var formatted25Percent = formatter.format(commission25Percent);
-					var formatted30Percent = formatter.format(commission30Percent);
+					let formatted25Percent = formatter.format(commission25Percent);
+					let formatted30Percent = formatter.format(commission30Percent);
 
-					var personnelData = await dbCmds.readPersStats(user.id)
+					let personnelData = await dbCmds.readPersStats(user.id)
 					if (personnelData.commission25Percent != null && personnelData.commission25Percent > 0) {
 						await dbCmds.removeCommission(user.id, commission25Percent, commission30Percent)
 
-						var personnelData = await dbCmds.readPersStats(user.id)
-						var commissionArray = await dbCmds.readCommission(user.id);
-						var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+						let personnelData = await dbCmds.readPersStats(user.id)
+						let commissionArray = await dbCmds.readCommission(user.id);
+						let weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 						if (weeklyCarsSold < 100) {
-							var overallCommission = commissionArray.commission25Percent;
-							var commissionPercent = "25%";
+							let overallCommission = commissionArray.commission25Percent;
+							let commissionPercent = "25%";
 						} else {
-							var overallCommission = commissionArray.commission30Percent;
-							var commissionPercent = "30%";
+							let overallCommission = commissionArray.commission30Percent;
+							let commissionPercent = "30%";
 						}
 
-						var formattedOverallCommission = formatter.format(overallCommission);
+						let formattedOverallCommission = formatter.format(overallCommission);
 
 						await editEmbed.editStatsEmbed(interaction.client);
 
 						// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-						var notificationEmbed = new EmbedBuilder()
+						let notificationEmbed = new EmbedBuilder()
 							.setTitle('Commission Modified Manually:')
 							.setDescription(`<@${interaction.user.id}> removed from <@${user.id}>'s commission:\n• **25%:** \`${formatted25Percent}\`\n• **30%:** \`${formatted30Percent}\`\n\nTheir new total is (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.\n\n**Reason:** \`${reason}\`.`)
 
@@ -87,11 +87,11 @@ module.exports = {
 				await interaction.reply({ content: `:x: You must have the \`Sales\` role or the \`Administrator\` permission to use this function.`, ephemeral: true });
 			}
 		} catch (error) {
-			var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-			var fileParts = __filename.split(/[\\/]/);
-			var fileName = fileParts[fileParts.length - 1];
+			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+			let fileParts = __filename.split(/[\\/]/);
+			let fileName = fileParts[fileParts.length - 1];
 
-			var errorEmbed = [new EmbedBuilder()
+			let errorEmbed = [new EmbedBuilder()
 				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 				.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 				.setColor('B80600')

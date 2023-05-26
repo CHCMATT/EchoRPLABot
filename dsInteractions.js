@@ -1,8 +1,8 @@
 let moment = require('moment');
-var dsBtn = require('./dsBtn.js');
-var dsModal = require('./dsModal.js');
-var dsStringSelectMenu = require('./dsStringSelectMenu.js');
-var { EmbedBuilder } = require('discord.js');
+let dsBtn = require('./dsBtn.js');
+let dsModal = require('./dsModal.js');
+let dsStringSelectMenu = require('./dsStringSelectMenu.js');
+let { EmbedBuilder } = require('discord.js');
 
 module.exports = (client) => {
 	client.on('interactionCreate', async interaction => {
@@ -25,11 +25,11 @@ module.exports = (client) => {
 				return;
 			}
 		} catch (error) {
-			var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-			var fileParts = __filename.split(/[\\/]/);
-			var fileName = fileParts[fileParts.length - 1];
+			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+			let fileParts = __filename.split(/[\\/]/);
+			let fileName = fileParts[fileParts.length - 1];
 
-			var errorEmbed = [new EmbedBuilder()
+			let errorEmbed = [new EmbedBuilder()
 				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 				.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 				.setColor('B80600')

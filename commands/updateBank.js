@@ -1,5 +1,5 @@
-var dbCmds = require('../dbCmds.js');
-var { PermissionsBitField } = require('discord.js');
+let dbCmds = require('../dbCmds.js');
+let { PermissionsBitField } = require('discord.js');
 
 module.exports = {
 	name: 'updatebank',
@@ -21,8 +21,8 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			if (interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-				var user = interaction.options.getUser('user');
-				var bankNum = interaction.options.getString('accountnumber').replaceAll(' ', '');
+				let user = interaction.options.getUser('user');
+				let bankNum = interaction.options.getString('accountnumber').replaceAll(' ', '');
 				await dbCmds.setBankAccount(user.id, bankNum)
 				await interaction.reply({ content: `Successfully set the bank account number for <@${user.id}> to \`${bankNum}\`.`, ephemeral: true });
 			}
@@ -30,11 +30,11 @@ module.exports = {
 				await interaction.reply({ content: `:x: You must have the \`Administrator\` permission to use this function.`, ephemeral: true });
 			}
 		} catch (error) {
-			var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-			var fileParts = __filename.split(/[\\/]/);
-			var fileName = fileParts[fileParts.length - 1];
+			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+			let fileParts = __filename.split(/[\\/]/);
+			let fileName = fileParts[fileParts.length - 1];
 
-			var errorEmbed = [new EmbedBuilder()
+			let errorEmbed = [new EmbedBuilder()
 				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 				.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 				.setColor('B80600')

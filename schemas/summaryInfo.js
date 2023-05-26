@@ -1,16 +1,16 @@
-var { Schema, model, models } = require('mongoose');
+let { Schema, model, models } = require('mongoose');
 
-var reqString = {
+let reqString = {
 	type: String,
 	required: true,
 };
 
-var reqNum = {
+let reqNum = {
 	type: Number,
 	required: true,
 };
 
-var summaryInfoSchema = new Schema({
+let summaryInfoSchema = new Schema({
 	summaryName: reqString,
 	value: reqNum,
 	msgId: String,

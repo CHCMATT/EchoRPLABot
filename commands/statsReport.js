@@ -1,5 +1,5 @@
-var { PermissionsBitField } = require('discord.js');
-var statsReport = require('../statsReport.js');
+let { PermissionsBitField } = require('discord.js');
+let statsReport = require('../statsReport.js');
 
 module.exports = {
 	name: 'statsreport',
@@ -7,7 +7,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			if (interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-				var result = await statsReport.statsReport(interaction.client, `Manual`, `<@${interaction.user.id}>`);
+				let result = await statsReport.statsReport(interaction.client, `Manual`, `<@${interaction.user.id}>`);
 				if (result === "success") {
 					await interaction.reply({ content: `Successfully ran the statistics report.`, ephemeral: true });
 				} else {
@@ -18,11 +18,11 @@ module.exports = {
 				await interaction.reply({ content: `:x: You must have the \`Administrator\` permission to use this function.`, ephemeral: true });
 			}
 		} catch (error) {
-			var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-			var fileParts = __filename.split(/[\\/]/);
-			var fileName = fileParts[fileParts.length - 1];
+			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+			let fileParts = __filename.split(/[\\/]/);
+			let fileName = fileParts[fileParts.length - 1];
 
-			var errorEmbed = [new EmbedBuilder()
+			let errorEmbed = [new EmbedBuilder()
 				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 				.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 				.setColor('B80600')

@@ -1,8 +1,8 @@
-var moment = require('moment');
-var dbCmds = require('./dbCmds.js');
-var { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
+let moment = require('moment');
+let dbCmds = require('./dbCmds.js');
+let { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 
-var formatter = new Intl.NumberFormat('en-US', {
+let formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
 	currency: 'USD',
 	maximumFractionDigits: 0
@@ -18,30 +18,30 @@ module.exports.editMainEmbed = async (client) => {
 		countCarsSold = countCarsSold.toString();
 		countWeeklyCarsSold = countWeeklyCarsSold.toString();
 
-		var carsSoldEmbed = new EmbedBuilder()
+		let carsSoldEmbed = new EmbedBuilder()
 			.setTitle('Amount of Cars Sold:')
 			.setDescription(countCarsSold)
 			.setColor('023E8A');
 
-		var weeklyCarsSoldEmbed = new EmbedBuilder()
+		let weeklyCarsSoldEmbed = new EmbedBuilder()
 			.setTitle('Amount of Cars Sold This Week:')
 			.setDescription(countWeeklyCarsSold)
 			.setColor('0077B6');
 
-		var currEmbed = await dbCmds.readMsgId("embedMsg");
+		let currEmbed = await dbCmds.readMsgId("embedMsg");
 
-		var channel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID)
-		var currMsg = await channel.messages.fetch(currEmbed);
+		let channel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID)
+		let currMsg = await channel.messages.fetch(currEmbed);
 
-		var btnRows = addBtnRows();
+		let btnRows = addBtnRows();
 
 		currMsg.edit({ embeds: [carsSoldEmbed, weeklyCarsSoldEmbed], components: btnRows });
 	} catch (error) {
-		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-		var fileParts = __filename.split(/[\\/]/);
-		var fileName = fileParts[fileParts.length - 1];
+		let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		let fileParts = __filename.split(/[\\/]/);
+		let fileName = fileParts[fileParts.length - 1];
 
-		var errorEmbed = [new EmbedBuilder()
+		let errorEmbed = [new EmbedBuilder()
 			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 			.setColor('B80600')
@@ -55,7 +55,7 @@ module.exports.editMainEmbed = async (client) => {
 };
 
 function addBtnRows() {
-	var row1 = new ActionRowBuilder().addComponents(
+	let row1 = new ActionRowBuilder().addComponents(
 		new ButtonBuilder()
 			.setCustomId('addRegularCarSale')
 			.setLabel('Add a Regular Car Sale')
@@ -82,17 +82,17 @@ function addBtnRows() {
 			.setStyle(ButtonStyle.Secondary),
 	);
 
-	var rows = [row1];
+	let rows = [row1];
 	return rows;
 };
 
 module.exports.editStatsEmbed = async (client) => {
 	try {
-		var employeeStats = await dbCmds.currStats();
-		var currentDescList = '';
+		let employeeStats = await dbCmds.currStats();
+		let currentDescList = '';
 
-		var now = Math.floor(new Date().getTime() / 1000.0);
-		var today = `<t:${now}:d>`;
+		let now = Math.floor(new Date().getTime() / 1000.0);
+		let today = `<t:${now}:d>`;
 
 		for (i = 0; i < employeeStats.length; i++) {
 			if (employeeStats[i].weeklyCarsSold > 0) {
@@ -108,22 +108,22 @@ module.exports.editStatsEmbed = async (client) => {
 			currentDescList = "There is no salesperson data to display yet."
 		}
 
-		var embed = new EmbedBuilder()
+		let embed = new EmbedBuilder()
 			.setTitle(`Salesperson Data as of ${today}:`)
 			.setDescription(currentDescList)
 			.setColor('ADE8F4');
 
-		var statsEmbed = await dbCmds.readMsgId("statsMsg");
-		var channel = await client.channels.fetch(process.env.PERSONNEL_STATS_CHANNEL_ID)
-		var statsMsg = await channel.messages.fetch(statsEmbed);
+		let statsEmbed = await dbCmds.readMsgId("statsMsg");
+		let channel = await client.channels.fetch(process.env.PERSONNEL_STATS_CHANNEL_ID)
+		let statsMsg = await channel.messages.fetch(statsEmbed);
 
 		statsMsg.edit({ embeds: [embed] });
 	} catch (error) {
-		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-		var fileParts = __filename.split(/[\\/]/);
-		var fileName = fileParts[fileParts.length - 1];
+		let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		let fileParts = __filename.split(/[\\/]/);
+		let fileName = fileParts[fileParts.length - 1];
 
-		var errorEmbed = [new EmbedBuilder()
+		let errorEmbed = [new EmbedBuilder()
 			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 			.setColor('B80600')

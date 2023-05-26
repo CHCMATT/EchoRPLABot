@@ -1,16 +1,16 @@
-var { Schema, model, models } = require('mongoose');
+let { Schema, model, models } = require('mongoose');
 
-var reqString = {
+let reqString = {
 	type: String,
 	required: true,
 };
 
-var reqNum = {
+let reqNum = {
 	type: Number,
 	required: true,
 };
 
-var personnelInfoSchema = new Schema({
+let personnelInfoSchema = new Schema({
 	discordId: reqString,
 	charName: reqString,
 	carsSold: reqNum,

@@ -1,9 +1,9 @@
 let moment = require('moment');
-var dbCmds = require('./dbCmds.js');
-var editEmbed = require('./editEmbed.js');
-var { EmbedBuilder } = require('discord.js');
+let dbCmds = require('./dbCmds.js');
+let editEmbed = require('./editEmbed.js');
+let { EmbedBuilder } = require('discord.js');
 
-var formatter = new Intl.NumberFormat('en-US', {
+let formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
 	currency: 'USD',
 	maximumFractionDigits: 0
@@ -11,43 +11,46 @@ var formatter = new Intl.NumberFormat('en-US', {
 
 module.exports.commissionReport = async (client, type, who) => {
 	try {
-		var lastRep = await dbCmds.readRepDate("lastCommissionRepDate");
-		var lastRepDt = Number(lastRep.replaceAll('<t:', '').replaceAll(':d>', ''));
-		var now = Math.floor(new Date().getTime() / 1000.0);
-		var dateTime = new Date().toString().slice(0, 24);
-		var lastRepDiff = (now - lastRepDt);
+		let lastRep = await dbCmds.readRepDate("lastCommissionRepDate");
+		let lastRepDt = Number(lastRep.replaceAll('<t:', '').replaceAll(':d>', ''));
+		let now = Math.floor(new Date().getTime() / 1000.0);
+		let dateTime = new Date().toString().slice(0, 24);
+		let lastRepDiff = (now - lastRepDt);
 
 		if (lastRepDiff == null || isNaN(lastRepDiff) || lastRepDiff <= 64800) {
 			console.log(`${type} Commission report triggered by ${who} skipped at ${dateTime} (lastRepDiff: ${lastRepDiff})`)
 			return "fail";
 		} else {
-			var now = Math.floor(new Date().getTime() / 1000.0);
-			var today = `<t:${now}:d>`;
+			let now = Math.floor(new Date().getTime() / 1000.0);
+			let today = `<t:${now}:d>`;
 
-			var peopleArray = await dbCmds.commissionRep();
-			var commissionDescList = '';
+			let peopleArray = await dbCmds.commissionRep();
+			peopleArray.sort((a, b) => {
+				return a.commission25Percent - b.commission25Percent;
+			});
+			let commissionDescList = '';
 
-			var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+			let weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 			for (i = 0; i < peopleArray.length; i++) {
 				if (weeklyCarsSold < 100) {
-					var currentCommission = peopleArray[i].commission25Percent;
+					let currentCommission = peopleArray[i].commission25Percent;
 				} else {
-					var currentCommission = peopleArray[i].commission30Percent;
+					let currentCommission = peopleArray[i].commission30Percent;
 				}
 
 				commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
 
-				await dbCmds.resetCommission(peopleArray[i].discordId);
+				//await dbCmds.resetCommission(peopleArray[i].discordId);
 			}
 
 			if (weeklyCarsSold < 100) {
-				var commissionPercent = "25%";
+				let commissionPercent = "25%";
 			} else {
-				var commissionPercent = "30%";
+				let commissionPercent = "30%";
 			}
 
-			await dbCmds.resetSummValue("countWeeklyCarsSold");
+			//await dbCmds.resetSummValue("countWeeklyCarsSold");
 			await editEmbed.editMainEmbed(client);
 			await editEmbed.editStatsEmbed(client);
 
@@ -56,11 +59,11 @@ module.exports.commissionReport = async (client, type, who) => {
 			}
 
 			if (lastRep.includes("Value not found")) {
-				var nowMinus7 = now - 604800;
-				var lastRep = `<t:${nowMinus7}:d>`
+				let nowMinus7 = now - 604800;
+				let lastRep = `<t:${nowMinus7}:d>`
 			}
 
-			var embed = new EmbedBuilder()
+			let embed = new EmbedBuilder()
 				.setTitle(`${type} Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
 				.setDescription(commissionDescList)
 				.setColor('90E0EF');
@@ -70,8 +73,8 @@ module.exports.commissionReport = async (client, type, who) => {
 			// success/fail color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 			await dbCmds.setRepDate("lastCommissionRepDate", today);
 
-			var reason = `${type} Commission Report triggered by ${who} on ${today}`
-			var notificationEmbed = new EmbedBuilder()
+			let reason = `${type} Commission Report triggered by ${who} on ${today}`
+			let notificationEmbed = new EmbedBuilder()
 				.setTitle('Commission Modified Automatically:')
 				.setDescription(`All salesperson's commissions have been reset to \`$0\`.\n\n**Reason:** ${reason}.`)
 				.setColor('1EC276');
@@ -79,11 +82,11 @@ module.exports.commissionReport = async (client, type, who) => {
 			return "success";
 		}
 	} catch (error) {
-		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-		var fileParts = __filename.split(/[\\/]/);
-		var fileName = fileParts[fileParts.length - 1];
+		let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		let fileParts = __filename.split(/[\\/]/);
+		let fileName = fileParts[fileParts.length - 1];
 
-		var errorEmbed = [new EmbedBuilder()
+		let errorEmbed = [new EmbedBuilder()
 			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 			.setColor('B80600')

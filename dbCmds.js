@@ -1,8 +1,8 @@
-var summaryInfo = require('./schemas/summaryInfo');
-var personnelInfo = require('./schemas/personnelInfo');
+let summaryInfo = require('./schemas/summaryInfo');
+let personnelInfo = require('./schemas/personnelInfo');
 
 module.exports.readSummValue = async (summaryName) => {
-	var result = await summaryInfo.findOne({ summaryName }, { value: 1, _id: 0 });
+	let result = await summaryInfo.findOne({ summaryName }, { value: 1, _id: 0 });
 	if (result !== null) {
 		return result.value;
 	}
@@ -34,7 +34,7 @@ module.exports.initPersStats = async (discordId, discordNickname) => {
 };
 
 module.exports.readPersStats = async (discordId) => {
-	var result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, weeklyCarsSold: 1, _id: 0 });
+	let result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, weeklyCarsSold: 1, _id: 0 });
 	return result;
 };
 
@@ -61,7 +61,7 @@ module.exports.setPersonnelMsgId = async (discordId, embedId) => {
 };
 
 module.exports.readPersonnelMsgId = async (discordId) => {
-	var result = await personnelInfo.findOne({ discordId: discordId }, { embedMsgId: 1, _id: 0 });
+	let result = await personnelInfo.findOne({ discordId: discordId }, { embedMsgId: 1, _id: 0 });
 	return result.embedMsgId;
 };
 
@@ -80,12 +80,12 @@ module.exports.resetCommission = async (discordId) => {
 };
 
 module.exports.readCommission = async (discordId) => {
-	var result = await personnelInfo.findOne({ discordId: discordId }, { commission25Percent: 1, commission30Percent: 1, _id: 0 });
+	let result = await personnelInfo.findOne({ discordId: discordId }, { commission25Percent: 1, commission30Percent: 1, _id: 0 });
 	return result;
 };
 
 module.exports.commissionRep = async () => {
-	var result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, _id: 0 });
+	let result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, _id: 0 });
 	return result;
 };
 
@@ -96,7 +96,7 @@ module.exports.setMsgId = async (summaryName, newValue) => {
 };
 
 module.exports.readMsgId = async (summaryName) => {
-	var result = await summaryInfo.findOne({ summaryName }, { msgId: 1, _id: 0 });
+	let result = await summaryInfo.findOne({ summaryName }, { msgId: 1, _id: 0 });
 	if (result !== null) {
 		return result.msgId;
 	}
@@ -112,7 +112,7 @@ module.exports.setRepDate = async (summaryName, newValue) => {
 };
 
 module.exports.readRepDate = async (summaryName) => {
-	var result = await summaryInfo.findOne({ summaryName }, { repDate: 1, _id: 0 });
+	let result = await summaryInfo.findOne({ summaryName }, { repDate: 1, _id: 0 });
 	if (result !== null) {
 		return result.repDate;
 	}
@@ -122,12 +122,12 @@ module.exports.readRepDate = async (summaryName) => {
 };
 
 module.exports.currStats = async () => {
-	var result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, embedColor: 1, carsSold: 1, weeklyCarsSold: 1, commission25Percent: 1, commission30Percent: 1, _id: 0 });
+	let result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, embedColor: 1, carsSold: 1, weeklyCarsSold: 1, commission25Percent: 1, commission30Percent: 1, _id: 0 });
 	return result;
 };
 
 module.exports.weeklyStatsRep = async () => {
-	var result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, carsSold: 1, weeklyCarsSold: 1, _id: 0 });
+	let result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, carsSold: 1, weeklyCarsSold: 1, _id: 0 });
 	return result;
 };
 
