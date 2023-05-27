@@ -351,13 +351,13 @@ module.exports.modalSubmit = async (interaction) => {
 				let tunerCommissionPercent, tunerThisSaleCommission, tunerCurrentCommission;
 
 				if (tunerWeeklyCarsSold < 100) {
-					commissionPercent = "25%";
-					thisSaleCommission = tunerCommission25Percent
-					currentCommission = tunerCommissionArray.commission25Percent;
+					tunerCommissionPercent = "25%";
+					tunerThisSaleCommission = tunerCommission25Percent
+					tunerCurrentCommission = tunerCommissionArray.commission25Percent;
 				} else {
-					commissionPercent = "30%";
-					thisSaleCommission = tunerCommission30Percent;
-					currentCommission = tunerCommissionArray.commission30Percent;
+					tunerCommissionPercent = "30%";
+					tunerThisSaleCommission = tunerCommission30Percent;
+					tunerCurrentCommission = tunerCommissionArray.commission30Percent;
 				}
 
 				let tunerOverallCommission25Percent = tunerCommissionArray.commission25Percent;
