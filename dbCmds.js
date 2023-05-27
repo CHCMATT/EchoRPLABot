@@ -85,7 +85,7 @@ module.exports.readCommission = async (discordId) => {
 };
 
 module.exports.commissionRep = async () => {
-	let result = await personnelInfo.find({ commission25Percent: { $gt: 1 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, _id: 0 });
+	let result = await personnelInfo.find({ commission25Percent: { $gt: 0 } }, { discordId: 1, charName: 1, commission25Percent: 1, commission30Percent: 1, bankAccount: 1, _id: 0 });
 	return result;
 };
 
