@@ -1,10 +1,10 @@
-var moment = require('moment');
-var dbCmds = require('./dbCmds.js');
-var editEmbed = require('./editEmbed.js');
-var { EmbedBuilder } = require('discord.js');
-var personnelCmds = require('./personnelCmds.js');
+let moment = require('moment');
+let dbCmds = require('./dbCmds.js');
+let editEmbed = require('./editEmbed.js');
+let { EmbedBuilder } = require('discord.js');
+let personnelCmds = require('./personnelCmds.js');
 
-var formatter = new Intl.NumberFormat('en-US', {
+let formatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
 	currency: 'USD',
 	maximumFractionDigits: 0
@@ -12,45 +12,45 @@ var formatter = new Intl.NumberFormat('en-US', {
 
 function toTitleCase(str) {
 	str = str.toLowerCase().split(' ');
-	for (var i = 0; i < str.length; i++) {
+	for (let i = 0; i < str.length; i++) {
 		str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
 	}
 	return str.join(' ');
 }
 
 function strCleanup(str) {
-	var cleaned = str.replaceAll('`', '-').replaceAll('\\', '-').trimEnd().trimStart();
+	let cleaned = str.replaceAll('`', '-').replaceAll('\\', '-').trimEnd().trimStart();
 	return cleaned;
 };
 
 module.exports.modalSubmit = async (interaction) => {
 	try {
-		var modalID = interaction.customId;
+		let modalID = interaction.customId;
 		switch (modalID) {
 			case 'addRegularCarSaleModal':
-				var salesmanName;
+				let regSalesmanName;
 				if (interaction.member.nickname) {
-					salesmanName = interaction.member.nickname;
+					regSalesmanName = interaction.member.nickname;
 				} else {
-					salesmanName = interaction.member.user.username;
+					regSalesmanName = interaction.member.user.username;
 				}
 
-				var now = Math.floor(new Date().getTime() / 1000.0);
-				var saleDate = `<t:${now}:d>`;
+				let regNow = Math.floor(new Date().getTime() / 1000.0);
+				let regSaleDate = `<t:${regNow}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('regSoldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('regVehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('regVehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('regPriceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('regNotesInput'));
+				let regSoldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('regSoldToInput')));
+				let regVehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('regVehicleNameInput')));
+				let regVehiclePlate = strCleanup(interaction.fields.getTextInputValue('regVehiclePlateInput')).toUpperCase();
+				let regPrice = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('regPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				let regNotes = strCleanup(interaction.fields.getTextInputValue('regNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
-					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Regular`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Regular`, `${regSalesmanName} (<@${interaction.user.id}>)`, regSaleDate, regSoldTo, regVehicleName, regVehiclePlate, regPrice, regNotes]] }
 				});
 
-				var formattedPrice = formatter.format(price);
+				let regFormattedPrice = formatter.format(regPrice);
 
-				if (isNaN(price)) { // validate quantity of money
+				if (isNaN(regPrice)) { // validate quantity of money
 					await interaction.reply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('regPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
@@ -58,114 +58,118 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				var costPrice = (price * 0.90);
-				var laProfit = price - costPrice;
-				var commission25Percent = (laProfit * 0.25);
-				var commission30Percent = (laProfit * 0.30);
+				let regCostPrice = (regPrice * 0.90);
+				let regLaProfit = regPrice - regCostPrice;
+				let regCommission25Percent = (regLaProfit * 0.25);
+				let regCommission30Percent = (regLaProfit * 0.30);
 
-				var formattedCostPrice = formatter.format(costPrice);
-				var formattedLaProfit = formatter.format(laProfit);
+				let regFormattedCostPrice = formatter.format(regCostPrice);
+				let regFormattedLaProfit = formatter.format(regLaProfit);
 
-				if (!notes || notes.toLowerCase() === "n/a") {
-					var carSoldEmbed = [new EmbedBuilder()
+				let regCarSoldEmbed;
+
+				if (!regNotes || regNotes.toLowerCase() === "n/a") {
+					regCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new car has been sold!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+							{ name: `Salesperson Name:`, value: `${regSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${regSaleDate}` },
+							{ name: `Car Sold To:`, value: `${regSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${regVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${regVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${regFormattedPrice}` },
 						)
-						.setColor('03045E')];
+						.setColor('03045E');
 				} else {
-					var carSoldEmbed = [new EmbedBuilder()
+					regCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new car has been sold!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-							{ name: `Notes:`, value: `${notes}` }
+							{ name: `Salesperson Name:`, value: `${regSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${regSaleDate}` },
+							{ name: `Car Sold To:`, value: `${regSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${regVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${regVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${regFormattedPrice}` },
+							{ name: `Notes:`, value: `${regNotes}` }
 						)
-						.setColor('03045E')];
+						.setColor('03045E');
 				}
 
-				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
-				if (personnelStats == null || personnelStats.charName == null) {
+				let regPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
+				if (regPersonnelStats == null || regPersonnelStats.charName == null) {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: carSoldEmbed });
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [regCarSoldEmbed] });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				await dbCmds.addCommission(interaction.member.user.id, commission25Percent, commission30Percent);
-				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				await dbCmds.addCommission(interaction.member.user.id, regCommission25Percent, regCommission30Percent);
+				let regCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
+				let regWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
-				if (weeklyCarsSold < 100) {
-					var commissionPercent = "25%";
-					var thisSaleCommission = commission25Percent
-					var currentCommission = commissionArray.commission25Percent;
+				let regCommissionPercent, regThisSaleCommission, regCurrentCommission;
+
+				if (regWeeklyCarsSold < 100) {
+					regCommissionPercent = "25%";
+					regThisSaleCommission = regCommission25Percent
+					regCurrentCommission = regCommissionArray.commission25Percent;
 				} else {
-					var commissionPercent = "30%";
-					var thisSaleCommission = commission30Percent;
-					var currentCommission = commissionArray.commission30Percent;
+					regCommissionPercent = "30%";
+					regThisSaleCommission = regCommission30Percent;
+					regCurrentCommission = regCommissionArray.commission30Percent;
 				}
 
-				var overallCommission25Percent = commissionArray.commission25Percent;
-				var overallCommission30Percent = commissionArray.commission30Percent;
-				var formattedOverall25PercentComm = formatter.format(overallCommission25Percent);
-				var formattedOverall30PercentComm = formatter.format(overallCommission30Percent);
-				var formattedThisSale25PercentComm = formatter.format(commission25Percent);
-				var formattedThisSale30PercentComm = formatter.format(commission30Percent);
-				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
-				var formattedCurrentCommission = formatter.format(currentCommission);
+				let regOverallCommission25Percent = regCommissionArray.commission25Percent;
+				let regOverallCommission30Percent = regCommissionArray.commission30Percent;
+				let regFormattedOverall25PercentComm = formatter.format(regOverallCommission25Percent);
+				let regFormattedOverall30PercentComm = formatter.format(regOverallCommission30Percent);
+				let regFormattedThisSale25PercentComm = formatter.format(regCommission25Percent);
+				let regFormattedThisSale30PercentComm = formatter.format(regCommission30Percent);
+				let regFormattedThisSaleCommission = formatter.format(regThisSaleCommission);
+				let regFormattedCurrentCommission = formatter.format(regCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
 				await editEmbed.editStatsEmbed(interaction.client);
 
-				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
+				let regNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
+				let regReason = `Car Sale to \`${regSoldTo}\` costing \`${regFormattedPrice}\` on ${regSaleDate}`
 
 				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				var notificationEmbed = new EmbedBuilder()
+				let regNotificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${regFormattedThisSale25PercentComm}\`\n• **30%:** \`${regFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${regFormattedOverall25PercentComm}\`\n• **30%:** \`${regFormattedOverall30PercentComm}\`\n\n**Reason:** ${regReason}.`)
 					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
+				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [regNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${regCommissionPercent}\`): \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addSportsCarSaleModal':
-				var salesmanName;
+				let sportsSalesmanName;
 				if (interaction.member.nickname) {
-					salesmanName = interaction.member.nickname;
+					sportsSalesmanName = interaction.member.nickname;
 				} else {
-					salesmanName = interaction.member.user.username;
+					sportsSalesmanName = interaction.member.user.username;
 				}
 
-				var now = Math.floor(new Date().getTime() / 1000.0);
-				var saleDate = `<t:${now}:d>`;
+				let sportsNow = Math.floor(new Date().getTime() / 1000.0);
+				let sportsSaleDate = `<t:${sportsNow}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('sportsSoldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('sportsVehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('sportsVehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('sportsPriceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('sportsNotesInput'));
+				let sportsSoldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('sportsSoldToInput')));
+				let sportsVehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('sportsVehicleNameInput')));
+				let sportsVehiclePlate = strCleanup(interaction.fields.getTextInputValue('sportsVehiclePlateInput')).toUpperCase();
+				let sportsPrice = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('sportsPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				let sportsNotes = strCleanup(interaction.fields.getTextInputValue('sportsNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
-					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Sports`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Sports`, `${sportsSalesmanName} (<@${interaction.user.id}>)`, sportsSaleDate, sportsSoldTo, sportsVehicleName, sportsVehiclePlate, sportsPrice, sportsNotes]] }
 				});
 
-				var formattedPrice = formatter.format(price);
+				let sportsFormattedPrice = formatter.format(sportsPrice);
 
-				if (isNaN(price)) { // validate quantity of money
+				if (isNaN(sportsPrice)) { // validate quantity of money
 					await interaction.reply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('sportsPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
@@ -173,114 +177,118 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				var costPrice = (price * 0.85);
-				var laProfit = price - costPrice;
-				var commission25Percent = (laProfit * 0.25);
-				var commission30Percent = (laProfit * 0.30);
+				let sportsCostPrice = (sportsPrice * 0.85);
+				let sportsLaProfit = sportsPrice - sportsCostPrice;
+				let sportsCommission25Percent = (sportsLaProfit * 0.25);
+				let sportsCommission30Percent = (sportsLaProfit * 0.30);
 
-				var formattedCostPrice = formatter.format(costPrice);
-				var formattedLaProfit = formatter.format(laProfit);
+				let sportsFormattedCostPrice = formatter.format(sportsCostPrice);
+				let sportsFormattedLaProfit = formatter.format(sportsLaProfit);
 
-				if (!notes || notes.toLowerCase() === "n/a") {
-					var carSoldEmbed = [new EmbedBuilder()
+				let sportsCarSoldEmbed;
+
+				if (!sportsNotes || sportsNotes.toLowerCase() === "n/a") {
+					sportsCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+							{ name: `Salesperson Name:`, value: `${sportsSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${sportsSaleDate}` },
+							{ name: `Car Sold To:`, value: `${sportsSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${sportsVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${sportsVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${sportsFormattedPrice}` },
 						)
-						.setColor('023E8A')];
+						.setColor('023E8A');
 				} else {
-					var carSoldEmbed = [new EmbedBuilder()
+					sportsCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-							{ name: `Notes:`, value: `${notes}` }
+							{ name: `Salesperson Name:`, value: `${sportsSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${sportsSaleDate}` },
+							{ name: `Car Sold To:`, value: `${sportsSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${sportsVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${sportsVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${sportsFormattedPrice}` },
+							{ name: `Notes:`, value: `${sportsNotes}` }
 						)
-						.setColor('023E8A')];
+						.setColor('023E8A');
 				}
 
-				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
-				if (personnelStats == null || personnelStats.charName == null) {
+				let sportsPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
+				if (sportsPersonnelStats == null || sportsPersonnelStats.charName == null) {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: carSoldEmbed });
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [sportsCarSoldEmbed] });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				await dbCmds.addCommission(interaction.member.user.id, commission25Percent, commission30Percent);
-				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				await dbCmds.addCommission(interaction.member.user.id, sportsCommission25Percent, sportsCommission30Percent);
+				let sportsCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
+				let sportsWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
-				if (weeklyCarsSold < 100) {
-					var commissionPercent = "25%";
-					var thisSaleCommission = commission25Percent
-					var currentCommission = commissionArray.commission25Percent;
+				let sportsCommissionPercent, sportsThisSaleCommission, sportsCurrentCommission;
+
+				if (sportsWeeklyCarsSold < 100) {
+					sportsCommissionPercent = "25%";
+					sportsThisSaleCommission = sportsCommission25Percent
+					sportsCurrentCommission = sportsCommissionArray.commission25Percent;
 				} else {
-					var commissionPercent = "30%";
-					var thisSaleCommission = commission30Percent;
-					var currentCommission = commissionArray.commission30Percent;
+					sportsCommissionPercent = "30%";
+					sportsThisSaleCommission = sportsCommission30Percent;
+					sportsCurrentCommission = sportsCommissionArray.commission30Percent;
 				}
 
-				var overallCommission25Percent = commissionArray.commission25Percent;
-				var overallCommission30Percent = commissionArray.commission30Percent;
-				var formattedOverall25PercentComm = formatter.format(overallCommission25Percent);
-				var formattedOverall30PercentComm = formatter.format(overallCommission30Percent);
-				var formattedThisSale25PercentComm = formatter.format(commission25Percent);
-				var formattedThisSale30PercentComm = formatter.format(commission30Percent);
-				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
-				var formattedCurrentCommission = formatter.format(currentCommission);
+				let sportsOverallCommission25Percent = sportsCommissionArray.commission25Percent;
+				let sportsOverallCommission30Percent = sportsCommissionArray.commission30Percent;
+				let sportsFormattedOverall25PercentComm = formatter.format(sportsOverallCommission25Percent);
+				let sportsFormattedOverall30PercentComm = formatter.format(sportsOverallCommission30Percent);
+				let sportsFormattedThisSale25PercentComm = formatter.format(sportsCommission25Percent);
+				let sportsFormattedThisSale30PercentComm = formatter.format(sportsCommission30Percent);
+				let sportsFormattedThisSaleCommission = formatter.format(sportsThisSaleCommission);
+				let sportsFormattedCurrentCommission = formatter.format(sportsCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
 				await editEmbed.editStatsEmbed(interaction.client);
 
-				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Sports Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
+				let sportsNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
+				let sportsReason = `Sports Car Sale to \`${sportsSoldTo}\` costing \`${sportsFormattedPrice}\` on ${sportsSaleDate}`
 
 				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				var notificationEmbed = new EmbedBuilder()
+				let sportsNotificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${sportsFormattedThisSale25PercentComm}\`\n• **30%:** \`${sportsFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${sportsFormattedOverall25PercentComm}\`\n• **30%:** \`${sportsFormattedOverall30PercentComm}\`\n\n**Reason:** ${sportsReason}.`)
 					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
+				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [sportsNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${sportsCommissionPercent}\`): \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addTunerCarSaleModal':
-				var salesmanName;
+				let tunerSalesmanName;
 				if (interaction.member.nickname) {
-					salesmanName = interaction.member.nickname;
+					tunerSalesmanName = interaction.member.nickname;
 				} else {
-					salesmanName = interaction.member.user.username;
+					tunerSalesmanName = interaction.member.user.username;
 				}
 
-				var now = Math.floor(new Date().getTime() / 1000.0);
-				var saleDate = `<t:${now}:d>`;
+				let tunerNow = Math.floor(new Date().getTime() / 1000.0);
+				let tunerSaleDate = `<t:${tunerNow}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('tunerSoldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('tunerVehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('tunerVehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('tunerPriceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('tunerNotesInput'));
+				let tunerSoldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('tunerSoldToInput')));
+				let tunerVehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('tunerVehicleNameInput')));
+				let tunerVehiclePlate = strCleanup(interaction.fields.getTextInputValue('tunerVehiclePlateInput')).toUpperCase();
+				let tunerPrice = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('tunerPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				let tunerNotes = strCleanup(interaction.fields.getTextInputValue('tunerNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
-					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Tuner`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Tuner`, `${tunerSalesmanName} (<@${interaction.user.id}>)`, tunerSaleDate, tunerSoldTo, tunerVehicleName, tunerVehiclePlate, tunerPrice, tunerNotes]] }
 				});
 
-				var formattedPrice = formatter.format(price);
+				let tunerFormattedPrice = formatter.format(tunerPrice);
 
-				if (isNaN(price)) { // validate quantity of money
+				if (isNaN(tunerPrice)) { // validate quantity of money
 					await interaction.reply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('tunerPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
@@ -288,209 +296,216 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				var costPrice = (price * 0.80);
-				var laProfit = price - costPrice;
-				var commission25Percent = (laProfit * 0.25);
-				var commission30Percent = (laProfit * 0.30);
+				let tunerCostPrice = (tunerPrice * 0.80);
+				let tunerLaProfit = tunerPrice - tunerCostPrice;
+				let tunerCommission25Percent = (tunerLaProfit * 0.25);
+				let tunerCommission30Percent = (tunerLaProfit * 0.30);
 
-				var formattedCostPrice = formatter.format(costPrice);
-				var formattedLaProfit = formatter.format(laProfit);
+				let tunerFormattedCostPrice = formatter.format(tunerCostPrice);
+				let tunerFormattedLaProfit = formatter.format(tunerLaProfit);
 
-				if (!notes || notes.toLowerCase() === "n/a") {
-					var carSoldEmbed = [new EmbedBuilder()
+				let tunerCarSoldEmbed;
+
+				if (!tunerNotes || tunerNotes.toLowerCase() === "n/a") {
+					tunerCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new tuner car has been sold!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+							{ name: `Salesperson Name:`, value: `${tunerSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${tunerSaleDate}` },
+							{ name: `Car Sold To:`, value: `${tunerSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${tunerVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${tunerVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${tunerFormattedPrice}` },
 						)
-						.setColor('0077B6')];
+						.setColor('0077B6');
 				} else {
-					var carSoldEmbed = [new EmbedBuilder()
+					tunerCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new tuner car has been sold!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-							{ name: `Notes:`, value: `${notes}` }
+							{ name: `Salesperson Name:`, value: `${tunerSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${tunerSaleDate}` },
+							{ name: `Car Sold To:`, value: `${tunerSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${tunerVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${tunerVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${tunerFormattedPrice}` },
+							{ name: `Notes:`, value: `${tunerNotes}` }
 						)
-						.setColor('0077B6')];
+						.setColor('0077B6');
 				}
 
-				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
-				if (personnelStats == null || personnelStats.charName == null) {
+				let tunerPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
+				if (tunerPersonnelStats == null || tunerPersonnelStats.charName == null) {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: carSoldEmbed });
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [tunerCarSoldEmbed] });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				await dbCmds.addCommission(interaction.member.user.id, commission25Percent, commission30Percent);
-				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				await dbCmds.addCommission(interaction.member.user.id, tunerCommission25Percent, tunerCommission30Percent);
+				let tunerCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
+				let tunerWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
-				if (weeklyCarsSold < 100) {
-					var commissionPercent = "25%";
-					var thisSaleCommission = commission25Percent
-					var currentCommission = commissionArray.commission25Percent;
+				let tunerCommissionPercent, tunerThisSaleCommission, tunerCurrentCommission;
+
+				if (tunerWeeklyCarsSold < 100) {
+					commissionPercent = "25%";
+					thisSaleCommission = tunerCommission25Percent
+					currentCommission = tunerCommissionArray.commission25Percent;
 				} else {
-					var commissionPercent = "30%";
-					var thisSaleCommission = commission30Percent;
-					var currentCommission = commissionArray.commission30Percent;
+					commissionPercent = "30%";
+					thisSaleCommission = tunerCommission30Percent;
+					currentCommission = tunerCommissionArray.commission30Percent;
 				}
 
-				var overallCommission25Percent = commissionArray.commission25Percent;
-				var overallCommission30Percent = commissionArray.commission30Percent;
-				var formattedOverall25PercentComm = formatter.format(overallCommission25Percent);
-				var formattedOverall30PercentComm = formatter.format(overallCommission30Percent);
-				var formattedThisSale25PercentComm = formatter.format(commission25Percent);
-				var formattedThisSale30PercentComm = formatter.format(commission30Percent);
-				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
-				var formattedCurrentCommission = formatter.format(currentCommission);
+				let tunerOverallCommission25Percent = tunerCommissionArray.commission25Percent;
+				let tunerOverallCommission30Percent = tunerCommissionArray.commission30Percent;
+				let tunerFormattedOverall25PercentComm = formatter.format(tunerOverallCommission25Percent);
+				let tunerFormattedOverall30PercentComm = formatter.format(tunerOverallCommission30Percent);
+				let tunerFormattedThisSale25PercentComm = formatter.format(tunerCommission25Percent);
+				let tunerFormattedThisSale30PercentComm = formatter.format(tunerCommission30Percent);
+				let tunerFormattedThisSaleCommission = formatter.format(tunerThisSaleCommission);
+				let tunerFormattedCurrentCommission = formatter.format(tunerCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
 				await editEmbed.editStatsEmbed(interaction.client);
 
-				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Tuner Car Sale to \`${soldTo}\` costing \`${formattedPrice}\` on ${saleDate}`
+				let tunerNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
+				let tunerReason = `Tuner Car Sale to \`${tunerSoldTo}\` costing \`${tunerFormattedPrice}\` on ${tunerSaleDate}`
 
 				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				var notificationEmbed = new EmbedBuilder()
+				let tunerNotificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${tunerFormattedThisSale25PercentComm}\`\n• **30%:** \`${tunerFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${tunerFormattedOverall25PercentComm}\`\n• **30%:** \`${tunerFormattedOverall30PercentComm}\`\n\n**Reason:** ${tunerReason}.`)
 					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
+				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [tunerNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${tunerCommissionPercent}\`): \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addEmployeeSaleModal':
-				var salesmanName;
+				let empSalesmanName;
 				if (interaction.member.nickname) {
-					salesmanName = interaction.member.nickname;
+					empSalesmanName = interaction.member.nickname;
 				} else {
-					salesmanName = interaction.member.user.username;
+					empSalesmanName = interaction.member.user.username;
 				}
 
-				var now = Math.floor(new Date().getTime() / 1000.0);
-				var saleDate = `<t:${now}:d>`;
+				let empNow = Math.floor(new Date().getTime() / 1000.0);
+				let empSaleDate = `<t:${empNow}:d>`;
 
-				var soldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('employeeSoldToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('employeeVehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('employeeVehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('employeePriceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('employeeNotesInput'));
+				let empSoldTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('empSoldToInput')));
+				let empVehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('empVehicleNameInput')));
+				let empVehiclePlate = strCleanup(interaction.fields.getTextInputValue('empVehiclePlateInput')).toUpperCase();
+				let empPrice = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('empPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				let empNotes = strCleanup(interaction.fields.getTextInputValue('empNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
-					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Employee`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, soldTo, vehicleName, vehiclePlate, price, notes]] }
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Employee`, `${empSalesmanName} (<@${interaction.user.id}>)`, empSaleDate, empSoldTo, empVehicleName, empVehiclePlate, empPrice, empNotes]] }
 				});
 
-				var formattedPrice = formatter.format(price);
+				let empFormattedPrice = formatter.format(empPrice);
 
-				if (isNaN(price)) { // validate quantity of money
+				if (isNaN(empPrice)) { // validate quantity of money
 					await interaction.reply({
-						content: `:exclamation: \`${interaction.fields.getTextInputValue('employeePriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
+						content: `:exclamation: \`${interaction.fields.getTextInputValue('empPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
 					return;
 				}
 
-				var costPrice = (price * 0.80);
-				var laProfit = price - costPrice;
+				let empCostPrice = (empPrice * 0.80);
+				let empLaProfit = empPrice - empCostPrice;
 
-				var formattedCostPrice = formatter.format(costPrice);
-				var formattedLaProfit = formatter.format(laProfit);
+				let empFormattedCostPrice = formatter.format(empCostPrice);
+				let empFormattedLaProfit = formatter.format(empLaProfit);
 
-				if (!notes || notes.toLowerCase() === "n/a") {
-					var carSoldEmbed = [new EmbedBuilder()
+				let empCarSoldEmbed;
+
+				if (!empNotes || empNotes.toLowerCase() === "n/a") {
+					empCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new car has been sold to an employee!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
+							{ name: `Salesperson Name:`, value: `${empSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${empSaleDate}` },
+							{ name: `Car Sold To:`, value: `${empSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${empVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${empVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${empFormattedPrice}` },
 						)
-						.setColor('0096C7')];
+						.setColor('0096C7');
 				} else {
-					var carSoldEmbed = [new EmbedBuilder()
+					empCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new car has been sold to an employee!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
-							{ name: `Sale Date:`, value: `${saleDate}` },
-							{ name: `Car Sold To:`, value: `${soldTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Final Sale Price:`, value: `${formattedPrice}` },
-							{ name: `Notes:`, value: `${notes}` }
+							{ name: `Salesperson Name:`, value: `${empSalesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Sale Date:`, value: `${empSaleDate}` },
+							{ name: `Car Sold To:`, value: `${empSoldTo}` },
+							{ name: `Vehicle Name:`, value: `${empVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${empVehiclePlate}` },
+							{ name: `Final Sale Price:`, value: `${empFormattedPrice}` },
+							{ name: `Notes:`, value: `${empNotes}` }
 						)
-						.setColor('0096C7')];
+						.setColor('0096C7');
 				}
 
-				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
-				if (personnelStats == null || personnelStats.charName == null) {
+				let empPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
+				if (empPersonnelStats == null || empPersonnelStats.charName == null) {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: carSoldEmbed });
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [empCarSoldEmbed] });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				let empCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
+				let empWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
-				if (weeklyCarsSold < 100) {
-					var overallCommission = commissionArray.commission25Percent;
-					var commissionPercent = "25%";
+				let empOverallCommission, empCommissionPercent;
+				if (empWeeklyCarsSold < 100) {
+					empOverallCommission = empCommissionArray.commission25Percent;
+					empCommissionPercent = "25%";
 				} else {
-					var overallCommission = commissionArray.commission30Percent;
-					var commissionPercent = "30%";
+					empOverallCommission = empCommissionArray.commission30Percent;
+					empCommissionPercent = "30%";
 				}
 
-				var formattedOverallCommission = formatter.format(overallCommission);
+				let empFormattedOverallCommission = formatter.format(empOverallCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
 				await editEmbed.editStatsEmbed(interaction.client);
 
-				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
+				let empNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${newCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${formattedPrice}\`\n> Cost Price: \`${formattedCostPrice}\`\n> Luxury Autos Profit: \`${formattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedOverallCommission}\`.`, ephemeral: true });
+				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${empNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${empFormattedPrice}\`\n> Cost Price: \`${empFormattedCostPrice}\`\n> Luxury Autos Profit: \`${empFormattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now (\`${empCommissionPercent}\`): \`${empFormattedOverallCommission}\`.`, ephemeral: true });
 				break;
 			case 'addCarRentalModal':
-				var salesmanName;
+				let rentalSalesmanName;
 				if (interaction.member.nickname) {
-					salesmanName = interaction.member.nickname;
+					rentalSalesmanName = interaction.member.nickname;
 				} else {
-					salesmanName = interaction.member.user.username;
+					rentalSalesmanName = interaction.member.user.username;
 				}
 
-				var now = Math.floor(new Date().getTime() / 1000.0);
-				var rentalDate = `<t:${now}:d>`;
+				let rentalNow = Math.floor(new Date().getTime() / 1000.0);
+				let rentalDate = `<t:${rentalNow}:d>`;
 
-				var rentedTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('rentalRentedToInput')));
-				var vehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('rentalVehicleNameInput')));
-				var vehiclePlate = strCleanup(interaction.fields.getTextInputValue('rentalVehiclePlateInput')).toUpperCase();
-				var price = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('rentalPriceInput')).replaceAll(',', '').replaceAll('$', '')));
-				var notes = strCleanup(interaction.fields.getTextInputValue('rentalNotesInput'));
+				let rentedTo = toTitleCase(strCleanup(interaction.fields.getTextInputValue('rentedToInput')));
+				let rentalVehicleName = toTitleCase(strCleanup(interaction.fields.getTextInputValue('rentalVehicleNameInput')));
+				let rentalVehiclePlate = strCleanup(interaction.fields.getTextInputValue('rentalVehiclePlateInput')).toUpperCase();
+				let rentalPrice = Math.abs(Number(strCleanup(interaction.fields.getTextInputValue('rentalPriceInput')).replaceAll(',', '').replaceAll('$', '')));
+				let rentalNotes = strCleanup(interaction.fields.getTextInputValue('rentalNotesInput'));
 
 				await interaction.client.googleSheets.values.append({
-					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Rental`, `${salesmanName} (<@${interaction.user.id}>)`, saleDate, rentedTo, vehicleName, vehiclePlate, price, notes]] }
+					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Rental`, `${rentalSalesmanName} (<@${interaction.user.id}>)`, rentalDate, rentedTo, rentalVehicleName, rentalVehiclePlate, rentalPrice, rentalNotes]] }
 				});
 
-				var formattedPrice = formatter.format(price);
+				let rentalFormattedPrice = formatter.format(rentalPrice);
 
-				if (isNaN(price)) { // validate quantity of money
+				if (isNaN(rentalPrice)) { // validate quantity of money
 					await interaction.reply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('rentalPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
@@ -498,79 +513,82 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				var commission25Percent = price;
-				var commission30Percent = price;
+				let rentalCommission25Percent = rentalPrice;
+				let rentalCommission30Percent = rentalPrice;
 
-				if (!notes || notes.toLowerCase() === "n/a") {
-					var carRentedEmbed = [new EmbedBuilder()
+				let rentalCarRentedEmbed;
+
+				if (!rentalNotes || rentalNotes.toLowerCase() === "n/a") {
+					rentalCarRentedEmbed = new EmbedBuilder()
 						.setTitle('A new car has been rented!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Salesperson Name:`, value: `${rentalSalesmanName} (<@${interaction.user.id}>)` },
 							{ name: `Rental Date:`, value: `${rentalDate}` },
 							{ name: `Car Rented To:`, value: `${rentedTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Rental Price:`, value: `${formattedPrice}` },
+							{ name: `Vehicle Name:`, value: `${rentalVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${rentalVehiclePlate}` },
+							{ name: `Rental Price:`, value: `${rentalFormattedPrice}` },
 						)
-						.setColor('00B4D8')];
+						.setColor('00B4D8');
 				} else {
-					var carRentedEmbed = [new EmbedBuilder()
+					rentalCarRentedEmbed = new EmbedBuilder()
 						.setTitle('A new car has been rented!')
 						.addFields(
-							{ name: `Salesperson Name:`, value: `${salesmanName} (<@${interaction.user.id}>)` },
+							{ name: `Salesperson Name:`, value: `${rentalSalesmanName} (<@${interaction.user.id}>)` },
 							{ name: `Rental Date:`, value: `${rentalDate}` },
 							{ name: `Car Rented To:`, value: `${rentedTo}` },
-							{ name: `Vehicle Name:`, value: `${vehicleName}` },
-							{ name: `Vehicle Plate:`, value: `${vehiclePlate}` },
-							{ name: `Rental Price:`, value: `${formattedPrice}` },
-							{ name: `Notes:`, value: `${notes}` }
+							{ name: `Vehicle Name:`, value: `${rentalVehicleName}` },
+							{ name: `Vehicle Plate:`, value: `${rentalVehiclePlate}` },
+							{ name: `Rental Price:`, value: `${rentalFormattedPrice}` },
+							{ name: `Notes:`, value: `${rentalNotes}` }
 						)
-						.setColor('00B4D8')];
+						.setColor('00B4D8');
 				}
 
-				var personnelStats = await dbCmds.readPersStats(interaction.member.user.id);
-				if (personnelStats == null || personnelStats.charName == null) {
+				let rentalPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
+				if (rentalPersonnelStats == null || rentalPersonnelStats.charName == null) {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: carRentedEmbed });
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [rentalCarRentedEmbed] });
 
-				await dbCmds.addCommission(interaction.member.user.id, commission25Percent, commission30Percent);
-				var commissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				var weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				await dbCmds.addCommission(interaction.member.user.id, rentalCommission25Percent, rentalCommission30Percent);
+				let rentalCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
+				let rentalWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
-				if (weeklyCarsSold < 100) {
-					var commissionPercent = "25%";
-					var thisSaleCommission = commission25Percent
-					var currentCommission = commissionArray.commission25Percent;
+				let rentalCommissionPercent, rentalThisSaleCommission, rentalCurrentCommission;
+
+				if (rentalWeeklyCarsSold < 100) {
+					rentalCommissionPercent = "25%";
+					rentalThisSaleCommission = rentalCommission25Percent
+					rentalCurrentCommission = rentalCommissionArray.commission25Percent;
 				} else {
-					var commissionPercent = "30%";
-					var thisSaleCommission = commission30Percent;
-					var currentCommission = commissionArray.commission30Percent;
+					rentalCommissionPercent = "30%";
+					rentalThisSaleCommission = rentalCommission30Percent;
+					rentalCurrentCommission = rentalCommissionArray.commission30Percent;
 				}
 
-				var overallCommission25Percent = commissionArray.commission25Percent;
-				var overallCommission30Percent = commissionArray.commission30Percent;
-				var formattedOverall25PercentComm = formatter.format(overallCommission25Percent);
-				var formattedOverall30PercentComm = formatter.format(overallCommission30Percent);
-				var formattedThisSale25PercentComm = formatter.format(commission25Percent);
-				var formattedThisSale30PercentComm = formatter.format(commission30Percent);
-				var formattedThisSaleCommission = formatter.format(thisSaleCommission);
-				var formattedCurrentCommission = formatter.format(currentCommission);
+				let rentalOverallCommission25Percent = rentalCommissionArray.commission25Percent;
+				let rentalOverallCommission30Percent = rentalCommissionArray.commission30Percent;
+				let rentalFormattedOverall25PercentComm = formatter.format(rentalOverallCommission25Percent);
+				let rentalFormattedOverall30PercentComm = formatter.format(rentalOverallCommission30Percent);
+				let rentalFormattedThisSale25PercentComm = formatter.format(rentalCommission25Percent);
+				let rentalFormattedThisSale30PercentComm = formatter.format(rentalCommission30Percent);
+				let rentalFormattedThisSaleCommission = formatter.format(rentalThisSaleCommission);
+				let rentalFormattedCurrentCommission = formatter.format(rentalCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
 
-				var newCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				var reason = `Car Rented to \`${rentedTo}\` costing \`${formattedPrice}\` on ${rentalDate}`
+				let rentalReason = `Car Rented to \`${rentedTo}\` costing \`${rentalFormattedPrice}\` on ${rentalDate}`
 
 				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				var notificationEmbed = new EmbedBuilder()
+				let rentalNotificationEmbed = new EmbedBuilder()
 					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${formattedThisSale25PercentComm}\`\n• **30%:** \`${formattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
+					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${rentalFormattedThisSale25PercentComm}\`\n• **30%:** \`${rentalFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${rentalFormattedOverall25PercentComm}\`\n• **30%:** \`${rentalFormattedOverall30PercentComm}\`\n\n**Reason:** ${rentalReason}.`)
 					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
+				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [rentalNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully logged this Car Rental.\n\n\Details about this rental:\n> Rental Price: \`${formattedPrice}\`\n> Your Commission: \`${formattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${commissionPercent}\`): \`${formattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.reply({ content: `Successfully logged this Car Rental.\n\n\Details about this rental:\n> Rental Price: \`${rentalFormattedPrice}\`\n> Your Commission: \`${rentalFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${rentalCommissionPercent}\`): \`${rentalFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			default:
 				await interaction.reply({
@@ -580,11 +598,11 @@ module.exports.modalSubmit = async (interaction) => {
 				console.log(`Error: Unrecognized modal ID: ${interaction.customId}`);
 		}
 	} catch (error) {
-		var errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
-		var fileParts = __filename.split(/[\\/]/);
-		var fileName = fileParts[fileParts.length - 1];
+		let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+		let fileParts = __filename.split(/[\\/]/);
+		let fileName = fileParts[fileParts.length - 1];
 
-		var errorEmbed = [new EmbedBuilder()
+		let errorEmbed = [new EmbedBuilder()
 			.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
 			.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
 			.setColor('B80600')

@@ -86,19 +86,19 @@ function addBtnRows() {
 
 module.exports.postStatsEmbed = async (client) => {
 	try {
-		let employeeStats = await dbCmds.currStats();
+		let empStats = await dbCmds.currStats();
 		let currentDescList = '';
 
 		let now = Math.floor(new Date().getTime() / 1000.0);
 		let today = `<t:${now}:d>`;
 
-		for (i = 0; i < employeeStats.length; i++) {
-			if (employeeStats[i].weeklyCarsSold > 0) {
-				currentDescList = currentDescList.concat(`__${employeeStats[i].charName}__:
-	• **Cars Sold Overall:** ${employeeStats[i].carsSold}
-	• **Cars Sold This Week:** ${employeeStats[i].weeklyCarsSold}
-	• **Current Commission (25%):** ${formatter.format(employeeStats[i].commission25Percent)}
-	• **Current Commission (30%):** ${formatter.format(employeeStats[i].commission30Percent)}\n\n`);
+		for (i = 0; i < empStats.length; i++) {
+			if (empStats[i].weeklyCarsSold > 0) {
+				currentDescList = currentDescList.concat(`__${empStats[i].charName}__:
+	• **Cars Sold Overall:** ${empStats[i].carsSold}
+	• **Cars Sold This Week:** ${empStats[i].weeklyCarsSold}
+	• **Current Commission (25%):** ${formatter.format(empStats[i].commission25Percent)}
+	• **Current Commission (30%):** ${formatter.format(empStats[i].commission30Percent)}\n\n`);
 			}
 		}
 

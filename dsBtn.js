@@ -144,44 +144,44 @@ module.exports.btnPressed = async (interaction) => {
 				let addEmployeeSaleModal = new ModalBuilder()
 					.setCustomId('addEmployeeSaleModal')
 					.setTitle('Log a car that you sold to a fellow employee');
-				let employeeSoldToInput = new TextInputBuilder()
-					.setCustomId('employeeSoldToInput')
+				let empSoldToInput = new TextInputBuilder()
+					.setCustomId('empSoldToInput')
 					.setLabel("Who did you sell the car to?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Trevon Ricch')
 					.setRequired(true);
-				let employeeVehicleNameInput = new TextInputBuilder()
-					.setCustomId('employeeVehicleNameInput')
+				let empVehicleNameInput = new TextInputBuilder()
+					.setCustomId('empVehicleNameInput')
 					.setLabel("What is the vehicle name?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('190z')
 					.setRequired(true);
-				let employeeVehiclePlateInput = new TextInputBuilder()
-					.setCustomId('employeeVehiclePlateInput')
+				let empVehiclePlateInput = new TextInputBuilder()
+					.setCustomId('empVehiclePlateInput')
 					.setLabel("What was the car's license plate?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('G904Z23M')
 					.setRequired(true);
-				let employeePriceInput = new TextInputBuilder()
-					.setCustomId('employeePriceInput')
+				let empPriceInput = new TextInputBuilder()
+					.setCustomId('empPriceInput')
 					.setLabel("What was the final sale price?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('75000')
 					.setRequired(true);
-				let employeeNotesInput = new TextInputBuilder()
-					.setCustomId('employeeNotesInput')
+				let empNotesInput = new TextInputBuilder()
+					.setCustomId('empNotesInput')
 					.setLabel("Any notes to include about this sale?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Self purchase')
 					.setRequired(false);
 
-				let employeeSoldToInputRow = new ActionRowBuilder().addComponents(employeeSoldToInput);
-				let employeeVehicleNameInputRow = new ActionRowBuilder().addComponents(employeeVehicleNameInput);
-				let employeeVehiclePlateInputRow = new ActionRowBuilder().addComponents(employeeVehiclePlateInput);
-				let employeePriceInputRow = new ActionRowBuilder().addComponents(employeePriceInput);
-				let employeeNotesInputRow = new ActionRowBuilder().addComponents(employeeNotesInput);
+				let empSoldToInputRow = new ActionRowBuilder().addComponents(empSoldToInput);
+				let empVehicleNameInputRow = new ActionRowBuilder().addComponents(empVehicleNameInput);
+				let empVehiclePlateInputRow = new ActionRowBuilder().addComponents(empVehiclePlateInput);
+				let empPriceInputRow = new ActionRowBuilder().addComponents(empPriceInput);
+				let empNotesInputRow = new ActionRowBuilder().addComponents(empNotesInput);
 
-				addEmployeeSaleModal.addComponents(employeeSoldToInputRow, employeeVehicleNameInputRow, employeeVehiclePlateInputRow, employeePriceInputRow, employeeNotesInputRow);
+				addEmployeeSaleModal.addComponents(empSoldToInputRow, empVehicleNameInputRow, empVehiclePlateInputRow, empPriceInputRow, empNotesInputRow);
 
 				await interaction.showModal(addEmployeeSaleModal);
 				break;
@@ -189,8 +189,8 @@ module.exports.btnPressed = async (interaction) => {
 				let addCarRentalModal = new ModalBuilder()
 					.setCustomId('addCarRentalModal')
 					.setTitle('Log a car that you rented');
-				let rentalRentedToInput = new TextInputBuilder()
-					.setCustomId('rentalRentedToInput')
+				let rentedToInput = new TextInputBuilder()
+					.setCustomId('rentedToInput')
 					.setLabel("Who did you rent the car to?")
 					.setStyle(TextInputStyle.Short)
 					.setPlaceholder('Stacy Cox')
@@ -220,13 +220,13 @@ module.exports.btnPressed = async (interaction) => {
 					.setPlaceholder('First time rental')
 					.setRequired(false);
 
-				let rentalRentedToInputRow = new ActionRowBuilder().addComponents(rentalRentedToInput);
+				let rentedToInputRow = new ActionRowBuilder().addComponents(rentedToInput);
 				let rentalVehicleNameInputRow = new ActionRowBuilder().addComponents(rentalVehicleNameInput);
 				let rentalVehiclePlateInputRow = new ActionRowBuilder().addComponents(rentalVehiclePlateInput);
 				let rentalPriceInputRow = new ActionRowBuilder().addComponents(rentalPriceInput);
 				let rentalNotesInputRow = new ActionRowBuilder().addComponents(rentalNotesInput);
 
-				addCarRentalModal.addComponents(rentalRentedToInputRow, rentalVehicleNameInputRow, rentalVehiclePlateInputRow, rentalPriceInputRow, rentalNotesInputRow);
+				addCarRentalModal.addComponents(rentedToInputRow, rentalVehicleNameInputRow, rentalVehiclePlateInputRow, rentalPriceInputRow, rentalNotesInputRow);
 
 				await interaction.showModal(addCarRentalModal);
 				break;

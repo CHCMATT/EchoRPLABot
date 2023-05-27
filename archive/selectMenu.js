@@ -1,4 +1,4 @@
-var { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
+let { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'selectmenu',
@@ -7,7 +7,7 @@ module.exports = {
 	],
 	async execute(interaction) {
 
-		var select = new StringSelectMenuBuilder()
+		let select = new StringSelectMenuBuilder()
 			.setCustomId('starter')
 			.setPlaceholder('Make a selection!')
 			.addOptions(
@@ -17,7 +17,7 @@ module.exports = {
 					.setValue('Value 1'),
 			);
 
-		var row = new ActionRowBuilder()
+		let row = new ActionRowBuilder()
 			.addComponents(select);
 
 		await interaction.reply({
