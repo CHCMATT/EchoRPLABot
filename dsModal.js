@@ -28,6 +28,8 @@ module.exports.modalSubmit = async (interaction) => {
 		let modalID = interaction.customId;
 		switch (modalID) {
 			case 'addRegularCarSaleModal':
+				await interaction.deferReply({ ephemeral: true });
+
 				let regSalesmanName;
 				if (interaction.member.nickname) {
 					regSalesmanName = interaction.member.nickname;
@@ -51,7 +53,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let regFormattedPrice = formatter.format(regPrice);
 
 				if (isNaN(regPrice)) { // validate quantity of money
-					await interaction.reply({
+					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('regPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
@@ -144,9 +146,11 @@ module.exports.modalSubmit = async (interaction) => {
 					.setColor('1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [regNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${regCommissionPercent}\`): \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${regCommissionPercent}\`): \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addSportsCarSaleModal':
+				await interaction.deferReply({ ephemeral: true });
+
 				let sportsSalesmanName;
 				if (interaction.member.nickname) {
 					sportsSalesmanName = interaction.member.nickname;
@@ -170,7 +174,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let sportsFormattedPrice = formatter.format(sportsPrice);
 
 				if (isNaN(sportsPrice)) { // validate quantity of money
-					await interaction.reply({
+					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('sportsPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
@@ -263,9 +267,11 @@ module.exports.modalSubmit = async (interaction) => {
 					.setColor('1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [sportsNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${sportsCommissionPercent}\`): \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${sportsCommissionPercent}\`): \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addTunerCarSaleModal':
+				await interaction.deferReply({ ephemeral: true });
+
 				let tunerSalesmanName;
 				if (interaction.member.nickname) {
 					tunerSalesmanName = interaction.member.nickname;
@@ -289,7 +295,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let tunerFormattedPrice = formatter.format(tunerPrice);
 
 				if (isNaN(tunerPrice)) { // validate quantity of money
-					await interaction.reply({
+					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('tunerPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
@@ -382,9 +388,11 @@ module.exports.modalSubmit = async (interaction) => {
 					.setColor('1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [tunerNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${tunerCommissionPercent}\`): \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${tunerCommissionPercent}\`): \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addEmployeeSaleModal':
+				await interaction.deferReply({ ephemeral: true });
+
 				let empSalesmanName;
 				if (interaction.member.nickname) {
 					empSalesmanName = interaction.member.nickname;
@@ -408,7 +416,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let empFormattedPrice = formatter.format(empPrice);
 
 				if (isNaN(empPrice)) { // validate quantity of money
-					await interaction.reply({
+					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('empPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
@@ -480,9 +488,11 @@ module.exports.modalSubmit = async (interaction) => {
 
 				let empNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 
-				await interaction.reply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${empNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${empFormattedPrice}\`\n> Cost Price: \`${empFormattedCostPrice}\`\n> Luxury Autos Profit: \`${empFormattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now (\`${empCommissionPercent}\`): \`${empFormattedOverallCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${empNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${empFormattedPrice}\`\n> Cost Price: \`${empFormattedCostPrice}\`\n> Luxury Autos Profit: \`${empFormattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now (\`${empCommissionPercent}\`): \`${empFormattedOverallCommission}\`.`, ephemeral: true });
 				break;
 			case 'addCarRentalModal':
+				await interaction.deferReply({ ephemeral: true });
+
 				let rentalSalesmanName;
 				if (interaction.member.nickname) {
 					rentalSalesmanName = interaction.member.nickname;
@@ -506,7 +516,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let rentalFormattedPrice = formatter.format(rentalPrice);
 
 				if (isNaN(rentalPrice)) { // validate quantity of money
-					await interaction.reply({
+					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('rentalPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
 						ephemeral: true
 					});
@@ -588,10 +598,10 @@ module.exports.modalSubmit = async (interaction) => {
 					.setColor('1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [rentalNotificationEmbed] });
 
-				await interaction.reply({ content: `Successfully logged this Car Rental.\n\n\Details about this rental:\n> Rental Price: \`${rentalFormattedPrice}\`\n> Your Commission: \`${rentalFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${rentalCommissionPercent}\`): \`${rentalFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully logged this Car Rental.\n\n\Details about this rental:\n> Rental Price: \`${rentalFormattedPrice}\`\n> Your Commission: \`${rentalFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${rentalCommissionPercent}\`): \`${rentalFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			default:
-				await interaction.reply({
+				await interaction.editReply({
 					content: `I'm not familiar with this modal type. Please tag @CHCMATT to fix this issue.`,
 					ephemeral: true
 				});
