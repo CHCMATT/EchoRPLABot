@@ -108,7 +108,9 @@ module.exports.modalSubmit = async (interaction) => {
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				await dbCmds.addCommission(interaction.member.user.id, regCommission25Percent, regCommission30Percent);
+				if (Math.round(regCommission30Percent) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, regCommission25Percent, regCommission30Percent);
+				}
 				let regCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
 				let regWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
@@ -137,14 +139,16 @@ module.exports.modalSubmit = async (interaction) => {
 				await editEmbed.editStatsEmbed(interaction.client);
 
 				let regNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				let regReason = `Car Sale to \`${regSoldTo}\` costing \`${regFormattedPrice}\` on ${regSaleDate}`
+				if (Math.round(regCommission30Percent) > 0) {
+					let regReason = `Car Sale to \`${regSoldTo}\` costing \`${regFormattedPrice}\` on ${regSaleDate}`
 
-				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				let regNotificationEmbed = new EmbedBuilder()
-					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${regFormattedThisSale25PercentComm}\`\n• **30%:** \`${regFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${regFormattedOverall25PercentComm}\`\n• **30%:** \`${regFormattedOverall30PercentComm}\`\n\n**Reason:** ${regReason}.`)
-					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [regNotificationEmbed] });
+					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+					let regNotificationEmbed = new EmbedBuilder()
+						.setTitle('Commission Modified Automatically:')
+						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${regFormattedThisSale25PercentComm}\`\n• **30%:** \`${regFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${regFormattedOverall25PercentComm}\`\n• **30%:** \`${regFormattedOverall30PercentComm}\`\n\n**Reason:** ${regReason}.`)
+						.setColor('1EC276');
+					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [regNotificationEmbed] });
+				}
 
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${regCommissionPercent}\`): \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
@@ -229,7 +233,9 @@ module.exports.modalSubmit = async (interaction) => {
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				await dbCmds.addCommission(interaction.member.user.id, sportsCommission25Percent, sportsCommission30Percent);
+				if (Math.round(sportsCommission30Percent) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, sportsCommission25Percent, sportsCommission30Percent);
+				}
 				let sportsCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
 				let sportsWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
@@ -258,14 +264,16 @@ module.exports.modalSubmit = async (interaction) => {
 				await editEmbed.editStatsEmbed(interaction.client);
 
 				let sportsNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				let sportsReason = `Sports Car Sale to \`${sportsSoldTo}\` costing \`${sportsFormattedPrice}\` on ${sportsSaleDate}`
+				if (Math.round(sportsCommission30Percent) > 0) {
+					let sportsReason = `Sports Car Sale to \`${sportsSoldTo}\` costing \`${sportsFormattedPrice}\` on ${sportsSaleDate}`
 
-				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				let sportsNotificationEmbed = new EmbedBuilder()
-					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${sportsFormattedThisSale25PercentComm}\`\n• **30%:** \`${sportsFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${sportsFormattedOverall25PercentComm}\`\n• **30%:** \`${sportsFormattedOverall30PercentComm}\`\n\n**Reason:** ${sportsReason}.`)
-					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [sportsNotificationEmbed] });
+					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+					let sportsNotificationEmbed = new EmbedBuilder()
+						.setTitle('Commission Modified Automatically:')
+						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${sportsFormattedThisSale25PercentComm}\`\n• **30%:** \`${sportsFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${sportsFormattedOverall25PercentComm}\`\n• **30%:** \`${sportsFormattedOverall30PercentComm}\`\n\n**Reason:** ${sportsReason}.`)
+						.setColor('1EC276');
+					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [sportsNotificationEmbed] });
+				}
 
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${sportsCommissionPercent}\`): \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
@@ -350,7 +358,9 @@ module.exports.modalSubmit = async (interaction) => {
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				await dbCmds.addCommission(interaction.member.user.id, tunerCommission25Percent, tunerCommission30Percent);
+				if (Math.round(tunerCommission30Percent) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, tunerCommission25Percent, tunerCommission30Percent);
+				}
 				let tunerCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
 				let tunerWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
@@ -379,14 +389,16 @@ module.exports.modalSubmit = async (interaction) => {
 				await editEmbed.editStatsEmbed(interaction.client);
 
 				let tunerNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				let tunerReason = `Tuner Car Sale to \`${tunerSoldTo}\` costing \`${tunerFormattedPrice}\` on ${tunerSaleDate}`
+				if (Math.round(tunerCommission30Percent) > 0) {
+					let tunerReason = `Tuner Car Sale to \`${tunerSoldTo}\` costing \`${tunerFormattedPrice}\` on ${tunerSaleDate}`
 
-				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				let tunerNotificationEmbed = new EmbedBuilder()
-					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${tunerFormattedThisSale25PercentComm}\`\n• **30%:** \`${tunerFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${tunerFormattedOverall25PercentComm}\`\n• **30%:** \`${tunerFormattedOverall30PercentComm}\`\n\n**Reason:** ${tunerReason}.`)
-					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [tunerNotificationEmbed] });
+					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+					let tunerNotificationEmbed = new EmbedBuilder()
+						.setTitle('Commission Modified Automatically:')
+						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${tunerFormattedThisSale25PercentComm}\`\n• **30%:** \`${tunerFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${tunerFormattedOverall25PercentComm}\`\n• **30%:** \`${tunerFormattedOverall30PercentComm}\`\n\n**Reason:** ${tunerReason}.`)
+						.setColor('1EC276');
+					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [tunerNotificationEmbed] });
+				}
 
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${tunerCommissionPercent}\`): \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
@@ -562,7 +574,9 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [rentalCarRentedEmbed] });
 
-				await dbCmds.addCommission(interaction.member.user.id, rentalCommission25Percent, rentalCommission30Percent);
+				if (Math.round(rentalCommission30Percent) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, rentalCommission25Percent, rentalCommission30Percent);
+				}
 				let rentalCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
 				let rentalWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
@@ -589,14 +603,16 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await editEmbed.editMainEmbed(interaction.client);
 
-				let rentalReason = `Car Rented to \`${rentedTo}\` costing \`${rentalFormattedPrice}\` on ${rentalDate}`
+				if (Math.round(rentalCommission30Percent) > 0) {
+					let rentalReason = `Car Rented to \`${rentedTo}\` costing \`${rentalFormattedPrice}\` on ${rentalDate}`
 
-				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
-				let rentalNotificationEmbed = new EmbedBuilder()
-					.setTitle('Commission Modified Automatically:')
-					.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${rentalFormattedThisSale25PercentComm}\`\n• **30%:** \`${rentalFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${rentalFormattedOverall25PercentComm}\`\n• **30%:** \`${rentalFormattedOverall30PercentComm}\`\n\n**Reason:** ${rentalReason}.`)
-					.setColor('1EC276');
-				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [rentalNotificationEmbed] });
+					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+					let rentalNotificationEmbed = new EmbedBuilder()
+						.setTitle('Commission Modified Automatically:')
+						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${rentalFormattedThisSale25PercentComm}\`\n• **30%:** \`${rentalFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${rentalFormattedOverall25PercentComm}\`\n• **30%:** \`${rentalFormattedOverall30PercentComm}\`\n\n**Reason:** ${rentalReason}.`)
+						.setColor('1EC276');
+					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [rentalNotificationEmbed] });
+				}
 
 				await interaction.editReply({ content: `Successfully logged this Car Rental.\n\n\Details about this rental:\n> Rental Price: \`${rentalFormattedPrice}\`\n> Your Commission: \`${rentalFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${rentalCommissionPercent}\`): \`${rentalFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
