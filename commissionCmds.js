@@ -64,7 +64,7 @@ module.exports.commissionReport = async (client, type, who) => {
 			}
 
 			let embed = new EmbedBuilder()
-				.setTitle(`${type} Commission Report (\`${commissionPercent}\`) for ${lastRep} through ${today}:`)
+				.setTitle(`${type} Commission Report (\`${weeklyCarsSold}\` sales @ \`${commissionPercent}\`) for ${lastRep} through ${today}:`)
 				.setDescription(commissionDescList)
 				.setColor('90E0EF');
 
