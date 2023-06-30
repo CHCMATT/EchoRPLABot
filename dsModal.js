@@ -535,8 +535,8 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				let rentalCommission25Percent = rentalPrice;
-				let rentalCommission30Percent = rentalPrice;
+				let rentalCommission25Percent = (rentalPrice * 0.50);
+				let rentalCommission30Percent = (rentalPrice * 0.50);
 
 				let rentalCarRentedEmbed;
 
