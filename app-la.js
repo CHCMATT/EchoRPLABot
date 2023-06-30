@@ -23,9 +23,9 @@ let fileName = fileParts[fileParts.length - 1];
 cron.schedule('0 15 * * FRI', function () {
 	commissionCmds.commissionReport(client, `Automatic`, `\`System\``);
 }); // runs at 15:00 every Friday
-cron.schedule('1 15 * * FRI', function () {
+cron.schedule('30 0 15 * * FRI', function () {
 	statsReport.statsReport(client, `Automatic`, `\`System\``);
-}); // runs at 15:01 every Friday
+}); // runs at 15:00:30 every Friday
 
 
 client.once('ready', async () => {
