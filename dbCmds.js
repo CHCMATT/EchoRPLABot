@@ -55,7 +55,7 @@ module.exports.setBankAccount = async (discordId, bankNum) => {
 };
 
 module.exports.setCharName = async (discordId, charName) => {
-	await d8PersonnelInfo.findOneAndUpdate({ discordId: discordId }, { charName: charName }, { upsert: true });
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { charName: charName }, { upsert: true });
 };
 
 
