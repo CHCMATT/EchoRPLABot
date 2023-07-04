@@ -103,8 +103,7 @@ module.exports.editStatsEmbed = async (client) => {
 				currentDescList = currentDescList.concat(`__${empStats[i].charName}__:
 	• **Cars Sold Overall:** ${empStats[i].carsSold}
 	• **Cars Sold This Week:** ${empStats[i].weeklyCarsSold}
-	• **Current Commission (25%):** ${formatter.format(empStats[i].commission25Percent)}
-	• **Current Commission (30%):** ${formatter.format(empStats[i].commission30Percent)}\n\n`);
+	• **Current Commission:** ${formatter.format(empStats[i].currentCommission)}\n\n`);
 			}
 		}
 

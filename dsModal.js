@@ -62,8 +62,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				let regCostPrice = (regPrice * 0.90);
 				let regLaProfit = regPrice - regCostPrice;
-				let regCommission25Percent = (regLaProfit * 0.25);
-				let regCommission30Percent = (regLaProfit * 0.30);
+				let regThisSaleCommission = (regLaProfit * 0.25);
 
 				let regFormattedCostPrice = formatter.format(regCostPrice);
 				let regFormattedLaProfit = formatter.format(regLaProfit);
@@ -108,30 +107,11 @@ module.exports.modalSubmit = async (interaction) => {
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				if (Math.round(regCommission30Percent) > 0) {
-					await dbCmds.addCommission(interaction.member.user.id, regCommission25Percent, regCommission30Percent);
+				if (Math.round(regThisSaleCommission) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, regThisSaleCommission);
 				}
-				let regCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				let regWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				let regCurrentCommission = await dbCmds.readCommission(interaction.member.user.id);
 
-				let regCommissionPercent, regThisSaleCommission, regCurrentCommission;
-
-				if (regWeeklyCarsSold < 100) {
-					regCommissionPercent = "25%";
-					regThisSaleCommission = regCommission25Percent
-					regCurrentCommission = regCommissionArray.commission25Percent;
-				} else {
-					regCommissionPercent = "30%";
-					regThisSaleCommission = regCommission30Percent;
-					regCurrentCommission = regCommissionArray.commission30Percent;
-				}
-
-				let regOverallCommission25Percent = regCommissionArray.commission25Percent;
-				let regOverallCommission30Percent = regCommissionArray.commission30Percent;
-				let regFormattedOverall25PercentComm = formatter.format(regOverallCommission25Percent);
-				let regFormattedOverall30PercentComm = formatter.format(regOverallCommission30Percent);
-				let regFormattedThisSale25PercentComm = formatter.format(regCommission25Percent);
-				let regFormattedThisSale30PercentComm = formatter.format(regCommission30Percent);
 				let regFormattedThisSaleCommission = formatter.format(regThisSaleCommission);
 				let regFormattedCurrentCommission = formatter.format(regCurrentCommission);
 
@@ -139,18 +119,18 @@ module.exports.modalSubmit = async (interaction) => {
 				await editEmbed.editStatsEmbed(interaction.client);
 
 				let regNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				if (Math.round(regCommission30Percent) > 0) {
+				if (Math.round(regThisSaleCommission) > 0) {
 					let regReason = `Car Sale to \`${regSoldTo}\` costing \`${regFormattedPrice}\` on ${regSaleDate}`
 
 					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 					let regNotificationEmbed = new EmbedBuilder()
 						.setTitle('Commission Modified Automatically:')
-						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${regFormattedThisSale25PercentComm}\`\n• **30%:** \`${regFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${regFormattedOverall25PercentComm}\`\n• **30%:** \`${regFormattedOverall30PercentComm}\`\n\n**Reason:** ${regReason}.`)
-						.setColor('1EC276');
+						.setDescription(`\`System\` added \`${regFormattedThisSaleCommission}\` to <@${interaction.user.id}>'s current commission for a new total of \`${regFormattedCurrentCommission}\`.\n\n**Reason:** ${regReason}.`)
+						.setColor('#1EC276');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [regNotificationEmbed] });
 				}
 
-				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${regCommissionPercent}\`): \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addSportsCarSaleModal':
 				await interaction.deferReply({ ephemeral: true });
@@ -175,7 +155,6 @@ module.exports.modalSubmit = async (interaction) => {
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Sports`, `${sportsSalesmanName} (<@${interaction.user.id}>)`, sportsSaleDate, sportsSoldTo, sportsVehicleName, sportsVehiclePlate, sportsPrice, sportsNotes]] }
 				});
 
-				let sportsFormattedPrice = formatter.format(sportsPrice);
 
 				if (isNaN(sportsPrice)) { // validate quantity of money
 					await interaction.editReply({
@@ -185,14 +164,12 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
+				let sportsFormattedPrice = formatter.format(sportsPrice);
 				let sportsCostPrice = (sportsPrice * 0.85);
 				let sportsLaProfit = sportsPrice - sportsCostPrice;
-				let sportsCommission25Percent = (sportsLaProfit * 0.25);
-				let sportsCommission30Percent = (sportsLaProfit * 0.30);
-
+				let sportsThisSaleCommission = (sportsLaProfit * 0.25);
 				let sportsFormattedCostPrice = formatter.format(sportsCostPrice);
 				let sportsFormattedLaProfit = formatter.format(sportsLaProfit);
-
 				let sportsCarSoldEmbed;
 
 				if (!sportsNotes || sportsNotes.toLowerCase() === "n/a") {
@@ -233,30 +210,11 @@ module.exports.modalSubmit = async (interaction) => {
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				if (Math.round(sportsCommission30Percent) > 0) {
-					await dbCmds.addCommission(interaction.member.user.id, sportsCommission25Percent, sportsCommission30Percent);
+				if (Math.round(sportsThisSaleCommission) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, sportsThisSaleCommission);
 				}
-				let sportsCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				let sportsWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				let sportsCurrentCommission = await dbCmds.readCommission(interaction.member.user.id);
 
-				let sportsCommissionPercent, sportsThisSaleCommission, sportsCurrentCommission;
-
-				if (sportsWeeklyCarsSold < 100) {
-					sportsCommissionPercent = "25%";
-					sportsThisSaleCommission = sportsCommission25Percent
-					sportsCurrentCommission = sportsCommissionArray.commission25Percent;
-				} else {
-					sportsCommissionPercent = "30%";
-					sportsThisSaleCommission = sportsCommission30Percent;
-					sportsCurrentCommission = sportsCommissionArray.commission30Percent;
-				}
-
-				let sportsOverallCommission25Percent = sportsCommissionArray.commission25Percent;
-				let sportsOverallCommission30Percent = sportsCommissionArray.commission30Percent;
-				let sportsFormattedOverall25PercentComm = formatter.format(sportsOverallCommission25Percent);
-				let sportsFormattedOverall30PercentComm = formatter.format(sportsOverallCommission30Percent);
-				let sportsFormattedThisSale25PercentComm = formatter.format(sportsCommission25Percent);
-				let sportsFormattedThisSale30PercentComm = formatter.format(sportsCommission30Percent);
 				let sportsFormattedThisSaleCommission = formatter.format(sportsThisSaleCommission);
 				let sportsFormattedCurrentCommission = formatter.format(sportsCurrentCommission);
 
@@ -264,18 +222,18 @@ module.exports.modalSubmit = async (interaction) => {
 				await editEmbed.editStatsEmbed(interaction.client);
 
 				let sportsNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				if (Math.round(sportsCommission30Percent) > 0) {
+				if (Math.round(sportsThisSaleCommission) > 0) {
 					let sportsReason = `Sports Car Sale to \`${sportsSoldTo}\` costing \`${sportsFormattedPrice}\` on ${sportsSaleDate}`
 
 					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 					let sportsNotificationEmbed = new EmbedBuilder()
 						.setTitle('Commission Modified Automatically:')
-						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${sportsFormattedThisSale25PercentComm}\`\n• **30%:** \`${sportsFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${sportsFormattedOverall25PercentComm}\`\n• **30%:** \`${sportsFormattedOverall30PercentComm}\`\n\n**Reason:** ${sportsReason}.`)
-						.setColor('1EC276');
+						.setDescription(`\`System\` added \`${sportsFormattedThisSaleCommission}\` to <@${interaction.user.id}>'s current commission for a new total of \`${sportsFormattedCurrentCommission}\`.\n\n**Reason:** ${sportsReason}.`)
+						.setColor('#1EC276');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [sportsNotificationEmbed] });
 				}
 
-				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${sportsCommissionPercent}\`): \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addTunerCarSaleModal':
 				await interaction.deferReply({ ephemeral: true });
@@ -300,8 +258,6 @@ module.exports.modalSubmit = async (interaction) => {
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Tuner`, `${tunerSalesmanName} (<@${interaction.user.id}>)`, tunerSaleDate, tunerSoldTo, tunerVehicleName, tunerVehiclePlate, tunerPrice, tunerNotes]] }
 				});
 
-				let tunerFormattedPrice = formatter.format(tunerPrice);
-
 				if (isNaN(tunerPrice)) { // validate quantity of money
 					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('tunerPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
@@ -310,14 +266,12 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
+				let tunerFormattedPrice = formatter.format(tunerPrice);
 				let tunerCostPrice = (tunerPrice * 0.80);
 				let tunerLaProfit = tunerPrice - tunerCostPrice;
-				let tunerCommission25Percent = (tunerLaProfit * 0.25);
-				let tunerCommission30Percent = (tunerLaProfit * 0.30);
-
+				let tunerThisSaleCommission = (tunerLaProfit * 0.25);
 				let tunerFormattedCostPrice = formatter.format(tunerCostPrice);
 				let tunerFormattedLaProfit = formatter.format(tunerLaProfit);
-
 				let tunerCarSoldEmbed;
 
 				if (!tunerNotes || tunerNotes.toLowerCase() === "n/a") {
@@ -358,30 +312,12 @@ module.exports.modalSubmit = async (interaction) => {
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				if (Math.round(tunerCommission30Percent) > 0) {
-					await dbCmds.addCommission(interaction.member.user.id, tunerCommission25Percent, tunerCommission30Percent);
-				}
-				let tunerCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				let tunerWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
-
-				let tunerCommissionPercent, tunerThisSaleCommission, tunerCurrentCommission;
-
-				if (tunerWeeklyCarsSold < 100) {
-					tunerCommissionPercent = "25%";
-					tunerThisSaleCommission = tunerCommission25Percent
-					tunerCurrentCommission = tunerCommissionArray.commission25Percent;
-				} else {
-					tunerCommissionPercent = "30%";
-					tunerThisSaleCommission = tunerCommission30Percent;
-					tunerCurrentCommission = tunerCommissionArray.commission30Percent;
+				if (Math.round(tunerThisSaleCommission) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, tunerThisSaleCommission);
 				}
 
-				let tunerOverallCommission25Percent = tunerCommissionArray.commission25Percent;
-				let tunerOverallCommission30Percent = tunerCommissionArray.commission30Percent;
-				let tunerFormattedOverall25PercentComm = formatter.format(tunerOverallCommission25Percent);
-				let tunerFormattedOverall30PercentComm = formatter.format(tunerOverallCommission30Percent);
-				let tunerFormattedThisSale25PercentComm = formatter.format(tunerCommission25Percent);
-				let tunerFormattedThisSale30PercentComm = formatter.format(tunerCommission30Percent);
+				let tunerCurrentCommission = await dbCmds.readCommission(interaction.member.user.id);
+
 				let tunerFormattedThisSaleCommission = formatter.format(tunerThisSaleCommission);
 				let tunerFormattedCurrentCommission = formatter.format(tunerCurrentCommission);
 
@@ -389,18 +325,18 @@ module.exports.modalSubmit = async (interaction) => {
 				await editEmbed.editStatsEmbed(interaction.client);
 
 				let tunerNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
-				if (Math.round(tunerCommission30Percent) > 0) {
+				if (Math.round(tunerThisSaleCommission) > 0) {
 					let tunerReason = `Tuner Car Sale to \`${tunerSoldTo}\` costing \`${tunerFormattedPrice}\` on ${tunerSaleDate}`
 
 					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 					let tunerNotificationEmbed = new EmbedBuilder()
 						.setTitle('Commission Modified Automatically:')
-						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${tunerFormattedThisSale25PercentComm}\`\n• **30%:** \`${tunerFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${tunerFormattedOverall25PercentComm}\`\n• **30%:** \`${tunerFormattedOverall30PercentComm}\`\n\n**Reason:** ${tunerReason}.`)
-						.setColor('1EC276');
+						.setDescription(`\`System\` added \`${tunerFormattedThisSaleCommission}\` to <@${interaction.user.id}>'s current commission for a new total of \`${tunerFormattedCurrentCommission}\`.\n\n**Reason:** ${tunerReason}.`)
+						.setColor('#1EC276');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [tunerNotificationEmbed] });
 				}
 
-				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${tunerCommissionPercent}\`): \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addEmployeeSaleModal':
 				await interaction.deferReply({ ephemeral: true });
@@ -425,8 +361,6 @@ module.exports.modalSubmit = async (interaction) => {
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Employee`, `${empSalesmanName} (<@${interaction.user.id}>)`, empSaleDate, empSoldTo, empVehicleName, empVehiclePlate, empPrice, empNotes]] }
 				});
 
-				let empFormattedPrice = formatter.format(empPrice);
-
 				if (isNaN(empPrice)) { // validate quantity of money
 					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('empPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
@@ -435,12 +369,11 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
+				let empFormattedPrice = formatter.format(empPrice);
 				let empCostPrice = (empPrice * 0.80);
 				let empLaProfit = empPrice - empCostPrice;
-
 				let empFormattedCostPrice = formatter.format(empCostPrice);
 				let empFormattedLaProfit = formatter.format(empLaProfit);
-
 				let empCarSoldEmbed;
 
 				if (!empNotes || empNotes.toLowerCase() === "n/a") {
@@ -481,26 +414,16 @@ module.exports.modalSubmit = async (interaction) => {
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "carsSold");
 				await dbCmds.addOnePersStat(interaction.member.user.id, "weeklyCarsSold");
-				let empCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				let empWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				let empCurrentCommission = await dbCmds.readCommission(interaction.member.user.id);
 
-				let empOverallCommission, empCommissionPercent;
-				if (empWeeklyCarsSold < 100) {
-					empOverallCommission = empCommissionArray.commission25Percent;
-					empCommissionPercent = "25%";
-				} else {
-					empOverallCommission = empCommissionArray.commission30Percent;
-					empCommissionPercent = "30%";
-				}
-
-				let empFormattedOverallCommission = formatter.format(empOverallCommission);
+				let empFormattedCurrentCommission = formatter.format(empCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
 				await editEmbed.editStatsEmbed(interaction.client);
 
 				let empNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 
-				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${empNewCarsSoldTotal}\`.\n\n\Details about this sale:\n> Sale Price: \`${empFormattedPrice}\`\n> Cost Price: \`${empFormattedCostPrice}\`\n> Luxury Autos Profit: \`${empFormattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now (\`${empCommissionPercent}\`): \`${empFormattedOverallCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${empNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${empFormattedPrice}\`\n> Cost Price: \`${empFormattedCostPrice}\`\n> Luxury Autos Profit: \`${empFormattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now: \`${empFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addCarRentalModal':
 				await interaction.deferReply({ ephemeral: true });
@@ -525,8 +448,6 @@ module.exports.modalSubmit = async (interaction) => {
 					auth: interaction.client.auth, spreadsheetId: interaction.client.sheetId, range: "Car Sales!A:H", valueInputOption: "RAW", resource: { values: [[`Rental`, `${rentalSalesmanName} (<@${interaction.user.id}>)`, rentalDate, rentedTo, rentalVehicleName, rentalVehiclePlate, rentalPrice, rentalNotes]] }
 				});
 
-				let rentalFormattedPrice = formatter.format(rentalPrice);
-
 				if (isNaN(rentalPrice)) { // validate quantity of money
 					await interaction.editReply({
 						content: `:exclamation: \`${interaction.fields.getTextInputValue('rentalPriceInput')}\` is not a valid number, please be sure to only enter numbers.`,
@@ -535,9 +456,8 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
-				let rentalCommission25Percent = (rentalPrice * 0.50);
-				let rentalCommission30Percent = (rentalPrice * 0.50);
-
+				let rentalFormattedPrice = formatter.format(rentalPrice);
+				let rentalThisSaleCommission = (rentalPrice * 0.50);
 				let rentalCarRentedEmbed;
 
 				if (!rentalNotes || rentalNotes.toLowerCase() === "n/a") {
@@ -574,47 +494,28 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [rentalCarRentedEmbed] });
 
-				if (Math.round(rentalCommission30Percent) > 0) {
-					await dbCmds.addCommission(interaction.member.user.id, rentalCommission25Percent, rentalCommission30Percent);
+				if (Math.round(rentalThisSaleCommission) > 0) {
+					await dbCmds.addCommission(interaction.member.user.id, rentalThisSaleCommission);
 				}
-				let rentalCommissionArray = await dbCmds.readCommission(interaction.member.user.id);
-				let rentalWeeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
+				let rentalCurrentCommission = await dbCmds.readCommission(interaction.member.user.id);
 
-				let rentalCommissionPercent, rentalThisSaleCommission, rentalCurrentCommission;
-
-				if (rentalWeeklyCarsSold < 100) {
-					rentalCommissionPercent = "25%";
-					rentalThisSaleCommission = rentalCommission25Percent
-					rentalCurrentCommission = rentalCommissionArray.commission25Percent;
-				} else {
-					rentalCommissionPercent = "30%";
-					rentalThisSaleCommission = rentalCommission30Percent;
-					rentalCurrentCommission = rentalCommissionArray.commission30Percent;
-				}
-
-				let rentalOverallCommission25Percent = rentalCommissionArray.commission25Percent;
-				let rentalOverallCommission30Percent = rentalCommissionArray.commission30Percent;
-				let rentalFormattedOverall25PercentComm = formatter.format(rentalOverallCommission25Percent);
-				let rentalFormattedOverall30PercentComm = formatter.format(rentalOverallCommission30Percent);
-				let rentalFormattedThisSale25PercentComm = formatter.format(rentalCommission25Percent);
-				let rentalFormattedThisSale30PercentComm = formatter.format(rentalCommission30Percent);
 				let rentalFormattedThisSaleCommission = formatter.format(rentalThisSaleCommission);
 				let rentalFormattedCurrentCommission = formatter.format(rentalCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
 
-				if (Math.round(rentalCommission30Percent) > 0) {
-					let rentalReason = `Car Rented to \`${rentedTo}\` costing \`${rentalFormattedPrice}\` on ${rentalDate}`
+				if (Math.round(rentalThisSaleCommission) > 0) {
+					let rentalReason = `Car Rental to \`${rentedTo}\` costing \`${rentalFormattedPrice}\` on ${rentalDate}`
 
 					// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 					let rentalNotificationEmbed = new EmbedBuilder()
 						.setTitle('Commission Modified Automatically:')
-						.setDescription(`\`System\` added to <@${interaction.user.id}>'s commission:\n• **25%:** \`${rentalFormattedThisSale25PercentComm}\`\n• **30%:** \`${rentalFormattedThisSale30PercentComm}\`\n\nTheir new totals are:\n• **25%:** \`${rentalFormattedOverall25PercentComm}\`\n• **30%:** \`${rentalFormattedOverall30PercentComm}\`\n\n**Reason:** ${rentalReason}.`)
-						.setColor('1EC276');
+						.setDescription(`\`System\` added \`${rentalFormattedThisSaleCommission}\` to <@${interaction.user.id}>'s current commission for a new total of \`${rentalFormattedCurrentCommission}\`.\n\n**Reason:** ${rentalReason}.`)
+						.setColor('#1EC276');
 					await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [rentalNotificationEmbed] });
 				}
 
-				await interaction.editReply({ content: `Successfully logged this Car Rental.\n\n\Details about this rental:\n> Rental Price: \`${rentalFormattedPrice}\`\n> Your Commission: \`${rentalFormattedThisSaleCommission}\`\n\nYour weekly commission is now (\`${rentalCommissionPercent}\`): \`${rentalFormattedCurrentCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully logged this Car Rental.\n\nDetails about this rental:\n> Rental Price: \`${rentalFormattedPrice}\`\n> Your Commission: \`${rentalFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${rentalFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			default:
 				await interaction.editReply({
