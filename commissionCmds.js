@@ -26,28 +26,18 @@ module.exports.commissionReport = async (client, type, who) => {
 
 			let peopleArray = await dbCmds.commissionRep();
 			peopleArray.sort((a, b) => {
-				return b.commission25Percent - a.commission25Percent;
+				return b.currentCommission - a.currentCommission;
 			});
 			let commissionDescList = '';
 
 			let weeklyCarsSold = await dbCmds.readSummValue("countWeeklyCarsSold");
 
 			for (i = 0; i < peopleArray.length; i++) {
-				if (weeklyCarsSold < 100) {
-					currentCommission = peopleArray[i].commission25Percent;
-				} else {
-					currentCommission = peopleArray[i].commission30Percent;
-				}
+				currentCommission = peopleArray[i].currentCommission;
 
 				commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
 
 				await dbCmds.resetCommission(peopleArray[i].discordId);
-			}
-
-			if (weeklyCarsSold < 100) {
-				commissionPercent = "25%";
-			} else {
-				commissionPercent = "30%";
 			}
 
 			await dbCmds.resetSummValue("countWeeklyCarsSold");
@@ -64,7 +54,7 @@ module.exports.commissionReport = async (client, type, who) => {
 			}
 
 			let embed = new EmbedBuilder()
-				.setTitle(`${type} Commission Report (\`${weeklyCarsSold}\` sales @ \`${commissionPercent}\`) for ${lastRep} through ${today}:`)
+				.setTitle(`${type} Commission Report (\`${weeklyCarsSold}\` sales) for ${lastRep} through ${today}:`)
 				.setDescription(commissionDescList)
 				.setColor('90E0EF');
 
