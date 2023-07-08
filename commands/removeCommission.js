@@ -20,14 +20,8 @@ module.exports = {
 			required: true,
 		},
 		{
-			name: 'commissiontwentyfive',
-			description: 'The amount of commission you\'d like to remove from the 25% counter',
-			type: 4,
-			required: true,
-		},
-		{
-			name: 'commissionthirty',
-			description: 'The amount of commission you\'d like to remove from the 30% counter',
+			name: 'commission',
+			description: 'The amount of commission you\'d like to remove from the specified salesperson',
 			type: 4,
 			required: true,
 		},
@@ -43,36 +37,30 @@ module.exports = {
 			if (interaction.member._roles.includes(process.env.REALTOR_ROLE_ID) || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
 				let user = interaction.options.getUser('user');
 				if (interaction.user.id == user.id || interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-					let commission25Percent = Math.abs(interaction.options.getInteger('commissiontwentyfive'));
-					let commission30Percent = Math.abs(interaction.options.getInteger('commissionthirty'));
+					let commission = Math.abs(interaction.options.getInteger('commission'));
 					let reason = interaction.options.getString('reason');
 
-					let formatted25Percent = formatter.format(commission25Percent);
-					let formatted30Percent = formatter.format(commission30Percent);
+					let formattedCommission = formatter.format(commission);
 
 					let personnelData = await dbCmds.readPersStats(user.id)
-					if (personnelData.commission25Percent != null && personnelData.commission25Percent > 0) {
-						await dbCmds.removeCommission(user.id, commission25Percent, commission30Percent)
+					if (personnelData.currentCommission != null && personnelData.currentCommission > 0) {
+						await dbCmds.removeCommission(user.id, commission)
 
 						personnelData = await dbCmds.readPersStats(user.id)
-						let commissionArray = await dbCmds.readCommission(user.id);
-
-						let overallCommission25Percent = commissionArray.commission25Percent;
-						let overallCommission30Percent = commissionArray.commission30Percent;
-						let formattedOverall25PercentComm = formatter.format(overallCommission25Percent);
-						let formattedOverall30PercentComm = formatter.format(overallCommission30Percent);
+						let overallCurrentCommission = await dbCmds.readCommission(user.id);
+						let formattedOverallCurrentCommission = formatter.format(overallCurrentCommission);
 
 						await editEmbed.editStatsEmbed(interaction.client);
 
 						// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 						let notificationEmbed = new EmbedBuilder()
 							.setTitle('Commission Modified Manually:')
-							.setDescription(`<@${interaction.user.id}> removed from <@${user.id}>'s commission:\n• **25%:** \`${formatted25Percent}\`\n• **30%:** \`${formatted30Percent}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\`\n\n**Reason:** ${reason}.`)
+							.setDescription(`<@${interaction.user.id}> removed \`${formattedCommission}\` from <@${user.id}>'s current commission for a new total of \`${formattedOverallCurrentCommission}\`.\n\n**Reason:** ${reason}.`)
 							.setColor('#FFA630');
 
 						await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
-						await interaction.reply({ content: `Successfully removed from <@${user.id}>'s commission: \n• **25%:** \`${formatted25Percent}\`\n• **30%:** \`${formatted30Percent}\`\n\nTheir new totals are:\n• **25%:** \`${formattedOverall25PercentComm}\`\n• **30%:** \`${formattedOverall30PercentComm}\``, ephemeral: true });
+						await interaction.reply({ content: `Successfully removed \`${formattedCommission}\` from <@${user.id}>'s current commission for a new total of \`${formattedOverallCurrentCommission}\``, ephemeral: true });
 					} else {
 						await interaction.reply({ content: `:exclamation: <@${user.id}> doesn't have any commission to modify, yet.`, ephemeral: true });
 					}
