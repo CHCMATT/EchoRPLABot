@@ -23,6 +23,16 @@ function strCleanup(str) {
 	return cleaned;
 };
 
+function isValidUrl(string) {
+	let url;
+	try {
+		url = new URL(string);
+	} catch (_) {
+		return false;
+	}
+	return url.protocol === "http:" || url.protocol === "https:";
+}
+
 module.exports.modalSubmit = async (interaction) => {
 	try {
 		let modalID = interaction.customId;
@@ -516,6 +526,67 @@ module.exports.modalSubmit = async (interaction) => {
 				}
 
 				await interaction.editReply({ content: `Successfully logged this Car Rental.\n\nDetails about this rental:\n> Rental Price: \`${rentalFormattedPrice}\`\n> Your Commission: \`${rentalFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${rentalFormattedCurrentCommission}\`.`, ephemeral: true });
+				break;
+			case 'addYPAdvertModal':
+				let ypAdSalesmanName;
+				if (interaction.member.nickname) {
+					ypAdSalesmanName = interaction.member.nickname;
+				} else {
+					ypAdSalesmanName = interaction.member.user.username;
+				}
+
+				let now = Math.floor(new Date().getTime() / 1000.0);
+				let adDate = `<t:${now}:d>`;
+
+				let screenshotLink = strCleanup(interaction.fields.getTextInputValue('screenshotInput'));
+
+				if (!isValidUrl(screenshotLink)) { // validate photo link
+					await interaction.reply({
+						content: `:exclamation: \`${screenshotLink}\` is not a valid URL, please be sure to enter a URL including the \`http\:\/\/\` or \`https\:\/\/\` portion.`,
+						ephemeral: true
+					});
+					return;
+				}
+				let allowedValues = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+				if (!RegExp(allowedValues.join('|')).test(screenshotLink.toLowerCase())) { // validate photo link, again
+					await interaction.reply({
+						content: `:exclamation: \`${screenshotLink}\` is not a valid picture URL, please be sure to enter a URL that includes one of the following: \`.png\`, \`.jpg\`, \`.jpeg\`, \`.gif\`, \`.webp\`.`,
+						ephemeral: true
+					});
+					return;
+				}
+
+				let ypAdSalesmanCommission = 526;
+				let formattedYpAdCommission = formatter.format(ypAdSalesmanCommission);
+				let reason = `Yellow Pages ad listed on ${adDate}`
+
+				await dbCmds.addCommission(interaction.member.user.id, ypAdSalesmanCommission);
+				let currCommission = formatter.format(await dbCmds.readCommission(interaction.member.user.id));
+
+				let embeds = new EmbedBuilder()
+					.setTitle('A new YP Ad Reimbursement has been submitted!')
+					.addFields(
+						{ name: `Salesperson Name:`, value: `${ypAdSalesmanName} (<@${interaction.user.id}>)` },
+						{ name: `Ad Date:`, value: `${adDate}` },
+					)
+					.setColor('DBB42C');
+
+				let photosEmbed = new EmbedBuilder()
+					.setColor('DBB42C')
+					.setURL('https://echorp.net/')
+					.setImage(screenshotLink);
+
+				await interaction.client.channels.cache.get(process.env.YP_AD_REIMBURSEMENT_CHANNEL_ID).send({ embeds: [embeds, photosEmbed] });
+
+				// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
+				let notificationEmbed = new EmbedBuilder()
+					.setTitle('Commission Modified Automatically:')
+					.setDescription(`\`System\` added \`${formattedYpAdCommission}\` to <@${interaction.user.id}>'s current commission for a new total of \`${currCommission}\`.\n\n**Reason:** ${reason}.`)
+					.setColor('#1EC276');
+				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
+
+				await interaction.reply({ content: `Successfully logged this Yellow Pages ad listing.\n\nDetails about this listing:\n> Your Commission: \`${formattedYpAdCommission}\`\n\nYour weekly commission is now: \`${currCommission}\`.`, ephemeral: true });
+
 				break;
 			default:
 				await interaction.editReply({

@@ -86,7 +86,14 @@ function addBtnRows() {
 			.setStyle(ButtonStyle.Secondary),
 	);
 
-	let rows = [row1];
+	let row2 = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
+			.setCustomId('addYPAdvert')
+			.setLabel('Log a YP Ad')
+			.setStyle(ButtonStyle.Secondary),
+	);
+
+	let rows = [row1, row2];
 	return rows;
 };
 
