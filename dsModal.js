@@ -556,6 +556,11 @@ module.exports.modalSubmit = async (interaction) => {
 					return;
 				}
 
+				let ypAdPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
+				if (ypAdPersonnelStats == null || ypAdPersonnelStats.charName == null) {
+					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
+				}
+
 				let ypAdSalesmanCommission = 526;
 				let formattedYpAdCommission = formatter.format(ypAdSalesmanCommission);
 				let reason = `Yellow Pages ad listed on ${adDate}`
