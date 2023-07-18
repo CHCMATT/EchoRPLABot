@@ -100,8 +100,17 @@ function addBtnRows() {
 module.exports.editStatsEmbed = async (client) => {
 	try {
 		let empStats = await dbCmds.currStats();
+
 		let currentDescList = '';
 		let overallDescList = '';
+
+		empStats.sort((a, b) => {
+			let fa = a.charName.toLowerCase(),
+				fb = b.charName.toLowerCase();
+			if (fa < fb) { return -1; }
+			if (fa > fb) { return 1; }
+			return 0;
+		});
 
 		let now = Math.floor(new Date().getTime() / 1000.0);
 		let today = `<t:${now}:d>`;
