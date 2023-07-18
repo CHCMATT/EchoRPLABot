@@ -107,7 +107,7 @@ module.exports.editStatsEmbed = async (client) => {
 
 		for (i = 0; i < empStats.length; i++) {
 			if (empStats[i].weeklyCarsSold > 0) {
-				currentDescList = currentDescList.concat(`__${empStats[i].charName}__:
+				currentDescList = currentDescList.concat(`<@${empStats[i].discordId}>
 	• **Cars Sold Overall:** ${empStats[i].carsSold}
 	• **Cars Sold This Week:** ${empStats[i].weeklyCarsSold}
 	• **Current Commission:** ${formatter.format(empStats[i].currentCommission)}\n\n`);
