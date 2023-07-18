@@ -101,25 +101,40 @@ module.exports.editStatsEmbed = async (client) => {
 	try {
 		let empStats = await dbCmds.currStats();
 		let currentDescList = '';
+		let overallDescList = '';
 
 		let now = Math.floor(new Date().getTime() / 1000.0);
 		let today = `<t:${now}:d>`;
 
 		for (i = 0; i < empStats.length; i++) {
-			if (empStats[i].weeklyCarsSold > 0) {
-				currentDescList = currentDescList.concat(`<@${empStats[i].discordId}>
-	• **Cars Sold Overall:** ${empStats[i].carsSold}
-	• **Cars Sold This Week:** ${empStats[i].weeklyCarsSold}
-	• **Current Commission:** ${formatter.format(empStats[i].currentCommission)}\n\n`);
+			if (empStats[i].carsSold > 0) {
+				overallDescList = overallDescList.concat(`<@${empStats[i].discordId}>\n• **Cars Sold Overall:** ${empStats[i].carsSold}\n\n`);
 			}
 		}
 
-		if (currentDescList == '') {
-			currentDescList = "There is no salesperson data to display yet."
+		for (i = 0; i < empStats.length; i++) {
+			if (empStats[i].weeklyCarsSold > 0) {
+				currentDescList = currentDescList.concat(`<@${empStats[i].discordId}>\n• **Cars Sold This Week:** ${empStats[i].weeklyCarsSold}\n• **Weekly Commission:** ${formatter.format(empStats[i].currentCommission)}\n\n`);
+			}
 		}
 
-		let embed = new EmbedBuilder()
-			.setTitle(`Salesperson Data as of ${today}:`)
+		if (overallDescList == '') {
+			overallDescList = "There is no overall salesperson data to display yet."
+		}
+
+		if (currentDescList == '') {
+			currentDescList = "There is no weekly salesperson data to display yet."
+		}
+
+		// theme color palette: https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8
+
+		let overallEmbed = new EmbedBuilder()
+			.setTitle(`Overall Salesperson Stats as of ${today}:`)
+			.setDescription(overallDescList)
+			.setColor('90E0EF');
+
+		let weeklyEmbed = new EmbedBuilder()
+			.setTitle(`Weekly Salesperson Stats as of ${today}:`)
 			.setDescription(currentDescList)
 			.setColor('ADE8F4');
 
@@ -127,7 +142,8 @@ module.exports.editStatsEmbed = async (client) => {
 		let channel = await client.channels.fetch(process.env.PERSONNEL_STATS_CHANNEL_ID)
 		let statsMsg = await channel.messages.fetch(statsEmbed);
 
-		statsMsg.edit({ embeds: [embed] });
+		statsMsg.edit({ embeds: [overallEmbed, weeklyEmbed] });
+
 	} catch (error) {
 		if (process.env.BOT_NAME == 'test') {
 			console.error(error);
