@@ -35,6 +35,10 @@ module.exports.commissionReport = async (client, type, who) => {
 			for (i = 0; i < peopleArray.length; i++) {
 				currentCommission = peopleArray[i].currentCommission;
 
+				if (!peopleArray[i].bankAccount) {
+					peopleArray[i].bankAccount = 'N/A';
+				}
+
 				commissionDescList = commissionDescList.concat(`• **${peopleArray[i].charName}** (\`${peopleArray[i].bankAccount}\`): ${formatter.format(currentCommission)}\n`);
 
 				await dbCmds.resetCommission(peopleArray[i].discordId);
