@@ -89,8 +89,9 @@ module.exports.editStatsEmbed = async (client) => {
 			if (empStats[i].currentCommission > 0) {
 				statsDescList = statsDescList.concat(`• ** Weekly Commission:** ${formatter.format(empStats[i].currentCommission)}\n`);
 			}
-
-			statsDescList = statsDescList.concat(`\n`);
+			if (empStats[i].carsSold > 0 || empStats[i].weeklyCarsSold > 0 || empStats[i].currentCommission > 0) {
+				statsDescList = statsDescList.concat(`\n`);
+			}
 		}
 
 		if (statsDescList == '') {
