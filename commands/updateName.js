@@ -1,6 +1,7 @@
+let moment = require('moment');
 let dbCmds = require('../dbCmds.js');
-let { PermissionsBitField } = require('discord.js');
 const editEmbed = require('../editEmbed.js');
+let { PermissionsBitField, EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'updatename',
@@ -31,7 +32,7 @@ module.exports = {
 				await dbCmds.setCharName(userId, charName);
 
 				await editEmbed.editStatsEmbed(interaction.client);
-				await interaction.reply({ content: `Successfully set the name for <@${userId}> to \`${charName}\`.`, ephemeral: true });
+				await interaction.reply({ content: [`Successfully set the name for <@${userId}> to \`${charName}\`.`], ephemeral: true });
 			}
 			else {
 				await interaction.reply({ content: `:x: You must have the \`Administrator\` permission to use this function.`, ephemeral: true });
@@ -42,19 +43,29 @@ module.exports = {
 			} else {
 				console.error(error);
 
-				let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');;
+				let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');
 				let fileParts = __filename.split(/[\\/]/);
 				let fileName = fileParts[fileParts.length - 1];
 
 				console.log(`Error occured at ${errTime} at file ${fileName}!`);
 
+				let errString = error.toString();
+
+				let gServUnavailIndc;
+
+				if (errString === 'Error: The service is currently unavailable.') {
+					gServUnavailIndc = '\`gServUnavailIndc: true\`';
+				} else {
+					gServUnavailIndc = '\`gServUnavailIndc: false\`';
+				}
+
 				let errorEmbed = [new EmbedBuilder()
 					.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
-					.setDescription(`\`\`\`${error.toString().slice(0, 2000)}\`\`\``)
+					.setDescription(`\`\`\`${errString}\`\`\``)
 					.setColor('B80600')
 					.setFooter({ text: `${errTime}` })];
 
-				await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+				await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ content: gServUnavailIndc, embeds: errorEmbed });
 			}
 		}
 	},
