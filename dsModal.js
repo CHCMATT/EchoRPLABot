@@ -35,11 +35,11 @@ function isValidUrl(string) {
 
 module.exports.modalSubmit = async (interaction) => {
 	try {
+		await interaction.deferReply({ ephemeral: true });
+
 		let modalID = interaction.customId;
 		switch (modalID) {
 			case 'addRegularCarSaleModal':
-				await interaction.deferReply({ ephemeral: true });
-
 				let regSalesmanName;
 				if (interaction.member.nickname) {
 					regSalesmanName = interaction.member.nickname;
@@ -143,8 +143,6 @@ module.exports.modalSubmit = async (interaction) => {
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addSportsCarSaleModal':
-				await interaction.deferReply({ ephemeral: true });
-
 				let sportsSalesmanName;
 				if (interaction.member.nickname) {
 					sportsSalesmanName = interaction.member.nickname;
@@ -246,8 +244,6 @@ module.exports.modalSubmit = async (interaction) => {
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addTunerCarSaleModal':
-				await interaction.deferReply({ ephemeral: true });
-
 				let tunerSalesmanName;
 				if (interaction.member.nickname) {
 					tunerSalesmanName = interaction.member.nickname;
@@ -349,8 +345,6 @@ module.exports.modalSubmit = async (interaction) => {
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addEmployeeSaleModal':
-				await interaction.deferReply({ ephemeral: true });
-
 				let empSalesmanName;
 				if (interaction.member.nickname) {
 					empSalesmanName = interaction.member.nickname;
@@ -436,8 +430,6 @@ module.exports.modalSubmit = async (interaction) => {
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${empNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${empFormattedPrice}\`\n> Cost Price: \`${empFormattedCostPrice}\`\n> Luxury Autos Profit: \`${empFormattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now: \`${empFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
 			case 'addCarRentalModal':
-				await interaction.deferReply({ ephemeral: true });
-
 				let rentalSalesmanName;
 				if (interaction.member.nickname) {
 					rentalSalesmanName = interaction.member.nickname;
@@ -541,7 +533,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let screenshotLink = strCleanup(interaction.fields.getTextInputValue('screenshotInput'));
 
 				if (!isValidUrl(screenshotLink)) { // validate photo link
-					await interaction.reply({
+					await interaction.editReply({
 						content: `:exclamation: \`${screenshotLink}\` is not a valid URL, please be sure to enter a URL including the \`http\:\/\/\` or \`https\:\/\/\` portion.`,
 						ephemeral: true
 					});
@@ -549,7 +541,7 @@ module.exports.modalSubmit = async (interaction) => {
 				}
 				let allowedValues = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 				if (!RegExp(allowedValues.join('|')).test(screenshotLink.toLowerCase())) { // validate photo link, again
-					await interaction.reply({
+					await interaction.editReply({
 						content: `:exclamation: \`${screenshotLink}\` is not a valid picture URL, please be sure to enter a URL that includes one of the following: \`.png\`, \`.jpg\`, \`.jpeg\`, \`.gif\`, \`.webp\`.`,
 						ephemeral: true
 					});
@@ -590,7 +582,7 @@ module.exports.modalSubmit = async (interaction) => {
 					.setColor('#1EC276');
 				await interaction.client.channels.cache.get(process.env.COMMISSION_LOGS_CHANNEL_ID).send({ embeds: [notificationEmbed] });
 
-				await interaction.reply({ content: `Successfully logged this Yellow Pages ad listing.\n\nDetails about this listing:\n> Your Commission: \`${formattedYpAdCommission}\`\n\nYour weekly commission is now: \`${currCommission}\`.`, ephemeral: true });
+				await interaction.editReply({ content: `Successfully logged this Yellow Pages ad listing.\n\nDetails about this listing:\n> Your Commission: \`${formattedYpAdCommission}\`\n\nYour weekly commission is now: \`${currCommission}\`.`, ephemeral: true });
 
 				break;
 			default:
