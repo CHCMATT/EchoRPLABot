@@ -61,16 +61,16 @@ module.exports.statsReport = async (client) => {
 			let fileParts = __filename.split(/[\\/]/);
 			let fileName = fileParts[fileParts.length - 1];
 
-			console.log(`Error occured at ${errTime} at file ${fileName}!`);
+			console.log(`An error occured at ${errTime} at file ${fileName}!`);
 
 			let errString = error.toString();
 
-			let gServUnavailIndc;
-
 			if (errString === 'Error: The service is currently unavailable.') {
-				gServUnavailIndc = '\`gServUnavailIndc: true\`';
-			} else {
-				gServUnavailIndc = '\`gServUnavailIndc: false\`';
+				try {
+					await interaction.editReply({ content: `⚠ A service provider we use has had a temporary outage. Please try to submit your request again.`, ephemeral: true });
+				} catch {
+					await interaction.reply({ content: `⚠ A service provider we use has had a temporary outage. Please try to submit your request again.`, ephemeral: true });
+				}
 			}
 
 			let errorEmbed = [new EmbedBuilder()
@@ -79,7 +79,7 @@ module.exports.statsReport = async (client) => {
 				.setColor('B80600')
 				.setFooter({ text: `${errTime}` })];
 
-			await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ content: gServUnavailIndc, embeds: errorEmbed });
+			await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
 		}
 	}
 };
