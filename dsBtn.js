@@ -69,7 +69,7 @@ module.exports.btnPressed = async (interaction) => {
 
 				let logSaleSelectOptions = new StringSelectMenuBuilder()
 					.setCustomId('logSaleSelectOptions')
-					.setPlaceholder('Select a Sale Type')
+					.setPlaceholder('Select a car sale type')
 					.addOptions(
 						new StringSelectMenuOptionBuilder()
 							.setLabel('Regular Car Sale')
@@ -92,7 +92,7 @@ module.exports.btnPressed = async (interaction) => {
 				let logSaleSelectComponent = new ActionRowBuilder()
 					.addComponents(logSaleSelectOptions);
 
-				await interaction.editReply({ content: `What type of **sale** is this?`, components: [logSaleSelectComponent], ephemeral: true });
+				await interaction.editReply({ content: `What type of car sale is this?`, components: [logSaleSelectComponent], ephemeral: true });
 				break;
 			default:
 				await interaction.reply({ content: `I'm not familiar with this button press. Please tag @CHCMATT to fix this issue.`, ephemeral: true });
