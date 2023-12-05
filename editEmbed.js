@@ -157,23 +157,8 @@ module.exports.editStatsEmbed = async (client) => {
 function addBtnRows() {
 	let row1 = new ActionRowBuilder().addComponents(
 		new ButtonBuilder()
-			.setCustomId('addRegularCarSale')
-			.setLabel('Add a Regular Car Sale')
-			.setStyle(ButtonStyle.Success),
-
-		new ButtonBuilder()
-			.setCustomId('addSportsCarSale')
-			.setLabel('Add a Sports Car Sale')
-			.setStyle(ButtonStyle.Success),
-
-		new ButtonBuilder()
-			.setCustomId('addTunerCarSale')
-			.setLabel('Add a Tuner Car Sale')
-			.setStyle(ButtonStyle.Success),
-
-		new ButtonBuilder()
-			.setCustomId('addEmployeeSale')
-			.setLabel('Add an Employee Sale')
+			.setCustomId('logSaleDropdown')
+			.setLabel('Log a Sale')
 			.setStyle(ButtonStyle.Primary),
 
 		new ButtonBuilder()

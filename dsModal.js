@@ -39,7 +39,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 		let modalID = interaction.customId;
 		switch (modalID) {
-			case 'addRegularCarSaleModal':
+			case 'logRegularCarSaleModal':
 				let regSalesmanName;
 				if (interaction.member.nickname) {
 					regSalesmanName = interaction.member.nickname;
@@ -142,7 +142,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${regNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${regFormattedPrice}\`\n> Cost Price: \`${regFormattedCostPrice}\`\n> Luxury Autos Profit: \`${regFormattedLaProfit}\`\n> Your Commission: \`${regFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${regFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
-			case 'addSportsCarSaleModal':
+			case 'logSportsCarSaleModal':
 				let sportsSalesmanName;
 				if (interaction.member.nickname) {
 					sportsSalesmanName = interaction.member.nickname;
@@ -243,7 +243,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${sportsNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${sportsFormattedPrice}\`\n> Cost Price: \`${sportsFormattedCostPrice}\`\n> Luxury Autos Profit: \`${sportsFormattedLaProfit}\`\n> Your Commission: \`${sportsFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${sportsFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
-			case 'addTunerCarSaleModal':
+			case 'logTunerCarSaleModal':
 				let tunerSalesmanName;
 				if (interaction.member.nickname) {
 					tunerSalesmanName = interaction.member.nickname;
@@ -344,7 +344,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${tunerNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${tunerFormattedPrice}\`\n> Cost Price: \`${tunerFormattedCostPrice}\`\n> Luxury Autos Profit: \`${tunerFormattedLaProfit}\`\n> Your Commission: \`${tunerFormattedThisSaleCommission}\`\n\nYour weekly commission is now: \`${tunerFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
-			case 'addEmployeeSaleModal':
+			case 'logEmployeeCarSaleModal':
 				let empSalesmanName;
 				if (interaction.member.nickname) {
 					empSalesmanName = interaction.member.nickname;
