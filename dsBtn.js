@@ -5,9 +5,9 @@ module.exports.btnPressed = async (interaction) => {
 	try {
 		let buttonID = interaction.customId;
 		switch (buttonID) {
-			case 'addCarRental':
-				let addCarRentalModal = new ModalBuilder()
-					.setCustomId('addCarRentalModal')
+			case 'logCarRental':
+				let logCarRentalModal = new ModalBuilder()
+					.setCustomId('logCarRentalModal')
 					.setTitle('Log a car that you rented');
 				let rentedToInput = new TextInputBuilder()
 					.setCustomId('rentedToInput')
@@ -46,9 +46,9 @@ module.exports.btnPressed = async (interaction) => {
 				let rentalPriceInputRow = new ActionRowBuilder().addComponents(rentalPriceInput);
 				let rentalNotesInputRow = new ActionRowBuilder().addComponents(rentalNotesInput);
 
-				addCarRentalModal.addComponents(rentedToInputRow, rentalVehicleNameInputRow, rentalVehiclePlateInputRow, rentalPriceInputRow, rentalNotesInputRow);
+				logCarRentalModal.addComponents(rentedToInputRow, rentalVehicleNameInputRow, rentalVehiclePlateInputRow, rentalPriceInputRow, rentalNotesInputRow);
 
-				await interaction.showModal(addCarRentalModal);
+				await interaction.showModal(logCarRentalModal);
 				break;
 			case 'addYPAdvert':
 				let addYPAdvertModal = new ModalBuilder()

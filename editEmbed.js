@@ -162,8 +162,8 @@ function addBtnRows() {
 			.setStyle(ButtonStyle.Primary),
 
 		new ButtonBuilder()
-			.setCustomId('addCarRental')
-			.setLabel('Add a Car Rental')
+			.setCustomId('logCarRental')
+			.setLabel('Log a Car Rental')
 			.setStyle(ButtonStyle.Secondary),
 	);
 

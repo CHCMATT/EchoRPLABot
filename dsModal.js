@@ -429,7 +429,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				await interaction.editReply({ content: `Successfully added \`1\` to the \`Cars Sold\` counter - the new total is \`${empNewCarsSoldTotal}\`.\n\nDetails about this sale:\n> Sale Price: \`${empFormattedPrice}\`\n> Cost Price: \`${empFormattedCostPrice}\`\n> Luxury Autos Profit: \`${empFormattedLaProfit}\`\n> Your Commission: \`n/a\`\n\nYour weekly commission is now: \`${empFormattedCurrentCommission}\`.`, ephemeral: true });
 				break;
-			case 'addCarRentalModal':
+			case 'logCarRentalModal':
 				let rentalSalesmanName;
 				if (interaction.member.nickname) {
 					rentalSalesmanName = interaction.member.nickname;
