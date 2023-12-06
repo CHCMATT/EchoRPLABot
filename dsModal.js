@@ -464,7 +464,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				if (!rentalNotes || rentalNotes.toLowerCase() === "n/a") {
 					rentalCarRentedEmbed = new EmbedBuilder()
-						.setTitle('A new car has been rented!')
+						.setTitle('A car has been rented!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${rentalSalesmanName} (<@${interaction.user.id}>)` },
 							{ name: `Rental Date:`, value: `${rentalDate}` },
@@ -476,7 +476,7 @@ module.exports.modalSubmit = async (interaction) => {
 						.setColor('00B4D8');
 				} else {
 					rentalCarRentedEmbed = new EmbedBuilder()
-						.setTitle('A new car has been rented!')
+						.setTitle('A car has been rented!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${rentalSalesmanName} (<@${interaction.user.id}>)` },
 							{ name: `Rental Date:`, value: `${rentalDate}` },
@@ -494,7 +494,7 @@ module.exports.modalSubmit = async (interaction) => {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [rentalCarRentedEmbed] });
+				await interaction.client.channels.cache.get(process.env.CAR_RENTALS_CHANNEL_ID).send({ embeds: [rentalCarRentedEmbed] });
 
 				if (Math.round(rentalThisSaleCommission) > 0) {
 					await dbCmds.addCommission(interaction.member.user.id, rentalThisSaleCommission);
