@@ -52,7 +52,7 @@ module.exports.editMainEmbed = async (client) => {
 
 			let gServUnavailIndc;
 
-			if (errString === 'Error: The service is currently unavailable.') {
+			if (errString === 'Error: The service is currently unavailable.' || errString === 'Error: Internal error encountered.') {
 				gServUnavailIndc = '\`gServUnavailIndc: true\`';
 			} else {
 				gServUnavailIndc = '\`gServUnavailIndc: false\`';
@@ -137,7 +137,7 @@ module.exports.editStatsEmbed = async (client) => {
 
 			let gServUnavailIndc;
 
-			if (errString === 'Error: The service is currently unavailable.') {
+			if (errString === 'Error: The service is currently unavailable.' || errString === 'Error: Internal error encountered.') {
 				gServUnavailIndc = '\`gServUnavailIndc: true\`';
 			} else {
 				gServUnavailIndc = '\`gServUnavailIndc: false\`';
