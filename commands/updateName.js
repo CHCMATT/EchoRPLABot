@@ -32,7 +32,7 @@ module.exports = {
 				await dbCmds.setCharName(userId, charName);
 
 				await editEmbed.editStatsEmbed(interaction.client);
-				await interaction.reply({ content: [`Successfully set the name for <@${userId}> to \`${charName}\`.`], ephemeral: true });
+				await interaction.reply({ content: `Successfully set the name for <@${userId}> to \`${charName}\`.`, ephemeral: true });
 			}
 			else {
 				await interaction.reply({ content: `:x: You must have the \`Administrator\` permission to use this function.`, ephemeral: true });
