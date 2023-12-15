@@ -19,12 +19,12 @@ module.exports.editMainEmbed = async (client) => {
 		countWeeklyCarsSold = countWeeklyCarsSold.toString();
 
 		let carsSoldEmbed = new EmbedBuilder()
-			.setTitle('Amount of Cars Sold:')
+			.setTitle('Cars Sold Overall:')
 			.setDescription(countCarsSold)
 			.setColor('023E8A');
 
 		let weeklyCarsSoldEmbed = new EmbedBuilder()
-			.setTitle('Amount of Cars Sold This Week:')
+			.setTitle('Cars Sold This Week:')
 			.setDescription(countWeeklyCarsSold)
 			.setColor('0077B6');
 
