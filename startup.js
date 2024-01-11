@@ -35,7 +35,7 @@ module.exports.startUp = async (client) => {
 		await statsChannel.messages.fetch(statsEmbed);
 		editEmbed.editStatsEmbed(client);
 	}
-	catch (error) {
+	catch {
 		postEmbed.postStatsEmbed(client);
 	}
 
@@ -44,7 +44,7 @@ module.exports.startUp = async (client) => {
 		editEmbed.editMainEmbed(client);
 		return "edited";
 	}
-	catch (error) {
+	catch {
 		postEmbed.postMainEmbed(client);
 		return "posted";
 	}
