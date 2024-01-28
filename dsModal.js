@@ -79,7 +79,7 @@ module.exports.modalSubmit = async (interaction) => {
 
 				let regCarSoldEmbed;
 
-				if (!regNotes || regNotes.toLowerCase() === "n/a") {
+				if (!regNotes || regNotes.toLowerCase() === "n/a" || regNotes.toLowerCase() === "-") {
 					regCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new car has been sold!')
 						.addFields(
@@ -180,7 +180,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let sportsFormattedLaProfit = formatter.format(sportsLaProfit);
 				let sportsCarSoldEmbed;
 
-				if (!sportsNotes || sportsNotes.toLowerCase() === "n/a") {
+				if (!sportsNotes || sportsNotes.toLowerCase() === "n/a" || sportsNotes.toLowerCase() === "-") {
 					sportsCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
 						.addFields(
@@ -280,7 +280,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let tunerFormattedLaProfit = formatter.format(tunerLaProfit);
 				let tunerCarSoldEmbed;
 
-				if (!tunerNotes || tunerNotes.toLowerCase() === "n/a") {
+				if (!tunerNotes || tunerNotes.toLowerCase() === "n/a" || tunerNotes.toLowerCase() === "-") {
 					tunerCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new tuner car has been sold!')
 						.addFields(
@@ -380,7 +380,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let empFormattedLaProfit = formatter.format(empLaProfit);
 				let empCarSoldEmbed;
 
-				if (!empNotes || empNotes.toLowerCase() === "n/a") {
+				if (!empNotes || empNotes.toLowerCase() === "n/a" || empNotes.toLowerCase() === "-") {
 					empCarSoldEmbed = new EmbedBuilder()
 						.setTitle('A new car has been sold to an employee!')
 						.addFields(
@@ -462,7 +462,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let rentalThisSaleCommission = (rentalPrice * 0.50);
 				let rentalCarRentedEmbed;
 
-				if (!rentalNotes || rentalNotes.toLowerCase() === "n/a") {
+				if (!rentalNotes || rentalNotes.toLowerCase() === "n/a" || rentalNotes.toLowerCase() === "-") {
 					rentalCarRentedEmbed = new EmbedBuilder()
 						.setTitle('A car has been rented!')
 						.addFields(
