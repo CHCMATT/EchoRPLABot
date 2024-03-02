@@ -4,39 +4,9 @@ let editEmbed = require('./editEmbed.js');
 let { EmbedBuilder } = require('discord.js');
 let personnelCmds = require('./personnelCmds.js');
 
-let formatter = new Intl.NumberFormat('en-US', {
-	style: 'currency',
-	currency: 'USD',
-	maximumFractionDigits: 0
-});
-
-function toTitleCase(str) {
-	str = str.toLowerCase().split(' ');
-	for (let i = 0; i < str.length; i++) {
-		str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-	}
-	return str.join(' ');
-}
-
-function strCleanup(str) {
-	let cleaned = str.replaceAll('`', '-').replaceAll('\\', '-').trimEnd().trimStart();
-	return cleaned;
-};
-
-function isValidUrl(string) {
-	let url;
-	try {
-		url = new URL(string);
-	} catch (_) {
-		return false;
-	}
-	return url.protocol === "http:" || url.protocol === "https:";
-}
-
 module.exports.modalSubmit = async (interaction) => {
 	try {
 		await interaction.deferReply({ ephemeral: true });
-
 		let modalID = interaction.customId;
 		switch (modalID) {
 			case 'logRegularCarSaleModal':
@@ -633,3 +603,32 @@ module.exports.modalSubmit = async (interaction) => {
 		}
 	}
 };
+
+let formatter = new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+	maximumFractionDigits: 0
+});
+
+function toTitleCase(str) {
+	str = str.toLowerCase().split(' ');
+	for (let i = 0; i < str.length; i++) {
+		str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+	}
+	return str.join(' ');
+}
+
+function strCleanup(str) {
+	let cleaned = str.replaceAll('`', '-').replaceAll('\\', '-').trimEnd().trimStart();
+	return cleaned;
+};
+
+function isValidUrl(string) {
+	let url;
+	try {
+		url = new URL(string);
+	} catch (_) {
+		return false;
+	}
+	return url.protocol === "http:" || url.protocol === "https:";
+}
