@@ -63,6 +63,7 @@ module.exports = {
 					.addFields(
 						{ name: `Created by:`, value: `${interaction.member.nickname} (<@${interaction.user.id}>)`, inline: true },
 						{ name: `Error handled?`, value: `${errHandled}`, inline: true },
+						{ name: `Server name:`, value: `${interaction.member.guild.name}`, inline: true },
 					)
 					.setColor('B80600')
 					.setFooter({ text: `${errTime}` })];
