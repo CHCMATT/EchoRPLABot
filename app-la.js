@@ -1,6 +1,5 @@
 let fs = require('fs');
 require("dotenv/config");
-let moment = require('moment');
 let cron = require('node-cron');
 let mongoose = require("mongoose");
 let startup = require('./startup.js');

@@ -50,7 +50,7 @@ module.exports = {
 						let overallCurrentCommission = await dbCmds.readCommission(user.id);
 						let formattedOverallCurrentCommission = formatter.format(overallCurrentCommission);
 
-						await editEmbed.editStatsEmbed(interaction.client);
+						await editEmbed.editMgmtStatsEmbed(interaction.client);
 
 						// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 						let notificationEmbed = new EmbedBuilder()

@@ -75,7 +75,7 @@ module.exports.postMainEmbed = async (client) => {
 	}
 };
 
-module.exports.postStatsEmbed = async (client) => {
+module.exports.postMgmtStatsEmbed = async (client) => {
 	try {
 		let empStats = await dbCmds.currStats();
 
@@ -111,7 +111,89 @@ module.exports.postStatsEmbed = async (client) => {
 		}
 
 		if (statsDescList == '') {
-			statsDescList = "There is no salesperson statistics to display yet."
+			statsDescList = "There are no salesperson statistics to display yet."
+		}
+
+		// theme color palette: https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8
+
+		let statsEmbed = new EmbedBuilder()
+			.setTitle(`Management Statistics as of ${today}: `)
+			.setDescription(statsDescList)
+			.setColor('90E0EF');
+
+		client.mgmtStatsMsg = await client.channels.cache.get(process.env.MGMT_STATS_CHANNEL_ID).send({ embeds: [statsEmbed] });
+
+		await dbCmds.setMsgId("mgmtStatsMsg", client.mgmtStatsMsg.id);
+	} catch (error) {
+		if (process.env.BOT_NAME == 'test') {
+			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');
+			let fileParts = __filename.split(/[\\/]/);
+			let fileName = fileParts[fileParts.length - 1];
+
+			console.error(errTime, fileName, error);
+		} else {
+			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');
+			let fileParts = __filename.split(/[\\/]/);
+			let fileName = fileParts[fileParts.length - 1];
+			console.error(errTime, fileName, error);
+
+			console.log(`An error occured at ${errTime} at file ${fileName} and was created by ${interaction.member.nickname} (${interaction.member.user.username}).`);
+
+			let errString = error.toString();
+			let errHandled = false;
+
+			if (errString === 'Error: The service is currently unavailable.' || errString === 'Error: Internal error encountered.' || errString === 'HTTPError: Service Unavailable') {
+				try {
+					await interaction.editReply({ content: `:warning: One of the service providers we use had a brief outage. Please try to submit your request again!`, ephemeral: true });
+				} catch {
+					await interaction.reply({ content: `:warning: One of the service providers we use had a brief outage. Please try to submit your request again!`, ephemeral: true });
+				}
+				errHandled = true;
+			}
+
+			let errorEmbed = [new EmbedBuilder()
+				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
+				.setDescription(`\`\`\`${errString}\`\`\``)
+				.addFields(
+					{ name: `Created by:`, value: `${interaction.member.nickname} (<@${interaction.user.id}>)`, inline: true },
+					{ name: `Error handled?`, value: `${errHandled}`, inline: true },
+				)
+				.setColor('B80600')
+				.setFooter({ text: `${errTime}` })];
+
+			await interaction.client.channels.cache.get(process.env.ERROR_LOG_CHANNEL_ID).send({ embeds: errorEmbed });
+		}
+	}
+};
+
+module.exports.postSalespersonStatsEmbed = async (client) => {
+	try {
+		let empStats = await dbCmds.currStats();
+
+		let statsDescList = '';
+
+		empStats.sort((a, b) => {
+			let fa = a.charName.toLowerCase(),
+				fb = b.charName.toLowerCase();
+			if (fa < fb) { return -1; }
+			if (fa > fb) { return 1; }
+			return 0;
+		});
+
+		let now = Math.floor(new Date().getTime() / 1000.0);
+		let today = `<t:${now}:d>`;
+
+		for (i = 0; i < empStats.length; i++) {
+			if (empStats[i].weeklyCarsSold > 0) {
+				statsDescList = statsDescList.concat(`<@${empStats[i].discordId}>\n`);
+			}
+			if (empStats[i].weeklyCarsSold > 0) {
+				statsDescList = statsDescList.concat(`• ** Sales This Week:** ${empStats[i].weeklyCarsSold}\n\n`);
+			}
+		}
+
+		if (statsDescList == '') {
+			statsDescList = "There are no salesperson statistics to display yet."
 		}
 
 		// theme color palette: https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8
@@ -121,9 +203,9 @@ module.exports.postStatsEmbed = async (client) => {
 			.setDescription(statsDescList)
 			.setColor('90E0EF');
 
-		client.statsMsg = await client.channels.cache.get(process.env.PERSONNEL_STATS_CHANNEL_ID).send({ embeds: [statsEmbed] });
+		client.salespersonStatsMsg = await client.channels.cache.get(process.env.SALESPERSON_STATS_CHANNEL_ID).send({ embeds: [statsEmbed] });
 
-		await dbCmds.setMsgId("statsMsg", client.statsMsg.id);
+		await dbCmds.setMsgId("salespersonStatsMsg", client.salespersonStatsMsg.id);
 	} catch (error) {
 		if (process.env.BOT_NAME == 'test') {
 			let errTime = moment().format('MMMM Do YYYY, h:mm:ss a');

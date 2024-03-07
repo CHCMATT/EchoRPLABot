@@ -31,7 +31,7 @@ module.exports = {
 
 				await dbCmds.setCharName(userId, charName);
 
-				await editEmbed.editStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(interaction.client);
 				await interaction.reply({ content: `Successfully set the name for <@${userId}> to \`${charName}\`.`, ephemeral: true });
 			}
 			else {

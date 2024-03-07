@@ -35,7 +35,7 @@ module.exports.statsReport = async (client) => {
 		}
 
 		await editEmbed.editMainEmbed(client);
-		await editEmbed.editStatsEmbed(client);
+		await editEmbed.editMgmtStatsEmbed(client);
 
 		if (lastRep == null || lastRep.includes("Value not found")) {
 			let nowMinus7 = now - 604800;

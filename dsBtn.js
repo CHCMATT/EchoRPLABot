@@ -94,6 +94,20 @@ module.exports.btnPressed = async (interaction) => {
 
 				await interaction.editReply({ content: `What type of car sale is this?`, components: [logSaleSelectComponent], ephemeral: true });
 				break;
+			case 'addProofOfId':
+				let addProofOfIdModal = new ModalBuilder()
+					.setCustomId('addProofOfIdModal')
+					.setTitle('Add Proof of ID to sale');
+				let idPhotoInput = new TextInputBuilder()
+					.setCustomId('idPhotoInput')
+					.setLabel('What is the link to the photo of the ID?')
+					.setStyle(TextInputStyle.Short)
+					.setPlaceholder('https://i.imgur.com/z6V5bk3.jpeg')
+					.setRequired(true);
+				let idPhotoInputRow = new ActionRowBuilder().addComponents(idPhotoInput);
+				addProofOfIdModal.addComponents(idPhotoInputRow);
+				await interaction.showModal(addProofOfIdModal);
+				break;
 			default:
 				await interaction.reply({ content: `I'm not familiar with this button press. Please tag @CHCMATT to fix this issue.`, ephemeral: true });
 				console.log(`Error: Unrecognized button press: ${interaction.customId}`);

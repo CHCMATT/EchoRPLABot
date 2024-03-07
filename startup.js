@@ -5,9 +5,11 @@ let editEmbed = require('./editEmbed.js');
 
 module.exports.startUp = async (client) => {
 	let mainChannel = await client.channels.fetch(process.env.EMBED_CHANNEL_ID);
-	let statsChannel = await client.channels.fetch(process.env.PERSONNEL_STATS_CHANNEL_ID);
+	let mgmtStatsChannel = await client.channels.fetch(process.env.MGMT_STATS_CHANNEL_ID);
+	let salespersonStatsChannel = await client.channels.fetch(process.env.SALESPERSON_STATS_CHANNEL_ID);
 	let mainEmbed = await dbCmds.readMsgId("embedMsg");
-	let statsEmbed = await dbCmds.readMsgId("statsMsg");
+	let mgmtStatsEmbed = await dbCmds.readMsgId("mgmtStatsMsg");
+	let salespersonStatsEmbed = await dbCmds.readMsgId("salespersonStatsMsg");
 
 	let countCarsSold = await dbCmds.readSummValue("countCarsSold");
 	countCarsSold = countCarsSold.toString();
@@ -29,11 +31,19 @@ module.exports.startUp = async (client) => {
 	}
 
 	try {
-		await statsChannel.messages.fetch(statsEmbed);
-		editEmbed.editStatsEmbed(client);
+		await mgmtStatsChannel.messages.fetch(mgmtStatsEmbed);
+		editEmbed.editMgmtStatsEmbed(client);
 	}
 	catch {
-		postEmbed.postStatsEmbed(client);
+		postEmbed.postMgmtStatsEmbed(client);
+	}
+
+	try {
+		await salespersonStatsChannel.messages.fetch(salespersonStatsEmbed);
+		editEmbed.editSalespersonStatsEmbed(client);
+	}
+	catch {
+		postEmbed.postSalespersonStatsEmbed(client);
 	}
 
 	try {

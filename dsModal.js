@@ -1,7 +1,7 @@
 let moment = require('moment');
 let dbCmds = require('./dbCmds.js');
 let editEmbed = require('./editEmbed.js');
-let { EmbedBuilder } = require('discord.js');
+let { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 let personnelCmds = require('./personnelCmds.js');
 
 module.exports.modalSubmit = async (interaction) => {
@@ -50,7 +50,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let regCarSoldEmbed;
 
 				if (!regNotes || regNotes.toLowerCase() === "n/a" || regNotes.toLowerCase() === "-") {
-					regCarSoldEmbed = new EmbedBuilder()
+					regCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${regSalesmanName} (<@${interaction.user.id}>)` },
@@ -60,9 +60,9 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Plate:`, value: `${regVehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${regFormattedPrice}` },
 						)
-						.setColor('03045E');
+						.setColor('03045E')];
 				} else {
-					regCarSoldEmbed = new EmbedBuilder()
+					regCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${regSalesmanName} (<@${interaction.user.id}>)` },
@@ -73,7 +73,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${regFormattedPrice}` },
 							{ name: `Notes:`, value: `${regNotes}` }
 						)
-						.setColor('03045E');
+						.setColor('03045E')];
 				}
 
 				let regPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -81,7 +81,8 @@ module.exports.modalSubmit = async (interaction) => {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [regCarSoldEmbed] });
+				var addSaleLogBtns = addSaleLogBtnRow();
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: regCarSoldEmbed, components: addSaleLogBtns });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
@@ -96,7 +97,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let regFormattedCurrentCommission = formatter.format(regCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(interaction.client);
 
 				let regNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				if (Math.round(regThisSaleCommission) > 0) {
@@ -151,7 +152,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let sportsCarSoldEmbed;
 
 				if (!sportsNotes || sportsNotes.toLowerCase() === "n/a" || sportsNotes.toLowerCase() === "-") {
-					sportsCarSoldEmbed = new EmbedBuilder()
+					sportsCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${sportsSalesmanName} (<@${interaction.user.id}>)` },
@@ -161,9 +162,9 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Plate:`, value: `${sportsVehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${sportsFormattedPrice}` },
 						)
-						.setColor('023E8A');
+						.setColor('023E8A')];
 				} else {
-					sportsCarSoldEmbed = new EmbedBuilder()
+					sportsCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new sports car has been sold!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${sportsSalesmanName} (<@${interaction.user.id}>)` },
@@ -174,7 +175,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${sportsFormattedPrice}` },
 							{ name: `Notes:`, value: `${sportsNotes}` }
 						)
-						.setColor('023E8A');
+						.setColor('023E8A')];
 				}
 
 				let sportsPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -182,7 +183,8 @@ module.exports.modalSubmit = async (interaction) => {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [sportsCarSoldEmbed] });
+				var addSaleLogBtns = addSaleLogBtnRow();
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: sportsCarSoldEmbed, components: addSaleLogBtns });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
@@ -197,7 +199,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let sportsFormattedCurrentCommission = formatter.format(sportsCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(interaction.client);
 
 				let sportsNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				if (Math.round(sportsThisSaleCommission) > 0) {
@@ -251,7 +253,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let tunerCarSoldEmbed;
 
 				if (!tunerNotes || tunerNotes.toLowerCase() === "n/a" || tunerNotes.toLowerCase() === "-") {
-					tunerCarSoldEmbed = new EmbedBuilder()
+					tunerCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new tuner car has been sold!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${tunerSalesmanName} (<@${interaction.user.id}>)` },
@@ -261,9 +263,9 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Plate:`, value: `${tunerVehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${tunerFormattedPrice}` },
 						)
-						.setColor('0077B6');
+						.setColor('0077B6')];
 				} else {
-					tunerCarSoldEmbed = new EmbedBuilder()
+					tunerCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new tuner car has been sold!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${tunerSalesmanName} (<@${interaction.user.id}>)` },
@@ -274,7 +276,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${tunerFormattedPrice}` },
 							{ name: `Notes:`, value: `${tunerNotes}` }
 						)
-						.setColor('0077B6');
+						.setColor('0077B6')];
 				}
 
 				let tunerPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -282,7 +284,8 @@ module.exports.modalSubmit = async (interaction) => {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [tunerCarSoldEmbed] });
+				var addSaleLogBtns = addSaleLogBtnRow();
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: tunerCarSoldEmbed, components: addSaleLogBtns });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
@@ -298,7 +301,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let tunerFormattedCurrentCommission = formatter.format(tunerCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(interaction.client);
 
 				let tunerNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				if (Math.round(tunerThisSaleCommission) > 0) {
@@ -351,7 +354,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let empCarSoldEmbed;
 
 				if (!empNotes || empNotes.toLowerCase() === "n/a" || empNotes.toLowerCase() === "-") {
-					empCarSoldEmbed = new EmbedBuilder()
+					empCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold to an employee!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${empSalesmanName} (<@${interaction.user.id}>)` },
@@ -361,9 +364,9 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Plate:`, value: `${empVehiclePlate}` },
 							{ name: `Final Sale Price:`, value: `${empFormattedPrice}` },
 						)
-						.setColor('0096C7');
+						.setColor('0096C7')];
 				} else {
-					empCarSoldEmbed = new EmbedBuilder()
+					empCarSoldEmbed = [new EmbedBuilder()
 						.setTitle('A new car has been sold to an employee!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${empSalesmanName} (<@${interaction.user.id}>)` },
@@ -374,7 +377,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Final Sale Price:`, value: `${empFormattedPrice}` },
 							{ name: `Notes:`, value: `${empNotes}` }
 						)
-						.setColor('0096C7');
+						.setColor('0096C7')];
 				}
 
 				let empPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -382,7 +385,8 @@ module.exports.modalSubmit = async (interaction) => {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: [empCarSoldEmbed] });
+				var addSaleLogBtns = addSaleLogBtnRow();
+				await interaction.client.channels.cache.get(process.env.CAR_SALES_CHANNEL_ID).send({ embeds: empCarSoldEmbed, components: addSaleLogBtns });
 
 				await dbCmds.addOneSumm("countCarsSold");
 				await dbCmds.addOneSumm("countWeeklyCarsSold");
@@ -393,7 +397,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let empFormattedCurrentCommission = formatter.format(empCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(interaction.client);
 
 				let empNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 
@@ -433,7 +437,7 @@ module.exports.modalSubmit = async (interaction) => {
 				let rentalCarRentedEmbed;
 
 				if (!rentalNotes || rentalNotes.toLowerCase() === "n/a" || rentalNotes.toLowerCase() === "-") {
-					rentalCarRentedEmbed = new EmbedBuilder()
+					rentalCarRentedEmbed = [new EmbedBuilder()
 						.setTitle('A car has been rented!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${rentalSalesmanName} (<@${interaction.user.id}>)` },
@@ -443,9 +447,9 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Vehicle Plate:`, value: `${rentalVehiclePlate}` },
 							{ name: `Rental Price:`, value: `${rentalFormattedPrice}` },
 						)
-						.setColor('00B4D8');
+						.setColor('00B4D8')];
 				} else {
-					rentalCarRentedEmbed = new EmbedBuilder()
+					rentalCarRentedEmbed = [new EmbedBuilder()
 						.setTitle('A car has been rented!')
 						.addFields(
 							{ name: `Salesperson Name:`, value: `${rentalSalesmanName} (<@${interaction.user.id}>)` },
@@ -456,7 +460,7 @@ module.exports.modalSubmit = async (interaction) => {
 							{ name: `Rental Price:`, value: `${rentalFormattedPrice}` },
 							{ name: `Notes:`, value: `${rentalNotes}` }
 						)
-						.setColor('00B4D8');
+						.setColor('00B4D8')];
 				}
 
 				let rentalPersonnelStats = await dbCmds.readPersStats(interaction.member.user.id);
@@ -464,7 +468,8 @@ module.exports.modalSubmit = async (interaction) => {
 					await personnelCmds.initPersonnel(interaction.client, interaction.member.user.id);
 				}
 
-				await interaction.client.channels.cache.get(process.env.CAR_RENTALS_CHANNEL_ID).send({ embeds: [rentalCarRentedEmbed] });
+				var addSaleLogBtns = addSaleLogBtnRow();
+				await interaction.client.channels.cache.get(process.env.CAR_RENTALS_CHANNEL_ID).send({ embeds: rentalCarRentedEmbed, components: addSaleLogBtns });
 
 				if (Math.round(rentalThisSaleCommission) > 0) {
 					await dbCmds.addCommission(interaction.member.user.id, rentalThisSaleCommission);
@@ -555,6 +560,53 @@ module.exports.modalSubmit = async (interaction) => {
 				await interaction.editReply({ content: `Successfully logged this Yellow Pages ad listing.\n\nDetails about this listing:\n> Your Commission: \`${formattedYpAdCommission}\`\n\nYour weekly commission is now: \`${currCommission}\`.`, ephemeral: true });
 
 				break;
+			case 'addProofOfIdModal':
+				if (1 == 1) {
+					let proofOfIdSalesperson;
+					if (interaction.member.nickname) {
+						proofOfIdSalesperson = interaction.member.nickname;
+					} else {
+						proofOfIdSalesperson = interaction.member.user.username;
+					}
+
+					let now = Math.floor(new Date().getTime() / 1000.0);
+					let idAddDate = `<t:${now}:d>`;
+
+					let idPhotoLink = strCleanup(interaction.fields.getTextInputValue('idPhotoInput'));
+
+					if (!isValidUrl(idPhotoLink)) { // validate photo link
+						await interaction.editReply({
+							content: `:exclamation: \`${idPhotoLink}\` is not a valid URL, please be sure to enter a URL including the \`http\:\/\/\` or \`https\:\/\/\` portion.`,
+							ephemeral: true
+						});
+						return;
+					}
+					let allowedValues = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
+					if (!RegExp(allowedValues.join('|')).test(idPhotoLink.toLowerCase())) { // validate photo link, again
+						await interaction.editReply({
+							content: `:exclamation: \`${idPhotoLink}\` is not a valid picture URL, please be sure to enter a URL that includes one of the following: \`.png\`, \`.jpg\`, \`.jpeg\`, \`.gif\`, \`.webp\`.`,
+							ephemeral: true
+						});
+						return;
+					}
+
+					idProofNote = `- [Proof of ID](${idPhotoLink}) for sale added by <@${interaction.user.id}> on ${idAddDate}.`;
+					if (interaction.message.embeds[0].data.fields[6]) {
+						interaction.message.embeds[0].data.fields[6].value = `${interaction.message.embeds[0].data.fields[6].value}\n${idProofNote}`;
+					} else {
+						interaction.message.embeds[0].data.fields[6] = { name: 'Notes:', value: idProofNote, inline: false };
+					}
+
+					let disabledSaleLogBtns = addDisabledSaleLogBtnRow(0);
+
+					await interaction.message.edit({ embeds: interaction.message.embeds, components: disabledSaleLogBtns });
+
+					await interaction.editReply({
+						content: `Successfully added a proof of ID for the sale of \`${interaction.message.embeds[0].data.fields[3].value}\` to \`${interaction.message.embeds[0].data.fields[2].value}\`.`,
+						ephemeral: true
+					});
+				}
+				break;
 			default:
 				await interaction.editReply({
 					content: `I'm not familiar with this modal type. Please tag @CHCMATT to fix this issue.`,
@@ -632,3 +684,28 @@ function isValidUrl(string) {
 	}
 	return url.protocol === "http:" || url.protocol === "https:";
 }
+
+function addSaleLogBtnRow() {
+	let row1 = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
+			.setCustomId('addProofOfId')
+			.setLabel('Add Proof of ID')
+			.setStyle(ButtonStyle.Secondary),
+	);
+
+	let rows = [row1];
+	return rows;
+};
+
+function addDisabledSaleLogBtnRow() {
+	let row1 = new ActionRowBuilder().addComponents(
+		new ButtonBuilder()
+			.setCustomId('addProofOfId')
+			.setLabel('Add Proof of ID')
+			.setStyle(ButtonStyle.Secondary)
+			.setDisabled(true),
+	);
+
+	let rows = [row1];
+	return rows;
+};
