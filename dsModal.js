@@ -97,7 +97,8 @@ module.exports.modalSubmit = async (interaction) => {
 				let regFormattedCurrentCommission = formatter.format(regCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editMgmtStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(client);
+				await editEmbed.editSalespersonStatsEmbed(client);
 
 				let regNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				if (Math.round(regThisSaleCommission) > 0) {
@@ -199,7 +200,8 @@ module.exports.modalSubmit = async (interaction) => {
 				let sportsFormattedCurrentCommission = formatter.format(sportsCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editMgmtStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(client);
+				await editEmbed.editSalespersonStatsEmbed(client);
 
 				let sportsNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				if (Math.round(sportsThisSaleCommission) > 0) {
@@ -301,7 +303,8 @@ module.exports.modalSubmit = async (interaction) => {
 				let tunerFormattedCurrentCommission = formatter.format(tunerCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editMgmtStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(client);
+				await editEmbed.editSalespersonStatsEmbed(client);
 
 				let tunerNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 				if (Math.round(tunerThisSaleCommission) > 0) {
@@ -397,7 +400,8 @@ module.exports.modalSubmit = async (interaction) => {
 				let empFormattedCurrentCommission = formatter.format(empCurrentCommission);
 
 				await editEmbed.editMainEmbed(interaction.client);
-				await editEmbed.editMgmtStatsEmbed(interaction.client);
+				await editEmbed.editMgmtStatsEmbed(client);
+				await editEmbed.editSalespersonStatsEmbed(client);
 
 				let empNewCarsSoldTotal = await dbCmds.readSummValue("countCarsSold");
 
