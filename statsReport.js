@@ -19,29 +19,32 @@ module.exports.statsReport = async (client) => {
 			return 0;
 		});
 
+		let guild = await client.guilds.fetch(process.env.DISCORD_SERVER_ID);
+		let guildMembers = await guild.members.fetch();
+		let arrayOfMembers = [];
+		guildMembers.forEach((member) => arrayOfMembers.push(member.id));
+
 		let statsDescList = '';
 		let noSalesDescList = '';
 
 		for (i = 0; i < statsArray.length; i++) {
 			if (statsArray[i].weeklyCarsSold > 0) {
-				statsDescList = statsDescList.concat(`__${statsArray[i].charName}__:
-• **Cars Sold Overall:** ${statsArray[i].carsSold}
-• **Cars Sold This Week:** ${statsArray[i].weeklyCarsSold}\n\n`);
+				statsDescList = statsDescList.concat(`__${statsArray[i].charName}__:\n• **Cars Sold Overall:** ${statsArray[i].carsSold}\n• **Cars Sold This Week:** ${statsArray[i].weeklyCarsSold}\n\n`);
 				await dbCmds.resetWeeklyStats(statsArray[i].discordId);
 			}
 
-			if (statsArray[i].weeklyCarsSold < 5 || statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
-				let weeklySales;
+			if (arrayOfMembers.includes(statsArray[i].discordId)) {
+				if (statsArray[i].weeklyCarsSold < 5 || statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
+					let weeklySales;
 
-				if (statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
-					weeklySales = 0;
-				} else {
-					weeklySales = statsArray[i].weeklyCarsSold;
+					if (statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
+						weeklySales = 0;
+					} else {
+						weeklySales = statsArray[i].weeklyCarsSold;
+					}
+
+					noSalesDescList = noSalesDescList.concat(`__${statsArray[i].charName}__:\n• **Cars Sold Overall:** ${statsArray[i].carsSold}\n• **Cars Sold This Week:** ${weeklySales}\n\n`);
 				}
-
-				noSalesDescList = noSalesDescList.concat(`__${statsArray[i].charName}__:
-• **Cars Sold Overall:** ${statsArray[i].carsSold}
-• **Cars Sold This Week:** ${weeklySales}\n\n`);
 			}
 		}
 
