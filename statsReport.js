@@ -20,6 +20,7 @@ module.exports.statsReport = async (client) => {
 		});
 
 		let statsDescList = '';
+		let noSalesDescList = '';
 
 		for (i = 0; i < statsArray.length; i++) {
 			if (statsArray[i].weeklyCarsSold > 0) {
@@ -28,10 +29,28 @@ module.exports.statsReport = async (client) => {
 • **Cars Sold This Week:** ${statsArray[i].weeklyCarsSold}\n\n`);
 				await dbCmds.resetWeeklyStats(statsArray[i].discordId);
 			}
+
+			if (statsArray[i].weeklyCarsSold < 5 || statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
+				let weeklySales;
+
+				if (statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
+					weeklySales = 0;
+				} else {
+					weeklySales = statsArray[i].weeklyCarsSold;
+				}
+
+				noSalesDescList = noSalesDescList.concat(`__${statsArray[i].charName}__:
+• **Cars Sold Overall:** ${statsArray[i].carsSold}
+• **Cars Sold This Week:** ${weeklySales}\n\n`);
+			}
 		}
 
 		if (statsDescList == '') {
 			statsDescList = "There were no sales this week."
+		}
+
+		if (noSalesDescList == '') {
+			noSalesDescList = "There were no dealers with less than 5 sales this week!"
 		}
 
 		await editEmbed.editMainEmbed(client);
@@ -39,14 +58,20 @@ module.exports.statsReport = async (client) => {
 
 		if (lastRep == null || lastRep.includes("Value not found")) {
 			let nowMinus7 = now - 604800;
-			let lastRep = `<t:${nowMinus7}:d>`
+			lastRep = `<t:${nowMinus7}:d>`
 		}
 
-		let embed = new EmbedBuilder()
-			.setTitle(`Salesperson Stats Report for ${lastRep} through ${today}:`)
+		let statsEmbed = new EmbedBuilder()
+			.setTitle(`Salespeople Stats Report for ${lastRep} through ${today}:`)
 			.setDescription(statsDescList)
 			.setColor('ADE8F4');
-		await client.channels.cache.get(process.env.CEO_GENERAL_CHANNEL_ID).send({ embeds: [embed] });
+
+		let noSalesEmbed = new EmbedBuilder()
+			.setTitle(`Salespeople Under Quota Report for ${lastRep} through ${today}:`)
+			.setDescription(noSalesDescList)
+			.setColor('CAF0F8');
+
+		await client.channels.cache.get(process.env.CEO_GENERAL_CHANNEL_ID).send({ embeds: [statsEmbed, noSalesEmbed] });
 
 		// success/failure color palette: https://coolors.co/palette/706677-7bc950-fffbfe-13262b-1ca3c4-b80600-1ec276-ffa630
 		await dbCmds.setRepDate("lastStatsRepDate", today);
@@ -68,15 +93,6 @@ module.exports.statsReport = async (client) => {
 
 			let errString = error.toString();
 			let errHandled = false;
-
-			if (errString === 'Error: The service is currently unavailable.' || errString === 'Error: Internal error encountered.' || errString === 'HTTPError: Service Unavailable') {
-				try {
-					await interaction.editReply({ content: `:warning: One of the service providers we use had a brief outage. Please try to submit your request again!`, ephemeral: true });
-				} catch {
-					await interaction.reply({ content: `:warning: One of the service providers we use had a brief outage. Please try to submit your request again!`, ephemeral: true });
-				}
-				errHandled = true;
-			}
 
 			let errorEmbed = [new EmbedBuilder()
 				.setTitle(`An error occured on the ${process.env.BOT_NAME} bot file ${fileName}!`)
