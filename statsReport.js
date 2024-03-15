@@ -22,7 +22,13 @@ module.exports.statsReport = async (client) => {
 		let guild = await client.guilds.fetch(process.env.DISCORD_SERVER_ID);
 		let guildMembers = await guild.members.fetch();
 		let arrayOfMembers = [];
-		guildMembers.forEach((member) => arrayOfMembers.push(member.id));
+
+		guildMembers = guildMembers.filter(member => !member._roles.includes(process.env.TRUSTED_ROLE_ID));
+
+		guildMembers.forEach((member) => {
+			arrayOfMembers.push(member.id)
+		});
+
 
 		let statsDescList = '';
 		let noSalesDescList = '';
