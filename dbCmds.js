@@ -30,11 +30,11 @@ module.exports.resetSummValue = async (summaryName) => {
 
 // for finding and adding to the personnel's statistics
 module.exports.initPersStats = async (discordId, discordNickname) => {
-	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { discordId: discordId, charName: discordNickname, carsSold: 0, weeklyCarsSold: 0, currentCommission: 0 }, { upsert: true });
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { discordId: discordId, charName: discordNickname, carsSold: 0, weeklyCarsSold: 0, currentCommission: 0, weeksUnderQuota: 0 }, { upsert: true });
 };
 
 module.exports.readPersStats = async (discordId) => {
-	let result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, currentCommission: 1, bankAccount: 1, weeklyCarsSold: 1, _id: 0 });
+	let result = await personnelInfo.findOne({ discordId: discordId }, { discordId: 1, charName: 1, embedMsgId: 1, embedColor: 1, carsSold: 1, currentCommission: 1, bankAccount: 1, weeklyCarsSold: 1, weeksUnderQuota: 1, _id: 0 });
 	return result;
 };
 
@@ -48,6 +48,10 @@ module.exports.addOnePersStat = async (discordId, statName) => {
 
 module.exports.subtractOnePersStat = async (discordId, statName) => {
 	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { $inc: { [statName]: -1 } });
+};
+
+module.exports.resetPersStat = async (discordId, statName) => {
+	await personnelInfo.findOneAndUpdate({ discordId: discordId }, { [statName]: 0 }, { upsert: true });
 };
 
 module.exports.setBankAccount = async (discordId, bankNum) => {
@@ -127,12 +131,12 @@ module.exports.readRepDate = async (summaryName) => {
 };
 
 module.exports.currStats = async () => {
-	let result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, embedColor: 1, carsSold: 1, weeklyCarsSold: 1, currentCommission: 1, _id: 0 });
+	let result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, embedColor: 1, carsSold: 1, weeklyCarsSold: 1, currentCommission: 1, weeksUnderQuota: 1, _id: 0 });
 	return result;
 };
 
 module.exports.weeklyStatsRep = async () => {
-	let result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, carsSold: 1, weeklyCarsSold: 1, _id: 0 });
+	let result = await personnelInfo.find({ charName: { $ne: null } }, { discordId: 1, charName: 1, carsSold: 1, weeklyCarsSold: 1, weeksUnderQuota: 1, _id: 0 });
 	return result;
 };
 

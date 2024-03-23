@@ -23,34 +23,45 @@ module.exports.statsReport = async (client) => {
 		let guildMembers = await guild.members.fetch();
 		let arrayOfMembers = [];
 
-		guildMembers = guildMembers.filter(member => !member._roles.includes(process.env.TRUSTED_ROLE_ID));
+		// exclude trusted members, upper mgmt, and lower mgmt members from array
+		guildMembers = guildMembers.filter(member => !member._roles.includes(process.env.TRUSTED_ROLE_ID) && !member._roles.includes(process.env.LOWER_MGMT_ROLE_ID) && !member._roles.includes(process.env.UPPER_MGMT_ROLE_ID));
 
-		guildMembers.forEach((member) => {
-			arrayOfMembers.push(member.id)
+		// include only members with sales role in array
+		guildMembers = guildMembers.filter(member => member._roles.includes(process.env.SALES_ROLE_ID));
+
+		guildMembers.forEach(async (member) => {
+			arrayOfMembers.push(member.id);
 		});
-
 
 		let statsDescList = '';
 		let noSalesDescList = '';
 
 		for (i = 0; i < statsArray.length; i++) {
+			// if weekly cars sold is greater than 0, add them to the Salespeople Stats Report
 			if (statsArray[i].weeklyCarsSold > 0) {
 				statsDescList = statsDescList.concat(`__${statsArray[i].charName}__:\n• **Cars Sold Overall:** ${statsArray[i].carsSold}\n• **Cars Sold This Week:** ${statsArray[i].weeklyCarsSold}\n\n`);
 				await dbCmds.resetWeeklyStats(statsArray[i].discordId);
 			}
 
-			if (arrayOfMembers.includes(statsArray[i].discordId)) {
-				if (statsArray[i].weeklyCarsSold < 5 || statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
-					let weeklySales;
+			// if weekly cars sold is greater than 5, reset their weeksUnderQuota stat
+			if (statsArray[i].weeklyCarsSold >= 5) {
+				await dbCmds.resetPersStat(statsArray[i].discordId, "weeksUnderQuota")
+			}
 
-					if (statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
-						weeklySales = 0;
-					} else {
-						weeklySales = statsArray[i].weeklyCarsSold;
-					}
+			// if weekly cars sold is less than 5 and the person is in the Discord server, add them to the Salespeople Under Quota Report
+			if ((statsArray[i].weeklyCarsSold < 5 || statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') && arrayOfMembers.includes(statsArray[i].discordId)) {
+				let weeklySales;
 
-					noSalesDescList = noSalesDescList.concat(`__${statsArray[i].charName}__:\n• **Cars Sold Overall:** ${statsArray[i].carsSold}\n• **Cars Sold This Week:** ${weeklySales}\n\n`);
+				if (statsArray[i].weeklyCarsSold == null || statsArray[i].weeklyCarsSold == '') {
+					weeklySales = 0;
+				} else {
+					weeklySales = statsArray[i].weeklyCarsSold;
 				}
+
+				await dbCmds.addOnePersStat(statsArray[i].discordId, "weeksUnderQuota");
+				let persStats = await dbCmds.readPersStats(statsArray[i].discordId, "weeksUnderQuota");
+
+				noSalesDescList = noSalesDescList.concat(`__${statsArray[i].charName}__:\n• **Cars Sold Overall:** ${statsArray[i].carsSold}\n• **Cars Sold This Week:** ${weeklySales}\n• **Weeks In A Row Under Quota:** ${persStats.weeksUnderQuota}\n\n`);
 			}
 		}
 
